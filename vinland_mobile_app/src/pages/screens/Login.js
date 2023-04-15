@@ -10,7 +10,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-export default function Register({ navigation }) {
+export default function Login({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white", paddingTop: 20 }}>
       <View
@@ -27,14 +27,14 @@ export default function Register({ navigation }) {
             onPress={navigation.goBack}
           />
         </View>
-        <Text style={styles.txtIcon}>Đăng Ký</Text>
+        <Text style={styles.txtIcon}>Đăng Nhập</Text>
       </View>
       <Text style={styles.tittle}>Chào mừng bạn đến với VinLand</Text>
       <View>
         <View style={styles.inputEmail}>
           <Image
             style={{ width: 20, height: 20, marginHorizontal: 20 }}
-            source={require("../image/mail-inbox-app.png")}
+            source={require("../../image/mail-inbox-app.png")}
           />
           <TextInput
             style={styles.txtInput}
@@ -44,32 +44,26 @@ export default function Register({ navigation }) {
         <View style={styles.inputPassword}>
           <Image
             style={{ width: 20, height: 20, marginHorizontal: 20 }}
-            source={require("../image/padlock.png")}
+            source={require("../../image/padlock.png")}
           />
           <TextInput
             style={styles.txtInput}
             placeholder="Vui lòng nhập Mật Khẩu"
           />
         </View>
-        <View style={styles.inputPassword}>
-          <Image
-            style={{ width: 20, height: 20, marginHorizontal: 20 }}
-            source={require("../image/padlock.png")}
-          />
-          <TextInput
-            style={styles.txtInput}
-            placeholder="Vui lòng nhập Mật Khẩu"
-          />
-        </View>
-        <Pressable
+        <Text
           style={{
-            justifyContent: "center",
-            alignItems: "center",
-            marginVertical: 15,
+            textAlign: "center",
+            marginVertical: 20,
+            fontFamily: "Bold",
+            fontSize: 16,
           }}
         >
+          Quên mật khẩu?
+        </Text>
+        <Pressable style={{ justifyContent: "center", alignItems: "center" }}>
           <View style={styles.btnLogin}>
-            <Text style={styles.textLogin}>Đăng Ký</Text>
+            <Text style={styles.textLogin}>Đăng Nhập</Text>
           </View>
         </Pressable>
         <Text
@@ -87,25 +81,25 @@ export default function Register({ navigation }) {
           style={{
             justifyContent: "center",
             alignItems: "center",
-            marginTop: 18,
+            marginTop: 38,
           }}
         >
           <Pressable onPress={() => navigation.navigate("#")}>
             <View style={styles.btnLogins}>
               <Image
                 style={{ width: 30, height: 30, marginHorizontal: 20 }}
-                source={require("../image/facebook.png")}
+                source={require("../../image/facebook.png")}
               />
-              <Text style={styles.txtLogins}>Đăng ký bằng FaceBook</Text>
+              <Text style={styles.txtLogins}>Đăng nhập bằng FaceBook</Text>
             </View>
           </Pressable>
           <Pressable onPress={() => navigation.navigate("#")}>
             <View style={styles.btnLogins}>
               <Image
                 style={{ width: 30, height: 30, marginHorizontal: 20 }}
-                source={require("../image/google.png")}
+                source={require("../../image/google.png")}
               />
-              <Text style={styles.txtLogins}>Đăng ký bằng Gmail</Text>
+              <Text style={styles.txtLogins}>Đăng nhập bằng Gmail</Text>
             </View>
           </Pressable>
         </View>
@@ -113,7 +107,6 @@ export default function Register({ navigation }) {
     </SafeAreaView>
   );
 }
-
 const styles = StyleSheet.create({
   headerBtn: {
     height: 40,
@@ -151,7 +144,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#d9d9d9",
     marginHorizontal: 30,
-    marginVertical: 10,
     borderRadius: 10,
   },
   txtInput: {

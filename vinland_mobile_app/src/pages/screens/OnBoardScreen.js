@@ -1,22 +1,15 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { View, StyleSheet, Text, Image, Pressable } from "react-native";
-import { useFonts } from "expo-font";
+import COLORS from "../../constants/colors";
 
 export default function OnBoardScreen({ navigation }) {
-  let [fontsLoaded] = useFonts({
-    Regular: require("../fonts/Raleway-Regular.ttf"),
-    Bold: require("../fonts/Raleway-Bold.ttf"),
-  });
-  if (!fontsLoaded) {
-    return null;
-  }
   return (
     <View style={styles.container}>
       <View style={{ justifyContent: "center", alignItems: "center" }}>
         <Image
           style={styles.background}
-          source={require("../image/LogoV.png")}
+          source={require("../../image/LogoV.png")}
         />
         <Text style={styles.title}>Chào mừng bạn đến với VinLand</Text>
       </View>
@@ -37,7 +30,7 @@ export default function OnBoardScreen({ navigation }) {
             <Text style={styles.textRegis}>Đăng Ký</Text>
           </View>
         </Pressable>
-        <Pressable onPress={() => navigation.navigate("MenuScreen")}>
+        <Pressable onPress={() => navigation.navigate("HomeScreen")}>
           <Text style={styles.textMenu}>Tiếp tục với tư cách khách</Text>
         </Pressable>
       </View>
@@ -48,14 +41,14 @@ export default function OnBoardScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.bgColor,
     alignItems: "center",
     justifyContent: "center",
   },
   title: {
     fontSize: 24,
     color: "#000",
-    fontFamily: "Regular",
+    fontFamily: "Bold",
     marginTop: 14,
     textAlign: "center",
   },
@@ -85,12 +78,12 @@ const styles = StyleSheet.create({
   },
   textLogin: {
     color: "white",
-    fontFamily: "Bold",
+    fontFamily: "Regular",
     fontSize: 24,
   },
   textRegis: {
     color: "#2D77EF",
-    fontFamily: "Bold",
+    fontFamily: "Regular",
     fontSize: 24,
   },
   textMenu: {
