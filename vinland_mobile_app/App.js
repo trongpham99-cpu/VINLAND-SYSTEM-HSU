@@ -1,4 +1,3 @@
-import { Text, View } from "react-native";
 import { Button } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";

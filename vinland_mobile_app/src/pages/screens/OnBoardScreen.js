@@ -1,11 +1,18 @@
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { View, StyleSheet, Text, Image, Pressable } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  Pressable,
+  StatusBar,
+} from "react-native";
 import COLORS from "../../constants/colors";
 
 export default function OnBoardScreen({ navigation }) {
   return (
     <View style={styles.container}>
+      <StatusBar barStyle={"dark-content"} />
       <View style={{ justifyContent: "center", alignItems: "center" }}>
         <Image
           style={styles.background}

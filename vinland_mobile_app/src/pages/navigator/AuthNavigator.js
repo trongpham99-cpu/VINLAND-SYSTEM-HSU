@@ -16,11 +16,7 @@ export default function AuthNavigator() {
       <Stack.Screen name="OnBoardScreen" component={OnBoardScreen} />
       <Stack.Screen name="LoginScreen" component={Login} />
       <Stack.Screen name="RegisterScreen" component={Register} />
-      <Stack.Screen
-        name="HomeScreen"
-        component={BottomNavigator}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="HomeScreen" component={BottomNavigator} />
     </Stack.Navigator>
   );
 }
