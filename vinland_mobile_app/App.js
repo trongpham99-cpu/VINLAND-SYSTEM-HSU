@@ -2,7 +2,8 @@ import { Button } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 //components
-import AuthNavigator from "./src/pages/navigator/AuthNavigator";
+import BottomNavigator from "./src/pages/navigator/BottomNavigator";
+import { StatusBar } from "react-native";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -18,7 +19,9 @@ export default function App() {
   }
   return (
     <NavigationContainer>
-      <AuthNavigator />
+      <StatusBar barStyle={"dark-content"} />
+      {/* <AuthNavigator /> */}
+      <BottomNavigator />
     </NavigationContainer>
   );
 }

@@ -6,9 +6,11 @@ import {
   Pressable,
   TextInput,
   Image,
+  ImageBackground,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import COLORS from "../../constants/colors";
 
 export default function Login({ navigation }) {
   return (
@@ -29,7 +31,10 @@ export default function Login({ navigation }) {
         </View>
         <Text style={styles.txtIcon}>Đăng Nhập</Text>
       </View>
-      <Text style={styles.tittle}>Chào mừng bạn đến với VinLand</Text>
+      <View style={{ alignItems: "center", marginTop: 20 }}>
+        <Image source={require("../../image/LogoV.png")} />
+        <Text style={styles.tittle}>Chào mừng bạn đến với VinLand</Text>
+      </View>
       <View>
         <View style={styles.inputEmail}>
           <Image
@@ -66,18 +71,38 @@ export default function Login({ navigation }) {
             <Text style={styles.textLogin}>Đăng Nhập</Text>
           </View>
         </Pressable>
-        <Text
+        <View
           style={{
-            textAlign: "center",
-            marginVertical: 10,
-            fontFamily: "Bold",
-            color: "#A7AFB2",
-            fontSize: 16,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          Hoặc
-        </Text>
-        <View
+          <Text
+            style={{
+              textAlign: "center",
+              marginVertical: 10,
+              fontFamily: "Bold",
+              color: COLORS.tittleColor,
+              fontSize: 16,
+            }}
+          >
+            Chưa có tài khoản?
+          </Text>
+          <Pressable onPress={() => navigation.navigate("Register")}>
+            <Text
+              style={{
+                paddingLeft: 10,
+                fontFamily: "Bold",
+                fontSize: 16,
+                color: COLORS.btnColor,
+              }}
+            >
+              Đăng ký
+            </Text>
+          </Pressable>
+        </View>
+        {/* <View
           style={{
             justifyContent: "center",
             alignItems: "center",
@@ -102,7 +127,7 @@ export default function Login({ navigation }) {
               <Text style={styles.txtLogins}>Đăng nhập bằng Gmail</Text>
             </View>
           </Pressable>
-        </View>
+        </View> */}
       </View>
     </SafeAreaView>
   );
@@ -124,9 +149,10 @@ const styles = StyleSheet.create({
     fontFamily: "Bold",
     fontSize: 24,
   },
+
   tittle: {
     marginTop: 20,
-    marginLeft: 30,
+    marginHorizontal: 20,
     marginBottom: 16,
     fontSize: 20,
     fontFamily: "Bold",

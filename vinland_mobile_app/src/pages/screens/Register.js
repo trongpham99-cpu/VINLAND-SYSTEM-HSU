@@ -6,13 +6,18 @@ import {
   Pressable,
   TextInput,
   Image,
+  StatusBar,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import COLORS from "../../constants/colors";
 
 export default function Register({ navigation }) {
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "white", paddingTop: 20 }}>
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: COLORS.bgColor, paddingTop: 20 }}
+    >
+      <StatusBar barStyle="dark-content" />
       <View
         style={{
           flexDirection: "row",
@@ -29,7 +34,16 @@ export default function Register({ navigation }) {
         </View>
         <Text style={styles.txtIcon}>Đăng Ký</Text>
       </View>
-      <Text style={styles.tittle}>Chào mừng bạn đến với VinLand</Text>
+      <View
+        style={{
+          alignItems: "center",
+          marginTop: 20,
+          justifyContent: "center",
+        }}
+      >
+        <Image source={require("../../image/LogoV.png")} />
+        <Text style={styles.tittle}>Chào mừng bạn đến với VinLand</Text>
+      </View>
       <View>
         <View style={styles.inputEmail}>
           <Image
@@ -72,7 +86,7 @@ export default function Register({ navigation }) {
             <Text style={styles.textLogin}>Đăng Ký</Text>
           </View>
         </Pressable>
-        <Text
+        {/* <Text
           style={{
             textAlign: "center",
             marginVertical: 10,
@@ -82,8 +96,8 @@ export default function Register({ navigation }) {
           }}
         >
           Hoặc
-        </Text>
-        <View
+        </Text> */}
+        {/* <View
           style={{
             justifyContent: "center",
             alignItems: "center",
@@ -108,7 +122,7 @@ export default function Register({ navigation }) {
               <Text style={styles.txtLogins}>Đăng ký bằng Gmail</Text>
             </View>
           </Pressable>
-        </View>
+        </View> */}
       </View>
     </SafeAreaView>
   );
@@ -133,7 +147,7 @@ const styles = StyleSheet.create({
   },
   tittle: {
     marginTop: 20,
-    marginLeft: 30,
+    alignItems: "center",
     marginBottom: 16,
     fontSize: 20,
     fontFamily: "Bold",

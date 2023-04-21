@@ -43,13 +43,13 @@ export default function Home() {
     );
   };
 
-  const Card = ({ house }) => {
+  const CardPopular = ({ house }) => {
     return (
       <Pressable
       // onPress={() => navigation.navigate("DetailScreen", house)}
       >
-        <View>
-          <Image source={house.image} style={styles.cardImage} />
+        <View style={styles.cardPopular}>
+          <Image source={house.image} style={styles.cardPoppularImage} />
           <View
             style={{
               flexDirection: "column",
@@ -115,6 +115,49 @@ export default function Home() {
     );
   };
 
+  const CardNearest = ({ house }) => {
+    return (
+      <Pressable
+      // onPress={() => navigation.navigate("DetailScreen", house)}
+      >
+        <View style={styles.cardNearest}>
+          <Image source={house.image} style={styles.cardNearestImage} />
+          <View
+            style={{
+              flexDirection: "column",
+              paddingHorizontal: 5,
+            }}
+          >
+            <Text style={{ fontSize: 18, fontFamily: "Bold" }}>
+              {house.title}
+            </Text>
+            <Text
+              style={{
+                width: width - 160,
+                fontSize: 14,
+                fontFamily: "Regular",
+                marginTop: 5,
+                // backgroundColor: "#ffffff",
+              }}
+            >
+              {house.location}
+            </Text>
+            <Text
+              style={{
+                fontSize: 16,
+                fontFamily: "Bold",
+                color: COLORS.btnColor,
+                marginTop: 5,
+              }}
+            >
+              {house.price}
+            </Text>
+          </View>
+        </View>
+      </Pressable>
+    );
+  };
+
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.bgColor, flex: 1 }}>
       <View style={styles.header}>
@@ -165,55 +208,82 @@ export default function Home() {
         </Pressable> */}
       </View>
       <ListCategory />
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          paddingHorizontal: 10,
-          marginVertical: 10,
-          alignItems: "center",
-        }}
-      >
-        <Text
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View
           style={{
-            fontFamily: "Bold",
-            color: COLORS.tittleColor,
-            fontSize: 20,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingHorizontal: 10,
+            marginVertical: 10,
+            alignItems: "center",
           }}
         >
-          Dự án nổi bật
-        </Text>
-        <Pressable>
           <Text
             style={{
-              fontFamily: "Regular",
+              fontFamily: "Bold",
               color: COLORS.tittleColor,
-              fontSize: 16,
+              fontSize: 20,
             }}
           >
-            xem tất cả
+            Dự án nổi bật
           </Text>
-        </Pressable>
-      </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <FlatList
-          numColumns={2}
-          data={houses}
-          renderItem={({ item, index }) => (
-            <View
+          <Pressable>
+            <Text
               style={{
-                flex: 0.5,
-                height: 350,
-                marginLeft: index % 2 == 0 ? 10 : 0,
-                marginRight: 10,
-                marginTop: 10,
-                borderRadius: 10,
-                backgroundColor: COLORS.greylight,
+                fontFamily: "Regular",
+                color: COLORS.tittleColor,
+                fontSize: 16,
               }}
             >
-              <Card house={item} />
-            </View>
-          )}
+              xem tất cả
+            </Text>
+          </Pressable>
+        </View>
+        <FlatList
+          napToInterval={width - 20}
+          contentContainerStyle={{ paddingLeft: 5, paddingVertical: 20 }}
+          horizontal
+          data={houses}
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => <CardPopular house={item} />}
+        />
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingHorizontal: 10,
+            marginVertical: 5,
+            alignItems: "center",
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: "Bold",
+              color: COLORS.tittleColor,
+              fontSize: 20,
+            }}
+          >
+            Dự án gần bạn
+          </Text>
+          <Pressable>
+            <Text
+              style={{
+                fontFamily: "Regular",
+                color: COLORS.tittleColor,
+                fontSize: 16,
+              }}
+            >
+              xem tất cả
+            </Text>
+          </Pressable>
+        </View>
+        <FlatList
+          napToInterval={width - 40}
+          contentContainerStyle={{ paddingLeft: 10, paddingVertical: 10 }}
+          horizontal
+          data={houses}
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => <CardNearest house={item} />}
         />
       </ScrollView>
     </SafeAreaView>
@@ -263,19 +333,33 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: "Bold",
   },
-  // card: {
-  //   // height: 400,
-  //   // width: width - 100,
-  //   // backgroundColor: COLORS.greylight,
-  //   // marginRight: 10,
-  //   // marginBottom: 10,
-  //   // padding: 5,
-  //   // borderRadius: 10,
-  // },
-  cardImage: {
+  cardPopular: {
+    height: 300,
+    width: width - 140,
+    backgroundColor: "#fafafa",
+    elevation: 10,
+    marginHorizontal: 5,
+    borderRadius: 20,
+  },
+  cardPoppularImage: {
     width: "100%",
-    height: 200,
+    height: 180,
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
+  },
+  cardNearest: {
+    height: 120,
+    width: width - 40,
+    backgroundColor: "#fafafa",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    marginRight: 10,
+  },
+  cardNearestImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
   },
 });

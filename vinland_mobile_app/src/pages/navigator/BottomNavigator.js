@@ -1,6 +1,5 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-// import { BottomNavigation } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
 //Components
 import Home from "../screens/Home";
@@ -13,15 +12,13 @@ const Tab = createBottomTabNavigator();
 export default function BottomNavigator() {
   return (
     <Tab.Navigator
-      // initialRouteName="Home"
+      initialRouteName="Trang chủ"
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "#2D77EF",
-        tabBarInactiveTintColor: "#9E9E9E",
       }}
     >
       <Tab.Screen
-        name="Home"
+        name="Trang chủ"
         component={Home}
         options={{
           tabBarIcon: ({ focused }) => {
@@ -36,7 +33,7 @@ export default function BottomNavigator() {
         }}
       />
       <Tab.Screen
-        name="News"
+        name="Tin tức"
         component={News}
         options={{
           tabBarIcon: ({ focused }) => (
@@ -62,7 +59,7 @@ export default function BottomNavigator() {
         }}
       />
       <Tab.Screen
-        name="Account"
+        name="Tài khoản"
         component={Account}
         options={{
           tabBarIcon: ({ focused }) => (
