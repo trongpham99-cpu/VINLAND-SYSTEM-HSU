@@ -14,7 +14,7 @@ const userRoute = require("./src/routes/user");
 const app = express();
 
 app.use(bodyParser.json());
-// app.use(cookieParser());
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
