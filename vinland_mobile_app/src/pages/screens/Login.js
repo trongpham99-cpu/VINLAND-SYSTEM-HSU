@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Text,
   View,
@@ -11,8 +11,40 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import COLORS from "../../constants/colors";
+import {
+  isValidEmail,
+  isValidObjField,
+  updateError,
+} from "../../services/methods";
+import FormInput from "../../services/FormInput";
 
 export default function Login({ navigation }) {
+  const [userInfo, setUserInfo] = useState({
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+
+  const { email, password } = userInfo;
+  const handleOnChangeText = (value, fieldName) => {
+    setUserInfo({ ...userInfo, [fieldName]: value });
+  };
+
+  const isValidForm = () => {
+    if (!isValidObjField(userInfo))
+      return updateError("Vui lòng nhập đầy đủ thông tin!", setError);
+    if (!isValidEmail(email))
+      return updateError("Email không hợp lệ", setError);
+    if (!password.trim() || password.length < 8)
+      return updateError("Password không hợp lệ!", setError);
+    return true;
+  };
+
+  const submitForm = () => {
+    if (isValidForm()) {
+      console.log(userInfo);
+    }
+  };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white", paddingTop: 20 }}>
       <View
@@ -36,26 +68,25 @@ export default function Login({ navigation }) {
         <Text style={styles.tittle}>Chào mừng bạn đến với VinLand</Text>
       </View>
       <View>
-        <View style={styles.inputEmail}>
-          <Image
-            style={{ width: 20, height: 20, marginHorizontal: 20 }}
-            source={require("../../image/mail-inbox-app.png")}
-          />
-          <TextInput
-            style={styles.txtInput}
-            placeholder="Vui lòng nhập Email"
-          />
-        </View>
-        <View style={styles.inputPassword}>
-          <Image
-            style={{ width: 20, height: 20, marginHorizontal: 20 }}
-            source={require("../../image/padlock.png")}
-          />
-          <TextInput
-            style={styles.txtInput}
-            placeholder="Vui lòng nhập Mật Khẩu"
-          />
-        </View>
+        {error ? (
+          <Text style={{ color: "red", fontSize: 18, textAlign: "center" }}>
+            {error}
+          </Text>
+        ) : null}
+        <FormInput
+          value={email}
+          onChangeText={(value) => handleOnChangeText(value, "email")}
+          source={require("../../image/mail-inbox-app.png")}
+          placeholder="Vui long nhap email cua ban"
+        />
+        <FormInput
+          secureTextEntry
+          autoCapitalize="none"
+          value={password}
+          onChangeText={(value) => handleOnChangeText(value, "password")}
+          source={require("../../image/padlock.png")}
+          placeholder="Vui long nhap mat khau cua ban"
+        />
         <Text
           style={{
             textAlign: "center",
@@ -66,7 +97,10 @@ export default function Login({ navigation }) {
         >
           Quên mật khẩu?
         </Text>
-        <Pressable style={{ justifyContent: "center", alignItems: "center" }}>
+        <Pressable
+          onPress={submitForm}
+          style={{ justifyContent: "center", alignItems: "center" }}
+        >
           <View style={styles.btnLogin}>
             <Text style={styles.textLogin}>Đăng Nhập</Text>
           </View>
@@ -157,26 +191,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "Bold",
   },
-  inputEmail: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#d9d9d9",
-    marginHorizontal: 30,
-    marginVertical: 10,
-    borderRadius: 10,
-  },
-  inputPassword: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#d9d9d9",
-    marginHorizontal: 30,
-    borderRadius: 10,
-  },
-  txtInput: {
-    width: 350,
-    height: 50,
-    alignItems: "center",
-  },
   btnLogin: {
     height: 60,
     width: 350,
@@ -191,21 +205,21 @@ const styles = StyleSheet.create({
     fontFamily: "Bold",
     fontSize: 18,
   },
-  btnLogins: {
-    height: 60,
-    width: 350,
-    flexDirection: "row",
-    backgroundColor: "#fff",
-    borderWidth: 2,
-    borderColor: "#2D77EF",
-    alignItems: "center",
-    // justifyContent: "center",
-    borderRadius: 30,
-    marginBottom: 10,
-  },
-  txtLogins: {
-    textAlign: "center",
-    fontFamily: "Bold",
-    fontSize: 16,
-  },
+  // btnLogins: {
+  //   height: 60,
+  //   width: 350,
+  //   flexDirection: "row",
+  //   backgroundColor: "#fff",
+  //   borderWidth: 2,
+  //   borderColor: "#2D77EF",
+  //   alignItems: "center",
+  //   // justifyContent: "center",
+  //   borderRadius: 30,
+  //   marginBottom: 10,
+  // },
+  // txtLogins: {
+  //   textAlign: "center",
+  //   fontFamily: "Bold",
+  //   fontSize: 16,
+  // },
 });

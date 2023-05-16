@@ -20,6 +20,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan("common"));
 
+app.get("/", (req, res) => {
+  res.json({ success: true, message: "Welcom to Vinland" });
+});
+
 //PORT SERVER
 const PORT = process.env.PORT || 7000;
 app.listen(PORT, () => {
