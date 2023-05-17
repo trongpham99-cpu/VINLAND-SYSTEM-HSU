@@ -58,14 +58,20 @@ const authController = {
     try {
       const user = await User.findOne({ username: req.body.username });
       if (!user) {
-        res.status(404).json("Wrong username!");
+        return res.status(404).json({
+          status: 400,
+          message: "User not found!",
+        });
       }
       const validPassword = await bcrypt.compare(
         req.body.password,
         user.password
       );
       if (!validPassword) {
-        res.status(404).json("Wrong password!");
+        return res.status(404).json({
+          status: 400,
+          message: "Wrong password!",
+        });
       }
       if (user && validPassword) {
         const accessToken = authController.generateAccessToken(user);
@@ -78,7 +84,10 @@ const authController = {
           sameSite: "strict",
         });
         const { password, ...others } = user._doc;
-        res.status(200).json({ ...others, accessToken });
+        res.status(200).json({
+          status: 200,
+          data: { ...others, accessToken },
+        });
       }
     } catch (error) {
       res.status(500).json(error);
