@@ -17,7 +17,7 @@ const authController = {
         username: req.body.username,
         email: req.body.email,
         password: hashed,
-        admin: req.body.admin,
+        // admin: req.body.admin,
       });
       //Save to DB
       const user = await newUser.save();
@@ -36,7 +36,7 @@ const authController = {
       },
       //secretKey
       process.env.ACCESS_TOKEN_KEY,
-      { expiresIn: "30s" }
+      { expiresIn: "2h" }
     );
   },
 

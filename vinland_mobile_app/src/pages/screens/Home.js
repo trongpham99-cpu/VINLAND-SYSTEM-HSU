@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import {
   Text,
@@ -16,10 +16,25 @@ import {
 import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/Ionicons";
 import houses from "../../constants/houses";
+import { getAllHome } from "../../services/home";
 
 export default function Home() {
   const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(0);
   const categoryList = ["Tất cả", "Căn hộ", "Nhà cho thuê", "Chung cư"];
+  const [homeList, setHomeList] = useState([]);
+
+  useEffect(() => {
+    const fetchHomeList = async () => {
+      try {
+        const response = await getAllHome();
+        //console.log(response.data);
+        setHomeList(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchHomeList();
+  }, []);
 
   const ListCategory = () => {
     return (

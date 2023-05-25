@@ -21,8 +21,15 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    // Home: {
+    //   //thong tin nha dat cua nguoi dang
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "Home",
+    //   required: true,
+    // },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("User", userSchema);
+let User = mongoose.model("User", userSchema);
+module.exports = { User };

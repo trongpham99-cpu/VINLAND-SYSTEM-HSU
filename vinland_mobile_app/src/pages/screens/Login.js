@@ -1,15 +1,26 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, Pressable, TextInput, Image, ImageBackground, Modal } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Pressable,
+  TextInput,
+  Image,
+  ImageBackground,
+  Modal,
+  TouchableOpacity,
+} from "react-native";
+import Formik from "formik";
+import * as Yup from "yup";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import COLORS from "../../constants/colors";
 import { isValidObjField, updateError } from "../../services/methods";
 import FormInput from "../../services/FormInput";
 import { login } from "../../services/auth";
-import { statusCode } from '../../constants/http/statusCodes';
+import { statusCode } from "../../constants/http/statusCodes";
 
 export default function Login({ navigation }) {
-
   const [userInfo, setUserInfo] = useState({
     username: "",
     password: "",
@@ -25,7 +36,7 @@ export default function Login({ navigation }) {
       return updateError("Vui lòng nhập đầy đủ thông tin!", setError);
     if (username.length < 6)
       return updateError("Tài khoản phải dài hơn 6 ký tự", setError);
-    if (!password.trim() || password.length < 3)
+    if (!password.trim() || password.length < 8)
       return updateError("Password không hợp lệ!", setError);
     return true;
   };
@@ -34,20 +45,20 @@ export default function Login({ navigation }) {
     const { username, password } = userInfo;
     if (isValidForm()) {
       try {
-        const res = await login(username, password)
-        if (res['status'] == statusCode.OK) {
+        const res = await login(username, password);
+        if (res["status"] == statusCode.OK) {
           //continue coding here....
-          console.log('Login successfully')
+          console.log("Login successfully");
         }
       } catch (err) {
-        console.log("Error Login")
+        console.log("Error Login");
       }
     }
   };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white", paddingTop: 20 }}>
-      <View style={{ flexDirection: "row", alignItems: "center" }} >
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
         <View style={styles.headerBtn}>
           <Icon
             style={{ marginLeft: 10 }}
@@ -63,18 +74,21 @@ export default function Login({ navigation }) {
         <Text style={styles.tittle}>Chào mừng bạn đến với VinLand</Text>
       </View>
       <View>
-        {error ? (
+        {/* {error ? (
           <Text style={{ color: "red", fontSize: 18, textAlign: "center" }}>
             {error}
           </Text>
-        ) : null}
+        ) : null} */}
+
         <FormInput
+          error={error}
           value={username}
           onChangeText={(value) => handleOnChangeText(value, "username")}
           source={require("../../image/mail-inbox-app.png")}
-          placeholder="Vui lòng nhập tài khoản của bạn"
+          placeholder="Vui lòng nhập tên của bạn"
         />
         <FormInput
+          error={error}
           secureTextEntry
           autoCapitalize="none"
           value={password}
@@ -92,14 +106,14 @@ export default function Login({ navigation }) {
         >
           Quên mật khẩu?
         </Text>
-        <Pressable
+        <TouchableOpacity
           onPress={submitForm}
           style={{ justifyContent: "center", alignItems: "center" }}
         >
           <View style={styles.btnLogin}>
             <Text style={styles.textLogin}>Đăng Nhập</Text>
           </View>
-        </Pressable>
+        </TouchableOpacity>
         <View
           style={{
             flexDirection: "row",

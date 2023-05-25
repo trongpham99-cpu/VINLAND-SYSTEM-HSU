@@ -8,6 +8,7 @@ import {
   Image,
   StatusBar,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -19,17 +20,19 @@ import {
 } from "../../services/methods";
 import client from "../../api/client";
 import FormInput from "../../services/FormInput";
+import { register } from "../../services/auth";
+import { statusCode } from "../../constants/http/statusCodes";
 
 export default function Register({ navigation }) {
   const [error, setError] = useState("");
-  const userInfo = {
+  const [userInfo, setUserInfo] = useState({
     username: "",
     email: "",
     password: "",
-    confirmPassword: "",
-  };
-  const { username, email, password, confirmPassword } = userInfo;
-  const handleChange = (value, fieldName) => {
+    // confirmPassword: "",
+  });
+  const { username, email, password } = userInfo;
+  const handleOnChangeText = (value, fieldName) => {
     setUserInfo({ ...userInfo, [fieldName]: value });
   };
   // console.log(userInfo);
@@ -37,21 +40,15 @@ export default function Register({ navigation }) {
   const isValidForm = () => {
     if (!isValidObjField(userInfo))
       return updateError("Vui lòng nhập đầy đủ thông tin!", setError);
-    if (!username.trim() || username.length < 3)
+    if (!username.trim() || username.length < 6)
       return updateError("Tên không hợp lệ", setError);
     if (!isValidEmail(email))
       return updateError("Email không hợp lệ", setError);
     if (!password.trim() || password.length < 8)
       return updateError("Password không nhỏ hơn 8 kí tự!", setError);
-    if (password !== confirmPassword)
-      return updateError("Password không trùng khớp", setError);
+    // if (password !== confirmPassword)
+    //   return updateError("Password không trùng khớp", setError);
     return true;
-  };
-
-  const submitForm = () => {
-    if (isValidForm()) {
-      console.log(userInfo);
-    }
   };
 
   const validationSchema = Yup.object({
@@ -72,12 +69,21 @@ export default function Register({ navigation }) {
     ),
   });
 
-  const signUp = async (values, formikActions) => {
-    const res = await client.post("/auth/register", { ...values });
-    console.log(res.data);
-    // console.log(values);
-    formikActions.resetForm();
-    formikActions.setSubmitting(false);
+  const submitForm = async () => {
+    const { username, email, password } = userInfo;
+    // console.log(userInfo);
+    if (isValidForm()) {
+      try {
+        const res = await register(username, email, password);
+        if (res["status"] == statusCode.OK) {
+          console.log("Register successfully");
+        }
+      } catch (err) {
+        console.log("Error Register");
+      }
+    }
+    // formikActions.resetForm();
+    // formikActions.setSubmitting(false);
   };
 
   return (
@@ -111,148 +117,40 @@ export default function Register({ navigation }) {
         <Image source={require("../../image/LogoV.png")} />
         <Text style={styles.tittle}>Chào mừng bạn đến với VinLand</Text>
       </View>
-      <Formik
-        initialValues={userInfo}
-        validationSchema={validationSchema}
-        onSubmit={signUp}
-      >
-        {({
-          values,
-          errors,
-          isSubmitting,
-          handleChange,
-          handleBlur,
-          touched,
-          handleSubmit,
-        }) => {
-          console.log(values);
-          const { username, email, password, confirmPassword } = values;
-          return (
-            <>
-              <FormInput
-                error={touched.username && errors.username}
-                value={username}
-                onChangeText={handleChange("username")}
-                onBlur={handleBlur("username")}
-                source={require("../../image/mail-inbox-app.png")}
-                placeholder="Vui long nhap ten cua ban"
-              />
-              <FormInput
-                error={touched.email && errors.email}
-                value={email}
-                onChangeText={handleChange("email")}
-                onBlur={handleBlur("email")}
-                source={require("../../image/mail-inbox-app.png")}
-                placeholder="Vui long nhap email cua ban"
-              />
-              <FormInput
-                error={touched.password && errors.password}
-                secureTextEntry
-                autoCapitalize="none"
-                value={password}
-                onChangeText={handleChange("password")}
-                onBlur={handleBlur("password")}
-                source={require("../../image/padlock.png")}
-                placeholder="Vui long nhap mat khau cua ban"
-              />
-              <FormInput
-                error={touched.confirmPassword && errors.confirmPassword}
-                secureTextEntry
-                autoCapitalize="none"
-                value={confirmPassword}
-                onChangeText={handleChange("confirmPassword")}
-                onBlur={handleBlur("confirmPassword")}
-                source={require("../../image/padlock.png")}
-                placeholder="Vui long nhap lai mat khau cua ban"
-              />
-              <TouchableOpacity
-                submitting={isSubmitting}
-                onPress={handleSubmit}
-                style={{
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginVertical: 15,
-                }}
-              >
-                <View style={styles.btnLogin}>
-                  <Text style={styles.textLogin}>Đăng Ký</Text>
-                </View>
-              </TouchableOpacity>
-            </>
-          );
-        }}
-      </Formik>
-      {/* <ScrollView>
-        {error ? (
-          <Text style={{ color: "red", fontSize: 18, textAlign: "center" }}>
-            {error}
-          </Text>
-        ) : null}
-        <View style={styles.inputAuth}>
-          <Image
-            style={{ width: 20, height: 20, marginHorizontal: 20 }}
-            source={require("../../image/mail-inbox-app.png")}
-          />
-          <TextInput
-            value={username}
-            onChangeText={(value) => handleOnChangeText(value, "username")}
-            style={styles.txtInput}
-            placeholder="Vui lòng nhập tên của bạn"
-          />
-        </View>
-        <View style={styles.inputAuth}>
-          <Image
-            style={{ width: 20, height: 20, marginHorizontal: 20 }}
-            source={require("../../image/mail-inbox-app.png")}
-          />
-          <TextInput
-            value={email}
-            onChangeText={(value) => handleOnChangeText(value, "email")}
-            style={styles.txtInput}
-            placeholder="Vui lòng nhập Email"
-          />
-        </View>
-        <View style={styles.inputAuth}>
-          <Image
-            style={{ width: 20, height: 20, marginHorizontal: 20 }}
-            source={require("../../image/padlock.png")}
-          />
-          <TextInput
-            value={password}
-            onChangeText={(value) => handleOnChangeText(value, "password")}
-            secureTextEntry
-            style={styles.txtInput}
-            placeholder="Vui lòng nhập Mật Khẩu"
-          />
-        </View>
-        <View style={styles.inputAuth}>
-          <Image
-            style={{ width: 20, height: 20, marginHorizontal: 20 }}
-            source={require("../../image/padlock.png")}
-          />
-          <TextInput
-            value={confirmPassword}
-            onChangeText={(value) =>
-              handleOnChangeText(value, "confirmPassword")
-            }
-            secureTextEntry
-            style={styles.txtInput}
-            placeholder="Vui lòng nhập lại Mật Khẩu"
-          />
-        </View>
-        <Pressable
+      <View>
+        <FormInput
+          error={error}
+          value={username}
+          onChangeText={(value) => handleOnChangeText(value, "username")}
+          source={require("../../image/mail-inbox-app.png")}
+          placeholder="Vui lòng nhập tên của bạn"
+        />
+        <FormInput
+          error={error}
+          value={email}
+          onChangeText={(value) => handleOnChangeText(value, "email")}
+          source={require("../../image/mail-inbox-app.png")}
+          placeholder="Vui lòng nhập email của bạn"
+        />
+        <FormInput
+          error={error}
+          secureTextEntry
+          autoCapitalize="none"
+          value={password}
+          onChangeText={(value) => handleOnChangeText(value, "password")}
+          source={require("../../image/padlock.png")}
+          placeholder="Vui lòng nhập mật khẩu của bạn"
+        />
+
+        <TouchableOpacity
           onPress={submitForm}
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            marginVertical: 15,
-          }}
+          style={{ justifyContent: "center", alignItems: "center" }}
         >
           <View style={styles.btnLogin}>
-            <Text style={styles.textLogin}>Đăng Ký</Text>
+            <Text style={styles.textLogin}>Đăng Ky</Text>
           </View>
-        </Pressable>
-      </ScrollView> */}
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -288,7 +186,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 30,
-    marginBottom: 10,
+    marginTop: 10,
   },
   textLogin: {
     color: "white",
