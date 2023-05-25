@@ -3,8 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 //Components
 
 import Home from "./Home";
-import DetailScreen from "./DetailsScreen";
-
+import DetailScreen from "./DetailScreen";
 const Stack = createStackNavigator();
 export default function ProductNavigator() {
   return (
@@ -12,8 +11,8 @@ export default function ProductNavigator() {
       initialRouteName="Home"
       screenOptions={{ headerShown: false }}
     >
-      <Stack.Screen name ="Home"component={Home}/>
-      <Stack.Screen name ="DetailScreen" component={DetailScreen}/>
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="DetailScreen" component={DetailScreen} />
     </Stack.Navigator>
   );
 }
