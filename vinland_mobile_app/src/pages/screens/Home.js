@@ -18,7 +18,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import houses from "../../constants/houses";
 import { getAllHome } from "../../services/home";
 
-export default function Home() {
+export default function Home({navigation}) {
   const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(0);
   const categoryList = ["Tất cả", "Căn hộ", "Nhà cho thuê", "Chung cư"];
   const [homeList, setHomeList] = useState([]);
@@ -61,7 +61,7 @@ export default function Home() {
   const CardPopular = ({ house }) => {
     return (
       <Pressable
-      // onPress={() => navigation.navigate("DetailScreen", house)}
+      onPress={() => navigation.navigate("DetailScreen", house)}
       >
         <View style={styles.cardPopular}>
           <Image source={house.image} style={styles.cardPoppularImage} />
@@ -133,7 +133,7 @@ export default function Home() {
   const CardNearest = ({ house }) => {
     return (
       <Pressable
-      // onPress={() => navigation.navigate("DetailScreen", house)}
+      onPress={() => navigation.navigate("DetailScreen", house)}
       >
         <View style={styles.cardNearest}>
           <Image source={house.image} style={styles.cardNearestImage} />
