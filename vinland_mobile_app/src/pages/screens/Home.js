@@ -18,23 +18,31 @@ import Icon from "react-native-vector-icons/Ionicons";
 import houses from "../../constants/houses";
 import { getAllHome } from "../../services/home";
 
-export default function Home({navigation}) {
+export default function Home({ props, navigation }) {
   const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(0);
   const categoryList = ["Tất cả", "Căn hộ", "Nhà cho thuê", "Chung cư"];
   const [homeList, setHomeList] = useState([]);
 
-  useEffect(() => {
-    const fetchHomeList = async () => {
-      try {
-        const response = await getAllHome();
-        //console.log(response.data);
-        setHomeList(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchHomeList();
-  }, []);
+  const getHomeList = async () => {
+    try {
+      const response = await getAllHome();
+      //const json = await response.json(); //chuyen du lieu thanh json
+      //console.log(response.data);
+      setHomeList(response);
+      console.log(setHomeList);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      // do something
+      getHomeList();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const ListCategory = () => {
     return (
@@ -58,13 +66,11 @@ export default function Home({navigation}) {
     );
   };
 
-  const CardPopular = ({ house }) => {
+  const CardPopular = ({ item }) => {
     return (
-      <Pressable
-      onPress={() => navigation.navigate("DetailScreen", house)}
-      >
+      <Pressable onPress={() => navigation.navigate("DetailScreen", item)}>
         <View style={styles.cardPopular}>
-          <Image source={house.image} style={styles.cardPoppularImage} />
+          <Image source={item.image} style={styles.cardPoppularImage} />
           <View
             style={{
               flexDirection: "column",
@@ -73,10 +79,10 @@ export default function Home({navigation}) {
             }}
           >
             <Text style={{ fontSize: 20, fontFamily: "Bold" }}>
-              {house.title}
+              {item.title}
             </Text>
             <Text style={{ fontSize: 16, fontFamily: "Regular", marginTop: 5 }}>
-              {house.location}
+              {item.location}
             </Text>
             <Text
               style={{
@@ -86,45 +92,9 @@ export default function Home({navigation}) {
                 marginTop: 5,
               }}
             >
-              {house.price}
+              {item.price}
             </Text>
           </View>
-
-          {/* <View style={{ marginTop: 15, flexDirection: "row" }}>
-            <View style={{ flexDirection: "column", marginRight: 10 }}>
-              <Text
-                style={{ fontSize: 14, color: COLORS.dark, fontWeight: "bold" }}
-              >
-                Phòng ngủ
-              </Text>
-              <View style={styles.facility}>
-                <Icon name="hotel" size={20} />
-                <Text style={styles.facilityText}>2</Text>
-              </View>
-            </View>
-            <View style={{ flexDirection: "column", marginRight: 10 }}>
-              <Text
-                style={{ fontSize: 14, color: COLORS.dark, fontWeight: "bold" }}
-              >
-                Phòng tắm
-              </Text>
-              <View style={styles.facility}>
-                <Icon name="bathtub" size={20} />
-                <Text style={styles.facilityText}>2</Text>
-              </View>
-            </View>
-            <View style={{ flexDirection: "column", marginRight: 10 }}>
-              <Text
-                style={{ fontSize: 14, color: COLORS.dark, fontWeight: "bold" }}
-              >
-                Diện tích
-              </Text>
-              <View style={styles.facility}>
-                <Icon name="aspect-ratio" size={20} />
-                <Text style={styles.facilityText}>200 m2</Text>
-              </View>
-            </View>
-          </View> */}
         </View>
       </Pressable>
     );
@@ -132,9 +102,7 @@ export default function Home({navigation}) {
 
   const CardNearest = ({ house }) => {
     return (
-      <Pressable
-      onPress={() => navigation.navigate("DetailScreen", house)}
-      >
+      <Pressable onPress={() => navigation.navigate("DetailScreen", house)}>
         <View style={styles.cardNearest}>
           <Image source={house.image} style={styles.cardNearestImage} />
           <View
@@ -258,9 +226,13 @@ export default function Home({navigation}) {
           napToInterval={width - 20}
           contentContainerStyle={{ paddingLeft: 5, paddingVertical: 20 }}
           horizontal
-          data={houses}
+          // data={houses}
+          data={homeList}
+          keyExtractor={(item_home) => {
+            return item_home.Id;
+          }}
           showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => <CardPopular house={item} />}
+          renderItem={<CardPopular />}
         />
         <View
           style={{
