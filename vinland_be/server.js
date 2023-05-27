@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 const authRoute = require("./src/routes/auth");
 const homeRoute = require("./src/routes/home");
 const userRoute = require("./src/routes/user");
+const roomRoute = require("./src/routes/room");
 const http = require("http");
 const app = express();
 const server = http.createServer(app);
@@ -24,6 +25,7 @@ dotenv.config();
 
 //cache 
 const ROOMS = require('./src/cache/room');
+const { getMessageOnRoom, createRoom } = require("./src/services/room.service");
 
 //Init Database (Connect Database(MongoDB))
 mongoose
@@ -38,12 +40,19 @@ mongoose
 
 //Init io 
 io.on("connection", (socket) => {
+
+  console.log("a user connected", socket.id);
+
   socket.on('chat message', msg => {
     io.emit('chat message', msg);
   });
 
-  socket.on('my-list-room', (data) => {
-    io.emit('my-list-room', ROOMS);
+  socket.on('get_my_rooms', async (data) => {
+    io.emit('get_my_rooms', ROOMS);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
   });
 });
 
@@ -57,6 +66,7 @@ app.get("/", (req, res) => {
 app.use("/home", homeRoute);
 app.use("/auth", authRoute);
 app.use("/user", userRoute);
+app.use('/room', roomRoute);
 
 //JSON WEB TOKEN
 

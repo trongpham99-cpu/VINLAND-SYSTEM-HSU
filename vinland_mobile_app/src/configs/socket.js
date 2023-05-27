@@ -6,16 +6,17 @@ const socket = io.connect(url, { transports: ['websocket'] });
 class Socket {
     initializeSocket() {
         try {
+
             this.socket = io(url, { transports: ['websocket'] })
 
             this.socket.on('connect', () => {
-                console.log('Socket connected')
+                // console.log('Socket connected')
             })
             this.socket.on('disconnect', () => {
-                console.log('Socket disconnected')
+                // console.log('Socket disconnected')
             })
             this.socket.on('connect_error', (error) => {
-                console.log('Socket error', error)
+                // console.log('Socket error', error)
             })
                         
         } catch (error) {

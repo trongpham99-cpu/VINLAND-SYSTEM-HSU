@@ -2,11 +2,13 @@ const mongoose = require("mongoose");
 const { Types } = mongoose;
 const roomSchema = new mongoose.Schema(
     {
-        Name: { type: String, required: true }, // Name of the room with product_name_sale
-        Messages: { type: [Types.ObjectId], required: true, ref: "Message" },
-        Users: { type: [Types.ObjectId], required: true, ref: "User" },
+        name: { type: String, required: true }, // Name of the room with product_name_sale
+        avatar: { type: String, required: true }, // Avatar of the room
+        messages: { type: [Types.ObjectId], default: Array, ref: "messages" },
+        users: { type: [Types.ObjectId], default: Array, ref: "users" },
+        owner: { type: Types.ObjectId, required: true, ref: "users" },
     },
     { timestamps: true }
 );
 
-module.exports = mongoose.model("Room", roomSchema);
+module.exports = mongoose.model("rooms", roomSchema);
