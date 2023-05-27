@@ -2,11 +2,10 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/Ionicons";
 //Components
-import Home from "../screens/Home";
-import Chat from "../screens/Chat";
 import News from "../screens/News";
 import Account from "../screens/Account";
 import ProductNavigator from "../screens/Product";
+import ChatNavigator from "../screens/ChatHub";
 
 const Tab = createBottomTabNavigator();
 
@@ -47,8 +46,8 @@ export default function BottomNavigator() {
         }}
       />
       <Tab.Screen
-        name="Chat"
-        component={Chat}
+        name="Chatting"
+        component={ChatNavigator}
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon

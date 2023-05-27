@@ -4,8 +4,8 @@ const messageSchema = new mongoose.Schema(
     {
         userID: { type: Types.ObjectId, required: true, ref: "User" },
         roomID: { type: Types.ObjectId, required: true, ref: "Room" },
-        Content: { type: String, required: true },
-        Attachments: { Type: [Object] },
+        content: { type: String, required: true },
+        attachments: { Type: [Object], default: [] },
     },
     { timestamps: true }
 );

@@ -28,11 +28,24 @@ const findRoomAdvance = async ({ id }) => {
             { $lookup: { from: "users", localField: "owner", foreignField: "_id", as: "owner" } },
             { $unwind: "$owner" },
             { $lookup: { from: "users", localField: "users", foreignField: "_id", as: "users" } },
-            { $lookup: { from: "messages", localField: "messages", foreignField: "_id", as: "messages" } },
+            {
+                $lookup: {
+                    from: "messages",
+                    localField: "messages",
+                    foreignField: "_id",
+                    as: "messages",
+                    pipeline: [
+                        { $sort: { createdAt: -1 } },
+                        // { $limit: 1 },
+                        { $lookup: { from: "users", localField: "userID", foreignField: "_id", as: "user" } },
+                        { $unwind: "$user" },
+                        { $project: { "user.password": 0 } }
+                    ]
+                }
+            },
             // { $project: {} }
         ])
     } catch (err) {
-        console.log(err);
         return err;
     }
 }
@@ -52,9 +65,32 @@ const addUserToRoom = async (roomID, userID) => {
 }
 
 const findRoomsByUserId = async (userID) => {
-    const rooms = await roomModel.find({
-        users: { $in: [userID] }
-    });
+    // const rooms = await roomModel.find({
+    //     users: { $in: [userID] }
+    // })
+    const rooms = await roomModel.aggregate([
+        { $match: { users: { $in: [new Types.ObjectId(userID)] } } },
+        { $lookup: { from: "users", localField: "owner", foreignField: "_id", as: "owner" } },
+        { $unwind: "$owner" },
+        { $lookup: { from: "users", localField: "users", foreignField: "_id", as: "users" } },
+        { $project: { "owner.password": 0 } },
+        {
+            $lookup: {
+                from: "messages",
+                localField: "messages",
+                foreignField: "_id",
+                as: "messages",
+                pipeline: [
+                    { $sort: { createdAt: -1 } },
+                    // { $limit: 1 },
+                    { $lookup: { from: "users", localField: "userID", foreignField: "_id", as: "user" } },
+                    { $unwind: "$user" },
+                    { $project: { "user.password": 0 } }
+                ]
+            }
+        },
+        { $sort: { "messages.createdAt": -1 } }
+    ])
     return rooms;
 }
 

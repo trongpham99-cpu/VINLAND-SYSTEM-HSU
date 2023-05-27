@@ -5,12 +5,8 @@ export const Room = (props) => {
 
     const { room = {}, navigation = {} } = props;
 
-    const ViewDetailRoom = () => {
-        console.log("ViewDetailRoom");
-    }
-
     return (
-        <TouchableOpacity style={styles.block_room} onPress={() => ViewDetailRoom()} >
+        <TouchableOpacity style={styles.block_room} onPress={() => navigation.navigate('ChatDetail', { room })} >
             <View style={styles.block_room}  >
                 <Image
                     style={styles.tinyLogo}
@@ -20,7 +16,7 @@ export const Room = (props) => {
                 />
                 <View style={{ flex: 1 }} >
                     <Text style={styles.name_room} >{room.name}</Text>
-                    <Text style={styles.last_message} >{room.last_message}</Text>
+                    <Text style={styles.last_message} >{room.messages?.length ? room.messages[room.messages.length - 1].content : ""}</Text>
                 </View>
             </View>
         </TouchableOpacity>

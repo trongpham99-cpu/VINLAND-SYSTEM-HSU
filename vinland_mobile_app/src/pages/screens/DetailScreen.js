@@ -18,13 +18,17 @@ import houses from "../../constants/houses";
 
 const DetailScreen = ({ navigation, route }) => {
   const house = route.params;
+  console.log(JSON.stringify(house))
   const InteriorCard = ({ interior }) => {
     return <Image source={interior} style={styles.interiorImage} />;
   };
+
+  const onContact = () => {
+    navigation.navigate("ChatDetail", "abc");
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
-      {/* House image */}
-
       <View style={styles.header}>
         <View style={styles.headerBtn}>
           <Icon
@@ -40,13 +44,12 @@ const DetailScreen = ({ navigation, route }) => {
         <View style={styles.headerBtn}>
           <Image
             style={{ width: 30, height: 40, marginHorizontal: 30 }}
-            //source={require("../../image/211780_more_icon.png")}
+          // source={require("../../image/211780_more_icon.png")}
           />
         </View>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* House image */}
-        <ImageBackground style={styles.backgroundImage} source={house.image}>
+        <ImageBackground style={styles.backgroundImage} source={house.thumbnail}>
           <View
             style={{
               height: 40,
@@ -112,7 +115,7 @@ const DetailScreen = ({ navigation, route }) => {
                   fontSize: 16,
                 }}
               >
-                {house.location}
+                {house.location.address + ", " + house.location.district + ", " + house.location.province}
               </Text>
             </View>
             <View
@@ -144,13 +147,12 @@ const DetailScreen = ({ navigation, route }) => {
             >
               Description
             </Text>
-            <Text style={{ lineHeight: 20 }}>{house.details} </Text>
+            <Text style={{ lineHeight: 20 }}>{house.description} </Text>
           </View>
           <View>
             <Text style={{ marginTop: 10, fontWeight: "bold", fontSize: 20 }}>
               Preview
             </Text>
-            {/* Interior list */}
             <FlatList
               contentContainerStyle={{ marginTop: 15 }}
               horizontal
@@ -160,13 +162,11 @@ const DetailScreen = ({ navigation, route }) => {
               renderItem={({ item }) => <InteriorCard interior={item} />}
             />
           </View>
-
-          {/* Facilities container */}
           <View style={{ flexDirection: "row", marginTop: 20 }}>
             <View style={styles.facility}></View>
           </View>
         </View>
-        <Pressable style={{ justifyContent: "center", alignItems: "center" }}>
+        <Pressable onPress={() => { onContact() }} style={{ justifyContent: "center", alignItems: "center" }}>
           <View style={styles.btn1}>
             <Text style={styles.text1}>Liên Hệ</Text>
           </View>

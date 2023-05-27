@@ -1,17 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import {
-  Text,
-  View,
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
-  TextInput,
-  Pressable,
-  FlatList,
-  Dimensions,
-  Image,
-  Button,
+  Text, View, StyleSheet, ScrollView, SafeAreaView, TextInput, Pressable, FlatList, Dimensions, Image, Button,
 } from "react-native";
 import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -26,10 +16,7 @@ export default function Home({ props, navigation }) {
   const getHomeList = async () => {
     try {
       const response = await getAllHome();
-      //const json = await response.json(); //chuyen du lieu thanh json
-      //console.log(response.data);
       setHomeList(response);
-      console.log(setHomeList);
     } catch (error) {
       console.log(error);
     }
@@ -70,7 +57,7 @@ export default function Home({ props, navigation }) {
     return (
       <Pressable onPress={() => navigation.navigate("DetailScreen", item)}>
         <View style={styles.cardPopular}>
-          <Image source={item.image} style={styles.cardPoppularImage} />
+          <Image source={item.thumbnail} style={styles.cardPoppularImage} />
           <View
             style={{
               flexDirection: "column",
@@ -82,7 +69,7 @@ export default function Home({ props, navigation }) {
               {item.title}
             </Text>
             <Text style={{ fontSize: 16, fontFamily: "Regular", marginTop: 5 }}>
-              {item.location}
+              {item.location.address + ", " + item.location.district + ", " + item.location.province}
             </Text>
             <Text
               style={{
@@ -186,9 +173,6 @@ export default function Home({ props, navigation }) {
             placeholder="Tìm kiếm nhà, căn hộ, dự án cho thuê"
           />
         </View>
-        {/* <Pressable style={styles.sortBtn}>
-          <Icon name="add-circle" color={COLORS.btnColor} size={30} />
-        </Pressable> */}
       </View>
       <ListCategory />
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -226,13 +210,12 @@ export default function Home({ props, navigation }) {
           napToInterval={width - 20}
           contentContainerStyle={{ paddingLeft: 5, paddingVertical: 20 }}
           horizontal
-          // data={houses}
           data={homeList}
           keyExtractor={(item_home) => {
             return item_home.Id;
           }}
           showsHorizontalScrollIndicator={false}
-          renderItem={<CardPopular />}
+          renderItem={({ item }) => <CardPopular item={item} />}
         />
         <View
           style={{

@@ -1,59 +1,45 @@
 import React, { useEffect, useState } from "react";
-import { Button, TextInput, SafeAreaView, ScrollView, Image, Text, View } from "react-native";
+import { Button, TextInput, SafeAreaView, ScrollView, Image, Text, View, ActivityIndicator } from "react-native";
 import { IconButton } from "@react-native-material/core";
 import { styles } from "./styles/room_detail.style";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 
 //components 
 import ListMessage from '../chat/list-message';
+import { fetchMyRoom, fetchRoomDetail } from "../../services/room";
 const RoomDetail = (props) => {
 
-    const { navigation } = props;
+    const { navigation, id } = props;
 
-    const [room, setRoom] = useState({
-        name: "Mua bán nhà đất quận 7",
-        avatar: "https://picsum.photos/200",
-        messages: [],
-        users: [],
-        last_message: "Hello"
-    });
+    const goBack = () => {
+        navigation.goBack();
+    }
 
-    const [messages, setMessages] = useState([
-        {
-            id: 1,
-            content: "Hello",
-            user: {
-                _id: 1,
-                username: "admin",
-                avatar: "https://picsum.photos/200"
-            },
-            attachments: []
-        },
-        {
-            id: 2,
-            content: "Hi",
-            user: {
-                _id: 2,
-                username: "user",
-                avatar: "https://picsum.photos/200"
-            },
-            attachments: []
-        },
-        {
-            id: 3,
-            content: "Hi",
-            user: {
-                _id: 2,
-                username: "user",
-                avatar: "https://picsum.photos/200"
-            },
-            attachments: []
-        }]);
+    const [room, setRoom] = useState({});
+    const [messages, setMessages] = useState([]);
     const [content, setContent] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const _fetchRoom = async () => {
+        setLoading(true);
+        let response = await fetchRoomDetail(id);
+        if (response) {
+            setRoom(response);
+            setMessages(response.messages);
+        }
+        setLoading(false);
+    }
+
+    useEffect(() => {
+        _fetchRoom();
+    }, []);
+
     return (
+
         <View>
+            <ActivityIndicator style={{}} size="small" color="#0000ff" animating={loading} />
             <View style={styles.block_room}>
-                <IconButton style={styles.icon} icon={props => <Icon name="chevron-left" {...props} />} />
+                <IconButton onPress={()=> goBack()} style={styles.icon} icon={props => <Icon name="chevron-left" {...props} />} />
                 <Image style={styles.tinyLogo}
                     source={{
                         uri: `${room.avatar}`,

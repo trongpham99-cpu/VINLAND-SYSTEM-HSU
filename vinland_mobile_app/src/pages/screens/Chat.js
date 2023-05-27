@@ -1,35 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, Text, View, ActivityIndicator } from "react-native";
 import ListRoom from '../../components/chat/list-room';
-import RoomDetail from '../../components/chat/room-detail';
 import socketService from "../../configs/socket";
+import { fetchMyRoom } from "../../services/room";
 
 export default function Chat({ navigation }) {
 
-  const [rooms, setRooms] = useState([
-    {
-      name: "Room 1",
-      avatar: "https://picsum.photos/200",
-      messages: [],
-      users: [],
-      last_message: "Hello"
-    },
-    {
-      name: "Room 2",
-      avatar: "https://picsum.photos/200",
-      messages: [],
-      users: [],
-      last_message: "Hôm nay trời đẹp quá, đi chơi không?"
+  const [rooms, setRooms] = useState();
+  const [loading, setLoading] = useState(true);
+
+  const _fetchMyRooms = async () => {
+    setLoading(true);
+    let response = await fetchMyRoom();
+    if (response) {
+      setRooms(response);
     }
-  ]);
+    setLoading(false);
+  }
 
   useEffect(() => {
     socketService.initializeSocket();
-    
-    socketService.on('get_my_rooms', (data) => {
-      console.log(data);
-    });
 
+    // socketService.on('get_my_rooms', (data) => {
+    //   console.log(data);
+    // });
     socketService.emit('get_my_rooms', { email: 'trong.phamtranduc@gmail.com' });
     return () => {
       socketService.removeAllListeners('connect');
@@ -38,12 +32,21 @@ export default function Chat({ navigation }) {
     }
   }, []);
 
+
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      //call api
+      _fetchMyRooms();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   return (
     <ScrollView>
       <SafeAreaView style={{ flex: 1 }}>
-        {/* <ListRoom rooms={rooms} navigation={navigation}/> */}
-        <RoomDetail
-          navigation={navigation} />
+        <ListRoom rooms={rooms} navigation={navigation} />
+        <ActivityIndicator size="small" color="#0000ff" animating={loading} />
       </SafeAreaView>
     </ScrollView>
   );

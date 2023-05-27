@@ -21,12 +21,6 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    // Home: {
-    //   //thong tin nha dat cua nguoi dang
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "Home",
-    //   required: true,
-    // },
   },
   { timestamps: true }
 );

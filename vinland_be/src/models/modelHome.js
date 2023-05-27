@@ -1,54 +1,54 @@
 const mongoose = require("mongoose");
 const homeSchema = new mongoose.Schema(
   {
-    Title: {
+    title: {
       type: String,
       required: true,
     },
-    Description: {
+    description: {
       type: String,
       required: true,
     },
-    Price: {
+    price: {
       type: String,
       required: true,
     },
-    Location: {
+    location: {
       type: Object,
       required: true,
     },
-    Thumbnail: {
+    thumbnail: {
       type: Object,
       required: true,
     },
-    Slug: {
+    slug: {
       type: String,
     },
-    Rating: {
+    rating: {
       type: Number,
       default: 0,
       min: [0, 'Rating must be at least 0'],
       max: [5, 'Rating must be at most 5'],
       set: v => Math.round(v * 10) / 10,
     },
-    Attachments: {
+    attachments: {
       type: Array,
       default: [],
     },
-    Note: {
+    note: {
       type: String,
     },
-    Status: {
+    status: {
       type: String,
       required: true,
     },
-    Owner: { //đăng bởi ai
+    owner: { //đăng bởi ai
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
     //for actions
-    Comments: {
+    comments: {
       type: Array,
       default: [],
     }

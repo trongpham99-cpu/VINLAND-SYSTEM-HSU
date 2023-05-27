@@ -34,7 +34,7 @@ const roomController = {
         try {
             const roomId = req.params.roomId;
             const room = await findRoomAdvance({ id: roomId });
-            res.status(200).json(room);
+            res.status(200).json(room[0]);
         } catch (err) {
             res.status(500).json(err); //http request code
         }
