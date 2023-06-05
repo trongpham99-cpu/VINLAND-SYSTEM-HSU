@@ -1,7 +1,18 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import {
-  Text, View, StyleSheet, ScrollView, SafeAreaView, TextInput, Pressable, FlatList, Dimensions, Image, Button,
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  SafeAreaView,
+  TextInput,
+  Pressable,
+  FlatList,
+  Dimensions,
+  Image,
+  Button,
+  TouchableOpacity,
 } from "react-native";
 import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -12,7 +23,6 @@ export default function Home({ props, navigation }) {
   const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(0);
   const categoryList = ["Tất cả", "Căn hộ", "Nhà cho thuê", "Chung cư"];
   const [homeList, setHomeList] = useState([]);
-
   const getHomeList = async () => {
     try {
       const response = await getAllHome();
@@ -22,14 +32,10 @@ export default function Home({ props, navigation }) {
     }
   };
 
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      // do something
-      getHomeList();
-    });
-
-    return unsubscribe;
-  }, [navigation]);
+  useEffect(() => {
+    // do something
+    getHomeList();
+  }, []);
 
   const ListCategory = () => {
     return (
@@ -54,6 +60,7 @@ export default function Home({ props, navigation }) {
   };
 
   const CardPopular = ({ item }) => {
+    // console.log(item);
     return (
       <Pressable onPress={() => navigation.navigate("DetailScreen", item)}>
         <View style={styles.cardPopular}>
@@ -68,9 +75,26 @@ export default function Home({ props, navigation }) {
             <Text style={{ fontSize: 20, fontFamily: "Bold" }}>
               {item.title}
             </Text>
-            <Text style={{ fontSize: 16, fontFamily: "Regular", marginTop: 5 }}>
-              {item.location.address + ", " + item.location.district + ", " + item.location.province}
-            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                marginTop: 5,
+              }}
+            >
+              <Icon name="location" size={16} color={COLORS.blue} />
+              <Text
+                style={{
+                  color: COLORS.tittleColor,
+                  fontSize: 16,
+                }}
+              >
+                {item.location.address +
+                  ", " +
+                  item.location.district +
+                  ", " +
+                  item.location.province}
+              </Text>
+            </View>
             <Text
               style={{
                 fontSize: 18,
@@ -87,11 +111,11 @@ export default function Home({ props, navigation }) {
     );
   };
 
-  const CardNearest = ({ house }) => {
+  const CardNearest = ({ item }) => {
     return (
-      <Pressable onPress={() => navigation.navigate("DetailScreen", house)}>
+      <Pressable onPress={() => navigation.navigate("DetailScreen", item)}>
         <View style={styles.cardNearest}>
-          <Image source={house.image} style={styles.cardNearestImage} />
+          <Image source={item.thumbnail} style={styles.cardNearestImage} />
           <View
             style={{
               flexDirection: "column",
@@ -99,19 +123,43 @@ export default function Home({ props, navigation }) {
             }}
           >
             <Text style={{ fontSize: 18, fontFamily: "Bold" }}>
-              {house.title}
+              {item.title}
             </Text>
-            <Text
+            <View
+              style={{
+                flexDirection: "row",
+                marginTop: 5,
+              }}
+            >
+              <Icon name="location" size={14} color={COLORS.blue} />
+              <Text
+                style={{
+                  width: width - 170,
+                  color: COLORS.tittleColor,
+                  fontSize: 14,
+                }}
+              >
+                {item.location.address +
+                  ", " +
+                  item.location.district +
+                  ", " +
+                  item.location.province}
+              </Text>
+            </View>
+            {/* <Text
               style={{
                 width: width - 160,
                 fontSize: 14,
-                fontFamily: "Regular",
                 marginTop: 5,
                 // backgroundColor: "#ffffff",
               }}
             >
-              {house.location}
-            </Text>
+              {item.location.address +
+                ", " +
+                item.location.district +
+                ", " +
+                item.location.province}
+            </Text> */}
             <Text
               style={{
                 fontSize: 16,
@@ -120,7 +168,7 @@ export default function Home({ props, navigation }) {
                 marginTop: 5,
               }}
             >
-              {house.price}
+              {item.price}
             </Text>
           </View>
         </View>
@@ -194,7 +242,9 @@ export default function Home({ props, navigation }) {
           >
             Dự án nổi bật
           </Text>
-          <Pressable>
+          <TouchableOpacity
+            onPress={({ item }) => navigation.navigate("HomePopular", item)}
+          >
             <Text
               style={{
                 fontFamily: "Regular",
@@ -204,10 +254,11 @@ export default function Home({ props, navigation }) {
             >
               xem tất cả
             </Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
+
         <FlatList
-          napToInterval={width - 20}
+          napToInterval={width - 40}
           contentContainerStyle={{ paddingLeft: 5, paddingVertical: 20 }}
           horizontal
           data={homeList}
@@ -235,7 +286,9 @@ export default function Home({ props, navigation }) {
           >
             Dự án gần bạn
           </Text>
-          <Pressable>
+          <TouchableOpacity
+            onPress={({ item }) => navigation.navigate("HomeNearest", item)}
+          >
             <Text
               style={{
                 fontFamily: "Regular",
@@ -245,15 +298,18 @@ export default function Home({ props, navigation }) {
             >
               xem tất cả
             </Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
         <FlatList
           napToInterval={width - 40}
           contentContainerStyle={{ paddingLeft: 10, paddingVertical: 10 }}
           horizontal
-          data={houses}
+          data={homeList}
+          keyExtractor={(item_home) => {
+            return item_home.Id;
+          }}
           showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => <CardNearest house={item} />}
+          renderItem={({ item }) => <CardNearest item={item} />}
         />
       </ScrollView>
     </SafeAreaView>
@@ -305,11 +361,15 @@ const styles = StyleSheet.create({
   },
   cardPopular: {
     height: 300,
-    width: width - 140,
+    width: width - 120,
     backgroundColor: "#fafafa",
     elevation: 10,
     marginHorizontal: 5,
-    borderRadius: 20,
+    borderRadius: 10,
+    shadowColor: "black",
+    shadowOffset: { width: 4, height: 4 },
+    shadowRadius: 4,
+    shadowOpacity: 0.25,
   },
   cardPoppularImage: {
     width: "100%",
@@ -326,6 +386,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 10,
     marginRight: 10,
+    shadowColor: "black",
+    shadowOffset: { width: 4, height: 4 },
+    shadowRadius: 4,
+    shadowOpacity: 0.25,
   },
   cardNearestImage: {
     width: 100,

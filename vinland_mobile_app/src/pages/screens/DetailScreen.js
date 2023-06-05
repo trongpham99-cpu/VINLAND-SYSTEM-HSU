@@ -11,16 +11,17 @@ import {
   FlatList,
   Image,
   Pressable,
+  TouchableOpacity,
 } from "react-native";
 import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import houses from "../../constants/houses";
 
 const DetailScreen = ({ navigation, route }) => {
-  const house = route.params;
-  console.log(JSON.stringify(house))
-  const InteriorCard = ({ interior }) => {
-    return <Image source={interior} style={styles.interiorImage} />;
+  const item = route.params;
+  // console.log(JSON.stringify(item));
+  const InteriorCard = () => {
+    return <Image source={item.interior} style={styles.interiorImage} />;
   };
 
   const onContact = () => {
@@ -44,12 +45,12 @@ const DetailScreen = ({ navigation, route }) => {
         <View style={styles.headerBtn}>
           <Image
             style={{ width: 30, height: 40, marginHorizontal: 30 }}
-          // source={require("../../image/211780_more_icon.png")}
+            // source={require("../../image/211780_more_icon.png")}
           />
         </View>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <ImageBackground style={styles.backgroundImage} source={house.thumbnail}>
+        <ImageBackground style={styles.backgroundImage} source={item.thumbnail}>
           <View
             style={{
               height: 40,
@@ -64,9 +65,9 @@ const DetailScreen = ({ navigation, route }) => {
             }}
           />
         </ImageBackground>
-        <View style={styles.iconfavorite}>
-          <Icon name="favorite" size={20} color={COLORS.red} />
-        </View>
+        <TouchableOpacity style={styles.iconfavorite}>
+          <Icon name="favorite" size={20} color={COLORS.red} disabled={false} />
+        </TouchableOpacity>
         <View style={styles.detailsContainer}>
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
@@ -75,35 +76,24 @@ const DetailScreen = ({ navigation, route }) => {
               style={{
                 fontSize: 22,
                 fontFamily: "Bold",
-                color: COLORS.btnColor,
+                color: COLORS.tittleColor,
               }}
             >
-              {house.title}
-            </Text>
-            <Text
-              style={{
-                fontSize: 20,
-                fontFamily: "Bold",
-                color: COLORS.btnColor,
-                // marginLeft: 200,
-
-                alignItems: "center",
-              }}
-            >
-              {house.price}
+              {item.title}
             </Text>
           </View>
           <View
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
-              marginTop: 15,
+              // alignItems: "center",
+              marginTop: 10,
             }}
           >
             <View
               style={{
-                width: 300,
-                height: 50,
+                width: 340,
+                // height: 40,
                 flexDirection: "row",
               }}
             >
@@ -111,11 +101,14 @@ const DetailScreen = ({ navigation, route }) => {
               <Text
                 style={{
                   color: COLORS.tittleColor,
-                  fontWeight: "bold",
-                  fontSize: 16,
+                  fontSize: 18,
                 }}
               >
-                {house.location.address + ", " + house.location.district + ", " + house.location.province}
+                {item.location.address +
+                  ", " +
+                  item.location.district +
+                  ", " +
+                  item.location.province}
               </Text>
             </View>
             <View
@@ -139,38 +132,88 @@ const DetailScreen = ({ navigation, route }) => {
           <View>
             <Text
               style={{
+                fontSize: 26,
+                fontFamily: "Bold",
+                color: COLORS.btnColor,
+                alignItems: "center",
+                marginVertical: 10,
+              }}
+            >
+              {item.price}
+            </Text>
+          </View>
+          <View>
+            <Text
+              style={{
                 marginTop: 5,
                 fontWeight: "bold",
                 fontSize: 20,
                 marginBottom: 10,
               }}
             >
-              Description
+              Mô Tả
             </Text>
-            <Text style={{ lineHeight: 20 }}>{house.description} </Text>
+            <Text
+              style={{ lineHeight: 20, fontFamily: "Regular", fontSize: 18 }}
+            >
+              {item.description}{" "}
+            </Text>
           </View>
           <View>
             <Text style={{ marginTop: 10, fontWeight: "bold", fontSize: 20 }}>
-              Preview
+              Hình ảnh liên quan
             </Text>
             <FlatList
               contentContainerStyle={{ marginTop: 15 }}
               horizontal
               showsHorizontalScrollIndicator={false}
               keyExtractor={(_, key) => key.toString()}
-              data={house.interiors}
+              data={item.interior}
               renderItem={({ item }) => <InteriorCard interior={item} />}
             />
           </View>
           <View style={{ flexDirection: "row", marginTop: 20 }}>
             <View style={styles.facility}></View>
           </View>
+          <View>
+            <Text
+              style={{ fontFamily: "Bold", fontSize: 20, marginBottom: 10 }}
+            >
+              Thông tin liên hệ
+            </Text>
+            <View style={styles.btn1}>
+              <Image
+                style={{ width: 50, height: 50, borderRadius: 30 }}
+                source={require("../../image/user.jpg")}
+              />
+              <Text style={styles.text1}>Nguyễn Minh Trung</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  onContact();
+                }}
+              >
+                <Image
+                  style={{ width: 40, height: 40, marginLeft: 80 }}
+                  source={require("../../image/chat.png")}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-        <Pressable onPress={() => { onContact() }} style={{ justifyContent: "center", alignItems: "center" }}>
+        {/* <Pressable
+          onPress={() => {
+            onContact();
+          }}
+          style={{ justifyContent: "center", alignItems: "center" }}
+        >
           <View style={styles.btn1}>
+            <Image
+              style={{ width: 50, height: 50, borderRadius: 20 }}
+              source={require("../../image/user.jpg")}
+            />
             <Text style={styles.text1}>Liên Hệ</Text>
           </View>
-        </Pressable>
+        </Pressable> */}
       </ScrollView>
     </SafeAreaView>
   );
@@ -192,7 +235,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   header: {
-    paddingVertical: 20,
+    paddingVertical: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -225,22 +268,27 @@ const styles = StyleSheet.create({
     color: "red",
   },
   interiorImage: {
-    width: width / 3 - 20,
-    height: 80,
+    width: width / 2 - 20,
+    height: 100,
     marginRight: 10,
     borderRadius: 10,
   },
   btn1: {
     height: 60,
-    width: 310,
-    backgroundColor: "#2D77EF",
+    backgroundColor: COLORS.bgColor,
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 30,
-    marginBottom: 10,
+    // justifyContent: "space-between",
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    shadowColor: "black",
+    shadowOffset: { width: -4, height: 2 },
+    shadowRadius: 2,
+    shadowOpacity: 0.25,
   },
   text1: {
-    color: "white",
+    marginLeft: 10,
+    color: "black",
     fontFamily: "Bold",
     fontSize: 18,
   },

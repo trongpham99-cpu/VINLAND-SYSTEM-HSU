@@ -74,21 +74,20 @@ export default function Login({ navigation }) {
         <Text style={styles.tittle}>Chào mừng bạn đến với VinLand</Text>
       </View>
       <View>
-        {/* {error ? (
+        {error ? (
           <Text style={{ color: "red", fontSize: 18, textAlign: "center" }}>
             {error}
           </Text>
-        ) : null} */}
-
+        ) : null}
         <FormInput
-          error={error}
+          // error={error}
           value={username}
           onChangeText={(value) => handleOnChangeText(value, "username")}
           source={require("../../image/mail-inbox-app.png")}
           placeholder="Vui lòng nhập tên của bạn"
         />
         <FormInput
-          error={error}
+          // error={error}
           secureTextEntry
           autoCapitalize="none"
           value={password}
@@ -145,32 +144,6 @@ export default function Login({ navigation }) {
             </Text>
           </Pressable>
         </View>
-        {/* <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: 38,
-          }}
-        >
-          <Pressable onPress={() => navigation.navigate("#")}>
-            <View style={styles.btnLogins}>
-              <Image
-                style={{ width: 30, height: 30, marginHorizontal: 20 }}
-                source={require("../../image/facebook.png")}
-              />
-              <Text style={styles.txtLogins}>Đăng nhập bằng FaceBook</Text>
-            </View>
-          </Pressable>
-          <Pressable onPress={() => navigation.navigate("#")}>
-            <View style={styles.btnLogins}>
-              <Image
-                style={{ width: 30, height: 30, marginHorizontal: 20 }}
-                source={require("../../image/google.png")}
-              />
-              <Text style={styles.txtLogins}>Đăng nhập bằng Gmail</Text>
-            </View>
-          </Pressable>
-        </View> */}
       </View>
     </SafeAreaView>
   );

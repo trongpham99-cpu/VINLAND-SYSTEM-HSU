@@ -4,6 +4,10 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import Home from "./Home";
 import DetailScreen from "./DetailScreen";
+import HomePopular from "./HomePopular";
+import HomeNearest from "./HomeNearest";
+// import ChatNavigator from "./ChatHub";
+import ChatDetail from "./ChatDetail";
 const Stack = createStackNavigator();
 export default function ProductNavigator() {
   return (
@@ -13,6 +17,9 @@ export default function ProductNavigator() {
     >
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="DetailScreen" component={DetailScreen} />
+      <Stack.Screen name="HomePopular" component={HomePopular} />
+      <Stack.Screen name="HomeNearest" component={HomeNearest} />
+      <Stack.Screen name="ChatDetail" component={ChatDetail} />
     </Stack.Navigator>
   );
 }

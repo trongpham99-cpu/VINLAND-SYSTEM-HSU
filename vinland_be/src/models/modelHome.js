@@ -21,15 +21,19 @@ const homeSchema = new mongoose.Schema(
       type: Object,
       required: true,
     },
+    interior: {
+      type: Object,
+      required: true,
+    },
     slug: {
       type: String,
     },
     rating: {
       type: Number,
       default: 0,
-      min: [0, 'Rating must be at least 0'],
-      max: [5, 'Rating must be at most 5'],
-      set: v => Math.round(v * 10) / 10,
+      min: [0, "Rating must be at least 0"],
+      max: [5, "Rating must be at most 5"],
+      set: (v) => Math.round(v * 10) / 10,
     },
     attachments: {
       type: Array,
@@ -42,7 +46,8 @@ const homeSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    owner: { //đăng bởi ai
+    owner: {
+      //đăng bởi ai
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
@@ -51,7 +56,7 @@ const homeSchema = new mongoose.Schema(
     comments: {
       type: Array,
       default: [],
-    }
+    },
   },
   {
     timestamps: true,
