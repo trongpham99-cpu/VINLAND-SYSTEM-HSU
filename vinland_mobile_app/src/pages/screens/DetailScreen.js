@@ -21,7 +21,7 @@ const DetailScreen = ({ navigation, route }) => {
   const item = route.params;
   // console.log(JSON.stringify(item));
   const InteriorCard = () => {
-    return <Image source={item.interior} style={styles.interiorImage} />;
+    return <Image source={interior} style={styles.interiorImage} />;
   };
 
   const onContact = () => {

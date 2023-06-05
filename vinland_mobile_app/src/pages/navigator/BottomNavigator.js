@@ -6,6 +6,7 @@ import News from "../screens/News";
 import Account from "../screens/Account";
 import ProductNavigator from "../screens/Product";
 import ChatNavigator from "../screens/ChatHub";
+import NewNavigator from "../screens/NewList";
 
 const Tab = createBottomTabNavigator();
 
@@ -34,7 +35,7 @@ export default function BottomNavigator() {
       />
       <Tab.Screen
         name="Tin tức"
-        component={News}
+        component={NewNavigator}
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon

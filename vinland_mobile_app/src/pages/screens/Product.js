@@ -8,6 +8,7 @@ import HomePopular from "./HomePopular";
 import HomeNearest from "./HomeNearest";
 // import ChatNavigator from "./ChatHub";
 import ChatDetail from "./ChatDetail";
+import SellProperty from "./SellProperty";
 const Stack = createStackNavigator();
 export default function ProductNavigator() {
   return (
@@ -16,10 +17,12 @@ export default function ProductNavigator() {
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="SellProperty" component={SellProperty} />
       <Stack.Screen name="DetailScreen" component={DetailScreen} />
       <Stack.Screen name="HomePopular" component={HomePopular} />
       <Stack.Screen name="HomeNearest" component={HomeNearest} />
       <Stack.Screen name="ChatDetail" component={ChatDetail} />
+     
     </Stack.Navigator>
   );
 }

@@ -175,7 +175,7 @@ export default function Home({ props, navigation }) {
       </Pressable>
     );
   };
-
+ 
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.bgColor, flex: 1 }}>
       <View style={styles.header}>
@@ -221,7 +221,30 @@ export default function Home({ props, navigation }) {
             placeholder="Tìm kiếm nhà, căn hộ, dự án cho thuê"
           />
         </View>
+        <TouchableOpacity
+    onPress={(item) => navigation.navigate("SellProperty",item)}
+  >
+     <Icon
+          style={{
+           borderColor: COLORS.greylight,
+           borderWidth: 5,
+           borderRadius: 10,
+           paddingHorizontal: 5,
+           paddingVertical: 5,
+           marginLeft:10,
+           backgroundColor: COLORS.blue,
+           color:COLORS.white,
+           justifyContent: "center",
+           alignItems: "center",
+         
+          }}
+       name="add"
+          size={22}
+  
+        />
+  </TouchableOpacity>
       </View>
+      
       <ListCategory />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View
