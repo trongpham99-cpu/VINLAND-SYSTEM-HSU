@@ -2,7 +2,7 @@ const env = process.env.NODE_ENV || "development";
 
 const development = {
   api: {
-    url: "http://192.168.0.105:8080",
+    url: "http://192.168.56.1:8080",
   },
 };
 
