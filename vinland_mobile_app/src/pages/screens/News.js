@@ -12,10 +12,7 @@ import {
   Image,
   Button,
   ImageBackground,
-<<<<<<< HEAD
   TouchableOpacity,
-=======
->>>>>>> 6f73e8265d1d3a8c3bf8ab8af2368e88b6e5c565
 } from "react-native";
 import { useState } from "react";
 import COLORS from "../../constants/colors";
@@ -26,11 +23,7 @@ export default function News({ props, navigation }) {
   const renderCard = ({ item }) => (
     <Pressable
       style={styles.card}
-<<<<<<< HEAD
       onPress={() => navigation.navigate('NewsDetail', { item })}
-=======
-      onPress={() => navigation.navigate("NewsDetail", { item })}
->>>>>>> 6f73e8265d1d3a8c3bf8ab8af2368e88b6e5c565
     >
       <View style={styles.card}>
         <ImageBackground source={item.image} style={styles.cardImage}>
@@ -45,32 +38,20 @@ export default function News({ props, navigation }) {
       </View>
     </Pressable>
   );
-<<<<<<< HEAD
   const goToAdminScreen = () => {
     navigation.navigate("Admin");
   };
   
   
-=======
->>>>>>> 6f73e8265d1d3a8c3bf8ab8af2368e88b6e5c565
   const house = [
     {
       id: 1,
       image: require("../../image/vinhome.jpg"),
       publishedDate: "07/04/2023 8:38",
       title: "Cập nhật giá chung cư VinHome Central Park mới nhất",
-<<<<<<< HEAD
       author: "Người đăng",
       description: "Mô tả chi tiết của bản tin về giá chung cư VinHome Central Park.",
     },
-=======
-      publishedDate: "07/04/2023 8:38",
-      author: "Người đăng",
-      description:
-        "Mô tả chi tiết của bản tin về giá chung cư VinHome Central Park.",
-    },
-
->>>>>>> 6f73e8265d1d3a8c3bf8ab8af2368e88b6e5c565
     { id: 2, image: require("../../image/vinhome2.jpg") },
     { id: 3, image: require("../../image/vinhome3.jpg") },
     { id: 4, image: require("../../image/vinhome4.jpg") },
@@ -79,7 +60,6 @@ export default function News({ props, navigation }) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <View style={styles.header}>
-<<<<<<< HEAD
       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 20 }}>
     <Text style={{ fontFamily: "Bold", fontSize: 26, flex: 1, textAlign: "center" }}>Tin tức bất động sản</Text>
     <TouchableOpacity onPress={goToAdminScreen} style={styles.adminButton}>
@@ -88,18 +68,6 @@ export default function News({ props, navigation }) {
   </View>
       
        
-=======
-        <View style={{ alignItems: "center", marginBottom: 20 }}>
-          <Text
-            style={{
-              fontFamily: "Bold",
-              fontSize: 26,
-            }}
-          >
-            Tin tức bất động sản
-          </Text>
-        </View>
->>>>>>> 6f73e8265d1d3a8c3bf8ab8af2368e88b6e5c565
         <ScrollView>
           <View style={styles.searchInput}>
             <Icon name="search" size={25} color={COLORS.grey} />
@@ -201,10 +169,7 @@ export default function News({ props, navigation }) {
               </Text>
             </View>
           </View>
-<<<<<<< HEAD
           
-=======
->>>>>>> 6f73e8265d1d3a8c3bf8ab8af2368e88b6e5c565
         </ScrollView>
       </View>
     </SafeAreaView>
@@ -311,8 +276,4 @@ const styles = StyleSheet.create({
     left: 15,
     borderRadius: 10,
   },
-<<<<<<< HEAD
-});
-=======
-});
->>>>>>> 6f73e8265d1d3a8c3bf8ab8af2368e88b6e5c565
+})
