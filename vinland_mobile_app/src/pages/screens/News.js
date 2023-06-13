@@ -74,7 +74,6 @@ export default function News({ props, navigation }) {
               fontFamily: "Bold",
               fontSize: 26,
               flex: 1,
-              marginLeft: 40,
               textAlign: "center",
             }}
           >
@@ -88,6 +87,16 @@ export default function News({ props, navigation }) {
           </TouchableOpacity>
         </View>
 
+        <View style={{ alignItems: "center", marginBottom: 20 }}>
+          <Text
+            style={{
+              fontFamily: "Bold",
+              fontSize: 26,
+            }}
+          >
+            Tin tức bất động sản
+          </Text>
+        </View>
         <ScrollView>
           <View style={styles.searchInput}>
             <Icon name="search" size={25} color={COLORS.grey} />
