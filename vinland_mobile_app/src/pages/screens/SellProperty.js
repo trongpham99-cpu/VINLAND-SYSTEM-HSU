@@ -367,4 +367,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textAlignVertical: "center",
   },
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> 6f73e8265d1d3a8c3bf8ab8af2368e88b6e5c565
