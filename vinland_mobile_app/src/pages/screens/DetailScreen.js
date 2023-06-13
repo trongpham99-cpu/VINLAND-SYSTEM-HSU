@@ -16,6 +16,7 @@ import {
 import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import houses from "../../constants/houses";
+import { Slider } from "react-native-elements";
 
 const DetailScreen = ({ navigation, route }) => {
   const item = route.params;

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   TextInput,
+  Button,
 } from "react-native";
 import React, { useState } from "react";
 import COLORS from "../../constants/colors";
@@ -14,25 +15,33 @@ import * as ImagePicker from "expo-image-picker";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 export default function EditProfile({ navigation }) {
-  const [image, setImage] = useState({ item });
-  const [name, setName] = useState("My Name");
-  const [email, setEmail] = useState("myname@gmail.com");
-  const [password, setPassword] = useState(".........");
-  const item = () => {
-    <Image source={require("../../image/user.jpg")} />;
+  const [image, setImage] = useState(null);
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+
+  const handleImagePicker = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status === "granted") {
+      const capturedImage = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+      });
+      if (!capturedImage.canceled) {
+        setImage(capturedImage.assets[0].uri);
+      }
+    }
   };
   const handleImageSelect = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
-    });
-
-    console.log(result);
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status === "granted") {
+      const capturedImage = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+      });
+      if (!capturedImage.canceled) {
+        setImage(capturedImage.assets[0].uri);
+      }
     }
   };
   return (
@@ -50,12 +59,10 @@ export default function EditProfile({ navigation }) {
       </View>
       <ScrollView>
         <View style={{ alignItems: "center", marginVertical: 22 }}>
-          <TouchableOpacity onPress={handleImageSelect}>
-            {/* <Image
-              source={require("../../image/user.jpg")}
-              // source={{
-              //   uri: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
-              // }}
+          {image && (
+            <Image
+              //source={require("../../image/user.jpg")}
+              source={{ uri: image }}
               style={{
                 height: 160,
                 width: 160,
@@ -63,31 +70,17 @@ export default function EditProfile({ navigation }) {
                 borderWidth: 2,
                 borderColor: COLORS.grey,
               }}
-            /> */}
-            {image && (
-              <Image
-                //source={require("../../image/user.jpg")}
-                source={{ uri: image }}
-                style={{
-                  height: 160,
-                  width: 160,
-                  borderRadius: 80,
-                  borderWidth: 2,
-                  borderColor: COLORS.grey,
-                }}
-              />
-            )}
-            <View
-              style={{
-                position: "absolute",
-                bottom: 0,
-                right: 12,
-                zIndex: 9999,
-              }}
-            >
-              <Icon name="photo-camera" size={32} color={COLORS.btnColor} />
+            />
+          )}
+          <View style={{ flexDirection: "row" }}>
+            <View style={{ justifyContent: "center" }}>
+              <Button title="Camera" onPress={() => handleImagePicker()} />
             </View>
-          </TouchableOpacity>
+            <View style={{ width: 10 }} />
+            <View style={{ justifyContent: "center" }}>
+              <Button title="Gallery" onPress={() => handleImageSelect()} />
+            </View>
+          </View>
         </View>
         <View>
           <View
@@ -98,7 +91,7 @@ export default function EditProfile({ navigation }) {
             }}
           >
             <Text style={{ fontFamily: "Bold", fontSize: 20, marginBottom: 5 }}>
-              Ho va ten
+              Họ và tên
             </Text>
             <View
               style={{
@@ -115,6 +108,7 @@ export default function EditProfile({ navigation }) {
             >
               <TextInput
                 value={name}
+                placeholder="Nhập tên của bạn"
                 onChangeText={(value) => setName(value)}
                 editable={true}
               ></TextInput>
@@ -140,6 +134,7 @@ export default function EditProfile({ navigation }) {
               }}
             >
               <TextInput
+                placeholder="Nhập Email của bạn"
                 value={email}
                 onChangeText={(value) => setEmail(value)}
                 editable={true}
@@ -150,7 +145,7 @@ export default function EditProfile({ navigation }) {
             style={{ flexDirection: "column", marginBottom: 6, marginLeft: 10 }}
           >
             <Text style={{ fontFamily: "Bold", fontSize: 20, marginBottom: 5 }}>
-              Mat Khau
+              Mật khẩu
             </Text>
             <View
               style={{
@@ -166,6 +161,7 @@ export default function EditProfile({ navigation }) {
               }}
             >
               <TextInput
+                placeholder="Nhập mật khẩu vào đây"
                 value={password}
                 onChangeText={(value) => setPassword(value)}
                 editable={true}
