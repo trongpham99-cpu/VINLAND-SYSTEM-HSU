@@ -28,7 +28,7 @@ app.use(morgan("common"));
 dotenv.config();
 
 //cache 
-const { getMessageOnRoom } = require("./src/services/room.service");
+const { getMessageOnRoom, findRoomAdvance } = require("./src/services/room.service");
 const { getRoomById } = require("./src/controllers/roomControllers");
 
 //Init Cloudinary
@@ -53,10 +53,10 @@ mongoose
 //Init io 
 io.on("connection", (socket) => {
 
+  console.log('a user connected');
+
   socket.on('join_room', async (roomId) => {
     socket.join(roomId);
-    const messages = await getMessageOnRoom(roomId);
-    io.to(roomId).emit('get messages', messages);
   });
 
   socket.on('leave_room', (roomId) => {
@@ -64,8 +64,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on('on_new_room', async (roomId) => {
-    const room = await getRoomById(roomId);
-    io.to(message.roomId).emit('on_new_room', room);
+    const room = await findRoomAdvance({ id: roomId });
+    io.to(roomId).emit('on_new_room', room[0]);
   });
 
   socket.on('disconnect', () => {

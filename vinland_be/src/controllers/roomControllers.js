@@ -60,9 +60,9 @@ const roomController = {
         try {
             const roomId = req.params.roomId;
             const room = await findRoomAdvance({ id: roomId });
-            res.status(200).json(room[0]);
+            return res.status(200).json(room[0]);
         } catch (err) {
-            res.status(500).json(err); //http request code
+            return res.status(500).json(err); //http request code
         }
     },
 

@@ -17,11 +17,13 @@ import {
 import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/Ionicons";
 import { getAllHome } from "../../services/home";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Home({ props, navigation }) {
   const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(0);
   const categoryList = ["Tất cả", "Căn hộ", "Nhà cho thuê", "Chung cư"];
   const [homeList, setHomeList] = useState([]);
+  
   const getHomeList = async () => {
     try {
       const type = selectedCategoryIndex;
@@ -29,6 +31,15 @@ export default function Home({ props, navigation }) {
       setHomeList(response);
     } catch (error) {
       return console.log(error);
+    }
+  };
+
+  const getToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      return token;
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -145,20 +156,6 @@ export default function Home({ props, navigation }) {
                   item.location.province}
               </Text>
             </View>
-            {/* <Text
-              style={{
-                width: width - 160,
-                fontSize: 14,
-                marginTop: 5,
-                // backgroundColor: "#ffffff",
-              }}
-            >
-              {item.location.address +
-                ", " +
-                item.location.district +
-                ", " +
-                item.location.province}
-            </Text> */}
             <Text
               style={{
                 fontSize: 16,
@@ -220,26 +217,29 @@ export default function Home({ props, navigation }) {
             placeholder="Tìm kiếm nhà, căn hộ, dự án cho thuê"
           />
         </View>
-        <TouchableOpacity
-          onPress={(item) => navigation.navigate("SellProperty", item)}
-        >
-          <Icon
-            style={{
-              borderColor: COLORS.greylight,
-              borderWidth: 2,
-              borderRadius: 10,
-              paddingHorizontal: 10,
-              paddingVertical: 10,
-              color: "gray",
-              marginLeft: 5,
-            }}
-            name="add"
-            size={22}
+        {
+          getToken() != null ? (
+            <TouchableOpacity
+              onPress={(item) => navigation.navigate("SellProperty", item)}
+            >
+              <Icon
+                style={{
+                  borderColor: COLORS.greylight,
+                  borderWidth: 2,
+                  borderRadius: 10,
+                  paddingHorizontal: 10,
+                  paddingVertical: 10,
+                  color: "gray",
+                  marginLeft: 5,
+                }}
+                name="add"
+                size={22}
 
-          />
-        </TouchableOpacity>
+              />
+            </TouchableOpacity>
+          ) : null
+        }
       </View>
-
       <ListCategory />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View

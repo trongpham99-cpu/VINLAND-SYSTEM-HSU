@@ -1,38 +1,17 @@
 import axios from "axios";
-import { AsyncStorage } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import config from "../configs/index";
 const {
   api: { url },
 } = config;
 
-export const addHome = async (
-  Title,
-  Description,
-  Price,
-  Location,
-  Thumbnail,
-  Slug,
-  Rating,
-  Attachments,
-  Note,
-  Status,
-  Owner,
-  Comments
-) => {
+export const addHome = async (params) => {
+  const token = await AsyncStorage.getItem("token");
   try {
-    const response = await axios.post(`${url}/home/`, {
-      Title,
-      Description,
-      Price,
-      Location,
-      Thumbnail,
-      Slug,
-      Rating,
-      Attachments,
-      Note,
-      Status,
-      Owner,
-      Comments,
+    const response = await axios.post(`${url}/home`, params, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
     });
     return response.data;
   } catch (error) {

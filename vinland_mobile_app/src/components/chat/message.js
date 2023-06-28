@@ -1,11 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, View } from "react-native";
 import { styles } from '../../components/chat/styles/message.style';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const Message = (props) => {
+    const [id, setId] = React.useState(null);
+
+    const getId = async () => {
+        let id = await AsyncStorage.getItem("user_id")
+        setId(id)
+    }
+
+    useEffect(() => {
+        getId();
+    }, [])
 
     const { message = {} } = props;
-    const isMe = message.user._id === 2 ? true : false;
-    
+    const { user: { _id } } = message;
+    const isMe = _id === id ? true : false;
+
     return (
         <View
             style={{

@@ -12,20 +12,20 @@ import {
   TextInput,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { Slider } from "react-native-elements";
+import { Input, Slider } from "react-native-elements";
 import COLORS from "../../constants/colors";
-import houses from "../../constants/houses";
 import * as ImagePicker from 'expo-image-picker';
-// import { launchImageLibrary } from 'react-native-image-picker';
+import { uploadSingleImage } from "../../services/upload";
+import { addHome } from "../../services/home";
 
 export default function SellProperty({ navigation, route }) {
   const [selectedPrice, setSelectedPrice] = useState(0);
   const [description, setDescription] = useState("");
-  const [selectedRoomType, setSelectedRoomType] = useState("studio");
+  const [title, setTitle] = useState("");
+  const [location, setLocation] = useState("");
+  const [selectedRoomType, setSelectedRoomType] = useState("1");
   const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
   const [images, setImages] = useState([]);
-  const item = route.params;
-  // console.log(JSON.stringify(item));
 
   useEffect(() => {
     (async () => {
@@ -42,11 +42,23 @@ export default function SellProperty({ navigation, route }) {
       quality: 1,
     });
 
-    const newImageUri = "file:///" + result.uri.split("file:/").join("");
+    const { uri } = result;
 
-    if (!result.cancelled) {
-      setImages([...images, newImageUri]);
-    }
+    const formData = new FormData();
+    formData.append("file", {
+      name: result.uri.split("/").pop(),
+      type: "image/jpeg",
+      uri: uri,
+    });
+
+    uploadSingleImage(formData).then((res) => {
+      if (res.data) {
+        const { url } = res.data;
+        setImages([...images, url]);
+      }
+    }).catch((err) => {
+      console.log(err);
+    });
   }
 
   const handleAddImage = async () => {
@@ -65,8 +77,29 @@ export default function SellProperty({ navigation, route }) {
     setSelectedRoomType(roomType);
   };
   const handleUpdateInformation = () => {
-    // Xử lý logic khi người dùng nhấn nút cập nhật thông tin
-    console.log("Thông tin đã được cập nhật!");
+    const newLocation = location.split(",");
+    const home = {
+      attachments: images,
+      comments: [],
+      description: description,
+      location: {
+        address: newLocation[0],
+        district: newLocation[1],
+        province: newLocation[2],
+      },
+      note: "",
+      price: Math.round(selectedPrice),
+      rating: 0,
+      type: selectedRoomType,
+      thumbnail: images,
+      title: title
+    };
+    addHome(home).then((res) => {
+      alert("Thêm bất động sản thành công, vui lòng chờ admin duyệt");
+      navigation.navigate("Home");
+    }).catch((err) => {
+      console.log(err);
+    });
   };
 
   return (
@@ -95,12 +128,50 @@ export default function SellProperty({ navigation, route }) {
         <FlatList
           data={images}
           horizontal
-          renderItem={({ item }) => {
-            return (<Image source={item} style={styles.interiorImage} />)
+          renderItem={({ item: uri }) => {
+            return <Image source={{ uri }} style={styles.interiorImage} />;
           }}
           keyExtractor={(item, index) => index.toString()}
         />
 
+        <View
+          style={{
+            marginTop: 10,
+            marginHorizontal: 10,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 18,
+              fontFamily: "Bold",
+              marginBottom: 5,
+              marginTop: 5,
+            }}
+          >
+            Tiêu đề:
+          </Text>
+          <View
+            style={
+              {
+                ...styles.textInputContainer,
+                flexDirection: "row",
+                height: 50,
+                border: "none",
+              }
+            }
+          >
+            <Input
+              style={styles.textInput}
+              multiline
+              numberOfLines={4}
+              value={title}
+              onChangeText={(e) => setTitle(e)}
+              placeholder="Nhập tiêu đề của bạn"
+              placeholderTextColor={COLORS.gray}
+            />
+
+          </View>
+        </View>
         <View style={styles.priceSelectorContainer}>
           <Text style={styles.priceLabel}>Chọn giá bán:</Text>
           <Slider
@@ -123,7 +194,7 @@ export default function SellProperty({ navigation, route }) {
             paddingHorizontal: 10,
           }}
         >
-          <Text style={styles.label}>Nêu mô tả:</Text>
+          <Text style={styles.label}>Mô tả:</Text>
           <View style={styles.textInputContainer}>
             <TextInput
               style={styles.textInput}
@@ -153,24 +224,25 @@ export default function SellProperty({ navigation, route }) {
             Địa chỉ:
           </Text>
           <View
-            style={{
-              flexDirection: "row",
-            }}
+            style={
+              {
+                ...styles.textInputContainer,
+                flexDirection: "row",
+                height: 50,
+                border: "none",
+              }
+            }
           >
-            <Icon name="place" size={18} color={COLORS.blue} />
-            <TextInput
-              style={{
-                width: "95%",
-                height: 40,
-                color: COLORS.tittleColor,
-                fontFamily: "Regular",
-                fontSize: 16,
-                backgroundColor: COLORS.greylight,
-                borderRadius: 5,
-              }}
-            >
-              {/* {house.location.address + ", " + house.location.district + ", " + house.location.province} */}
-            </TextInput>
+            <Input
+              style={styles.textInput}
+              multiline
+              numberOfLines={4}
+              value={location}
+              onChangeText={(e) => setLocation(e)}
+              placeholder="181 Cao Thắng, Quận 10, Hồ Chí Minh" //Đường, Quận, Thành phố
+              placeholderTextColor={COLORS.gray}
+            />
+
           </View>
         </View>
         <View style={styles.roomTypeContainer}>
@@ -184,56 +256,35 @@ export default function SellProperty({ navigation, route }) {
           >
             Loại Phòng
           </Text>
-
           <View style={styles.roomTypeOptions}>
             <TouchableOpacity
               style={[
                 styles.roomTypeOption,
-                selectedRoomType === "studio" && styles.selectedRoomTypeOption,
+                selectedRoomType === "1" && styles.selectedRoomTypeOption,
               ]}
-              onPress={() => handleRoomTypeChange("studio")}
+              onPress={() => handleRoomTypeChange("1")}
             >
-              <Text style={styles.roomTypeOptionText}>Studio</Text>
+              <Text style={styles.roomTypeOptionText}>Căn hộ</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[
                 styles.roomTypeOption,
-                selectedRoomType === "2bathroom" &&
+                selectedRoomType === "2" &&
                 styles.selectedRoomTypeOption,
               ]}
-              onPress={() => handleRoomTypeChange("2bathroom")}
+              onPress={() => handleRoomTypeChange("2")}
             >
-              <Text style={styles.roomTypeOptionText}>2 Bathroom</Text>
+              <Text style={styles.roomTypeOptionText}>Nhà cho thuê</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[
                 styles.roomTypeOption,
-                selectedRoomType === "3bathroom" &&
+                selectedRoomType === "3" &&
                 styles.selectedRoomTypeOption,
               ]}
-              onPress={() => handleRoomTypeChange("3bathroom")}
+              onPress={() => handleRoomTypeChange("3")}
             >
-              <Text style={styles.roomTypeOptionText}>3 Bathroom</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.roomTypeOption,
-                selectedRoomType === "4bathroom" &&
-                styles.selectedRoomTypeOption,
-              ]}
-              onPress={() => handleRoomTypeChange("4bathroom")}
-            >
-              <Text style={styles.roomTypeOptionText}>4 Bathroom</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.roomTypeOption,
-                selectedRoomType === "5bathroom" &&
-                styles.selectedRoomTypeOption,
-              ]}
-              onPress={() => handleRoomTypeChange("5bathroom")}
-            >
-              <Text style={styles.roomTypeOptionText}>5 Bathroom</Text>
+              <Text style={styles.roomTypeOptionText}>Chung cư</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -365,7 +416,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   selectedRoomTypeOption: {
-    backgroundColor: COLORS.blue,
+    backgroundColor: COLORS.btnColor,
+    color: "white",
+    padding: 20
   },
   roomTypeOptionText: {
     fontSize: 14,

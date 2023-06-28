@@ -8,7 +8,7 @@ import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import ListMessage from '../chat/list-message';
 import { fetchRoomDetail } from "../../services/room";
 import { sendMessage } from "../../services/message";
-import socketService from "../../configs/socket";
+import { onEmit, onListen, onOff } from "../../configs/socket";
 const RoomDetail = (props) => {
 
     const { navigation, id } = props;
@@ -27,7 +27,9 @@ const RoomDetail = (props) => {
         let response = await fetchRoomDetail(id);
         if (response) {
             setRoom(response);
-            setMessages(response.messages);
+            const newMessage = [...response.messages]
+            newMessage.reverse();
+            setMessages(newMessage);
         }
         setLoading(false);
     }
@@ -36,19 +38,24 @@ const RoomDetail = (props) => {
         _fetchRoom();
     }, []);
 
+    useEffect(() => {
+        onEmit("join_room", room._id);
+        onListen("on_new_room", onNewRoom);
+
+        return () => {
+            onEmit("leave_room", room._id);
+            onOff("on_new_room", onNewRoom);
+        }
+    }, [room])
+
     const onNewRoom = async (room) => {
-        setRoom(room);
-        setMessages(room.messages);
+        const newMessage = [...room.messages]
+        newMessage.reverse();
+        setMessages(newMessage);
     }
 
     useEffect(() => {
-        socketService.initializeSocket();
-        socketService.emit('join_room', room._id);
-        socketService.on('on_new_room', onNewRoom);
-        return () => {
-            socketService.emit('leave_room', room._id);
-            socketService.off('on_new_room', onNewRoom);
-        }
+
     }, [])
 
     const onSendMessage = () => {
@@ -56,7 +63,7 @@ const RoomDetail = (props) => {
             roomId: room._id,
             content: content,
             attachments: null,
-            type: text
+            type: "text"
         }
 
         if (data.attachments && data.attachments.length > 0) {
@@ -65,7 +72,7 @@ const RoomDetail = (props) => {
 
         sendMessage(data).then(res => {
             setContent('');
-            socketService.emit('on_new_room', data.roomId);
+            onEmit('on_new_room', data.roomId);
         }, err => {
             console.log(err);
         })

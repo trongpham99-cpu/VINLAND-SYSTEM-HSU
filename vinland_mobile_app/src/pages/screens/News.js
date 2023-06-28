@@ -41,7 +41,7 @@ export default function News({ props, navigation }) {
         onPress={() => navigation.navigate("NewsDetail", { id: item._id })}
       >
         <View style={styles.card}>
-          <ImageBackground style={styles.cardImage} source={item.thumbnail}>
+          <ImageBackground style={styles.cardImage} source={{ uri: item.thumbnail }}>
             <View style={styles.overlay}>
               <Text style={styles.overlayDateTime}>
                 {
@@ -66,7 +66,7 @@ export default function News({ props, navigation }) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <View style={styles.header}>
-        <View
+        {/* <View
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -89,8 +89,7 @@ export default function News({ props, navigation }) {
           >
             <Icon name="ellipsis-horizontal" size={22} />
           </TouchableOpacity>
-        </View>
-
+        </View> */}
         <View style={{ alignItems: "center", marginBottom: 20 }}>
           <Text
             style={{
@@ -115,7 +114,9 @@ export default function News({ props, navigation }) {
           </Text>
           <FlatList
             data={house}
-            renderItem={renderCard}
+            renderItem={(item)=> {
+              return renderCard(item);
+            }}
             keyExtractor={(item) => {
               return item._id;
             }}

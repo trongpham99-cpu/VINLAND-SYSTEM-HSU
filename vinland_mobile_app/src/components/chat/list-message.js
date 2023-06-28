@@ -7,7 +7,7 @@ import Message from './message';
 const ListMessage = (props) => {
 
     const { messages = [] } = props;
-
+    
     return (
         <View>
             {messages.map((message, index) => {

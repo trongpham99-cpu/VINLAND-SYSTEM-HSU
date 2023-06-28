@@ -7,10 +7,15 @@ import Account from "../screens/Account";
 import ProductNavigator from "../screens/Product";
 import ChatNavigator from "../screens/ChatHub";
 import NewNavigator from "../screens/NewList";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Tab = createBottomTabNavigator();
 
 export default function BottomNavigator() {
+  const getToken = async () => {
+    const token = await AsyncStorage.getItem("token");
+    return token;
+  };
   return (
     <Tab.Navigator
       initialRouteName="Trang chủ"
@@ -46,19 +51,23 @@ export default function BottomNavigator() {
           ),
         }}
       />
-      <Tab.Screen
-        name="Chatting"
-        component={ChatNavigator}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <Icon
-              name="chatbox"
-              size={24}
-              color={focused ? "#2D77EF" : "#9E9E9E"}
-            />
-          ),
-        }}
-      />
+      {
+        getToken() != null ? (
+          <Tab.Screen
+            name="Chatting"
+            component={ChatNavigator}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <Icon
+                  name="chatbox"
+                  size={24}
+                  color={focused ? "#2D77EF" : "#9E9E9E"}
+                />
+              ),
+            }}
+          />
+        ) : null
+      }
       <Tab.Screen
         name="Tài khoản"
         component={Account}

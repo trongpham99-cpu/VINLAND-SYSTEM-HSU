@@ -49,7 +49,8 @@ export default function Login({ navigation }) {
         const res = await login(username, password);
         if (res && res["status"] == statusCode.OK) {
           //continue coding here....
-          await AsyncStorage.setItem("token", JSON.stringify(res["data"]["accessToken"]));
+          await AsyncStorage.setItem("token", res["data"]["accessToken"]);
+          await AsyncStorage.setItem("user_id", res["data"]["_id"]);
           //navigate to home screen
           navigation.navigate("Home");
         }

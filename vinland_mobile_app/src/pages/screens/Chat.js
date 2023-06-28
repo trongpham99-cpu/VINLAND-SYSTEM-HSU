@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, Text, View, ActivityIndicator } from "react-native";
 import ListRoom from '../../components/chat/list-room';
-import socketService from "../../configs/socket";
 import { fetchMyRoom } from "../../services/room";
 
 export default function Chat({ navigation }) {
@@ -13,6 +12,7 @@ export default function Chat({ navigation }) {
     setLoading(true);
     let response = await fetchMyRoom();
     if (response) {
+      console.log(response)
       setRooms(response);
     }
     setLoading(false);
@@ -23,12 +23,9 @@ export default function Chat({ navigation }) {
   }
 
   useEffect(() => {
-    socketService.emit('get_list_room', onListRoom);
+  
     return () => {
-      socketService.removeAllListeners('connect');
-      socketService.removeAllListeners('disconnect');
-      socketService.removeAllListeners('connect_error');
-      socketService.removeAllListeners('get_list_room');
+
     }
   }, []);
 

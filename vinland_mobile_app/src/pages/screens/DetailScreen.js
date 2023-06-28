@@ -46,7 +46,7 @@ const DetailScreen = ({ navigation, route }) => {
     createRoom(room).then(res => {
       console.log(res)
       // if (res && res._id) {
-        
+
       // }
     }).catch(err => {
       console.log(err);
@@ -192,7 +192,7 @@ const DetailScreen = ({ navigation, route }) => {
               <View style={styles.btn1}>
                 <Text style={styles.text1}>{home?.owner?.username}</Text>
                 <Image
-                  style={{ width: 20, height: 20, marginLeft: 130 }}
+                  style={{ width: 20, height: 20, marginHorizontal: 10}}
                   source={require("../../image/chat.png")}
                 />
               </View>
@@ -270,6 +270,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 2,
     shadowOpacity: 0.25,
+    display: "flex",
   },
   text1: {
     marginLeft: 10,

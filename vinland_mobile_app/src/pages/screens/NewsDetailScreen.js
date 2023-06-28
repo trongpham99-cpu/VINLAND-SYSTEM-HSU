@@ -34,6 +34,7 @@ const NewsDetailScreen = ({ navigation, route }) => {
           <Text style={styles.headerText}>Chi tiết bản tin</Text>
         </View>
         <View style={styles.content}>
+          <Image style={styles.thumbnail} source={{ uri: blog.thumbnail }} />
           <Text style={styles.title}>
             {blog.title}
           </Text>
@@ -51,7 +52,6 @@ const NewsDetailScreen = ({ navigation, route }) => {
             />
             <View style={{ marginLeft: 10 }}>
               <Text style={styles.infoText}>Được đăng bởi: <Text style={{ fontWeight: "bold" }}>{
-                // blog.userId.username
               }</Text></Text>
               <Text style={styles.infoText}>{
                 formatISODate(blog.createdAt, 'dd/MM/yyyy')
@@ -114,9 +114,15 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: "bold",
     fontSize: 20,
-    marginTop: -10,
+    marginTop: 20,
     marginBottom: 10,
 
+  },
+  thumbnail: {
+    height: 200,
+    width: "100%",
+    borderRadius: 10,
+    marginBottom: 20,
   },
   infoContainer: {
     flexDirection: "row",

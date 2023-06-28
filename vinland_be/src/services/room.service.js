@@ -11,8 +11,8 @@ const getMessageOnRoom = async ({ roomID, page, limit }) => {
         { $match: { _id: roomID } },
         { $unwind: "$messages" },
         { $lookup: { from: "messages", localField: "messages", foreignField: "_id", as: "messages" } },
-        { $limit: limit },
-        { $skip: (page - 1) * limit },
+        // { $limit: limit },
+        // { $skip: (page - 1) * limit },
     ])
     return room;
 }
@@ -102,14 +102,14 @@ const findRoomsByUserId = async (userID) => {
                     as: "messages",
                     pipeline: [
                         { $sort: { createdAt: -1 } },
-                        // { $limit: 1 },
                         { $lookup: { from: "users", localField: "userID", foreignField: "_id", as: "user" } },
                         { $unwind: "$user" },
                         { $project: { "user.password": 0 } }
                     ]
                 }
             },
-            { $sort: { "messages.createdAt": -1 } }
+            { $sort: { "messages.createdAt": -1 } },
+            { $sort: { "createdAt": -1 } }
         ])
         return rooms;
     } catch (err) {

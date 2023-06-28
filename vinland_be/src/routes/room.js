@@ -5,7 +5,7 @@ const { route } = require("./auth");
 const router = require("express").Router();
 
 //GET ALL USER
-router.get("/my-rooms", roomController.getRoomsByUserId);
+router.get("/my-rooms", middlewareController.verifyToken , roomController.getRoomsByUserId);
 router.get("/detail/:roomId", roomController.getRoomById);
 router.post("/", middlewareController.verifyToken, roomController.addRoom);
 

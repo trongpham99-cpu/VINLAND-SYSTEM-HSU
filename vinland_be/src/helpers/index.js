@@ -1,8 +1,8 @@
 const multer = require('multer');
 const path = require('path');
 
-const ALLOW_FILE_UPLOAD_TYPE = ['image/png', 'image/jpg', 'image/jpeg'];
-const MAXIMUM_FILE_SIZE = 1024 * 1024 * 5; // 5MB
+const ALLOW_FILE_UPLOAD_TYPE = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif', 'image/heic'];
+const MAXIMUM_FILE_SIZE = 1024 * 1024 * 5 * 5; // 5MB
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
