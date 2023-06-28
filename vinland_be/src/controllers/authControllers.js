@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const User = require("../models/modelAuth");
+const User = require("../models/auth");
 const createError = require("http-errors");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
@@ -36,7 +36,7 @@ const authController = {
       },
       //secretKey
       process.env.ACCESS_TOKEN_KEY,
-      { expiresIn: "2h" }
+      // { expiresIn: "2h" }
     );
   },
 
@@ -49,7 +49,7 @@ const authController = {
       },
       //secretKey
       process.env.REFRESH_TOKEN_KEY,
-      { expiresIn: "365d" }
+      // { expiresIn: "365d" }
     );
   },
 
@@ -91,6 +91,17 @@ const authController = {
       }
     } catch (error) {
       res.status(500).json(error);
+    }
+  },
+
+  getProfile: async (req, res) => {
+    try {
+      const user = req.user;
+      const { id } = user;
+      const findUser = await User.findById(id).select("-password");
+      return res.status(200).json(findUser);
+    } catch (error) {
+      return res.status(500).json(error);
     }
   },
 

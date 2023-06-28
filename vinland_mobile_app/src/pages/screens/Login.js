@@ -19,6 +19,7 @@ import { isValidObjField, updateError } from "../../services/methods";
 import FormInput from "../../services/FormInput";
 import { login } from "../../services/auth";
 import { statusCode } from "../../constants/http/statusCodes";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Login({ navigation }) {
   const [userInfo, setUserInfo] = useState({
@@ -36,7 +37,7 @@ export default function Login({ navigation }) {
       return updateError("Vui lòng nhập đầy đủ thông tin!", setError);
     if (username.length < 6)
       return updateError("Tài khoản phải dài hơn 6 ký tự", setError);
-    if (!password.trim() || password.length < 8)
+    if (!password.trim() || password.length < 2)
       return updateError("Password không hợp lệ!", setError);
     return true;
   };
@@ -46,12 +47,14 @@ export default function Login({ navigation }) {
     if (isValidForm()) {
       try {
         const res = await login(username, password);
-        if (res["status"] == statusCode.OK) {
+        if (res && res["status"] == statusCode.OK) {
           //continue coding here....
-          console.log("Login successfully");
+          await AsyncStorage.setItem("token", JSON.stringify(res["data"]["accessToken"]));
+          //navigate to home screen
+          navigation.navigate("Home");
         }
       } catch (err) {
-        console.log("Error Login");
+        console.log("Error: ", err);
       }
     }
   };

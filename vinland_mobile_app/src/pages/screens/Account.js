@@ -9,21 +9,55 @@ import EditProfile from "./EditProfile";
 import QRcode from "./QRcode";
 import Rule from "./Rule";
 import Profile from "./Profile";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createStackNavigator();
 
-export default function Account() {
+export default function Account({ navigation }) {
+
+  const [isLogin, setIsLogin] = React.useState(false);
+
+  React.useEffect(() => {
+
+  }, []);
+
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      //call api
+      const getToken = async () => {
+        const token = await AsyncStorage.getItem("token");
+        if (token) {
+          setIsLogin(true);
+        } else {
+          setIsLogin(false);
+        }
+      };
+      getToken();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   return (
     <Stack.Navigator
       initialRouteName="Profile"
       screenOptions={{ headerShown: false }}
     >
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Register" component={Register} />
-      <Stack.Screen name="EditProfile" component={EditProfile} />
-      <Stack.Screen name="Qrcode" component={QRcode} />
-      <Stack.Screen name="Rule" component={Rule} />
-      <Stack.Screen name="Profile" component={Profile} />
+      {
+        isLogin ? (
+          <>
+            <Stack.Screen name="Profile" component={Profile} />
+            <Stack.Screen name="EditProfile" component={EditProfile} />
+            <Stack.Screen name="Qrcode" component={QRcode} />
+            <Stack.Screen name="Rule" component={Rule} />
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Register" component={Register} />
+          </>
+        )
+      }
     </Stack.Navigator>
   );
 }

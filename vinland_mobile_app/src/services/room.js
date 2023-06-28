@@ -5,6 +5,20 @@ const {
     api: { url },
 } = config;
 
+export const createRoom = async (data) => {
+    try {
+        // const token = await AsyncStorage.getItem("token");
+        const response = await axios.post(`${url}/room`, data, {
+            headers: {
+                // Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 export const fetchMyRoom = async () => {
     try {
         // const token = await AsyncStorage.getItem("token");

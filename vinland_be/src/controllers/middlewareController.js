@@ -3,18 +3,18 @@ const jwt = require("jsonwebtoken");
 const middlewareController = {
   //verifyToken
   verifyToken: (req, res, next) => {
-    const token = req.headers.token;
+    const token = req.headers.authorization;
     if (token) {
       const accessToken = token.split(" ")[1];
       jwt.verify(accessToken, process.env.ACCESS_TOKEN_KEY, (err, user) => {
         if (err) {
-          res.status(403).json("Token is not valid");
+          return res.status(403).json("Token is not valid");
         }
         req.user = user;
         next();
       });
     } else {
-      res.status(401).json("You're not authentiation");
+      return res.status(401).json("You're not authentication");
     }
   },
   verifyTokenAndAdminAuth: (req, res, next) => {

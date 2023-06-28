@@ -7,6 +7,6 @@ const router = require("express").Router();
 //GET ALL USER
 router.get("/my-rooms", roomController.getRoomsByUserId);
 router.get("/detail/:roomId", roomController.getRoomById);
-router.post("/", roomController.addRoom);
+router.post("/", middlewareController.verifyToken, roomController.addRoom);
 
 module.exports = router;

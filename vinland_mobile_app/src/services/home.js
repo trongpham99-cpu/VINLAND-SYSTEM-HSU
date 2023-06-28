@@ -40,9 +40,13 @@ export const addHome = async (
   }
 };
 
-export const getAllHome = async () => {
+export const getAllHome = async ({ type }) => {
   try {
-    const response = await axios.get(`${url}/home/`);
+    const response = await axios.get(`${url}/home/`, {
+      params: {
+        type,
+      },
+    });
     return response.data;
   } catch (error) {
     console.log(error);

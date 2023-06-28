@@ -11,7 +11,6 @@ export const styles = {
     block_message: {
         padding: 10,
     },
-
     tinyLogo: {
         width: 40,
         height: 40,

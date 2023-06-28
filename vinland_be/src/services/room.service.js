@@ -21,11 +21,15 @@ const getRoom = async (roomID) => {
     return await roomModel.findById(roomID);
 }
 
+const getRoomByPostIdAndUserId = async (postId, userId) => {
+    return await roomModel.findOne({ postId, userId });
+}
+
 const findRoomAdvance = async ({ id }) => {
     try {
         return roomModel.aggregate([
             { $match: { _id: new Types.ObjectId(id) } },
-            { $lookup: { from: "users", localField: "owner", foreignField: "_id", as: "owner" } },
+            { $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "owner" } },
             { $unwind: "$owner" },
             { $lookup: { from: "users", localField: "users", foreignField: "_id", as: "users" } },
             {
@@ -36,14 +40,18 @@ const findRoomAdvance = async ({ id }) => {
                     as: "messages",
                     pipeline: [
                         { $sort: { createdAt: -1 } },
-                        // { $limit: 1 },
-                        { $lookup: { from: "users", localField: "userID", foreignField: "_id", as: "user" } },
+                        { $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "user" } },
                         { $unwind: "$user" },
                         { $project: { "user.password": 0 } }
                     ]
                 }
             },
-            // { $project: {} }
+            {
+                $project: {
+                    "owner.password": 0,
+                    "users.password": 0
+                }
+            }
         ])
     } catch (err) {
         return err;
@@ -65,33 +73,49 @@ const addUserToRoom = async (roomID, userID) => {
 }
 
 const findRoomsByUserId = async (userID) => {
-    // const rooms = await roomModel.find({
-    //     users: { $in: [userID] }
-    // })
-    const rooms = await roomModel.aggregate([
-        { $match: { users: { $in: [new Types.ObjectId(userID)] } } },
-        { $lookup: { from: "users", localField: "owner", foreignField: "_id", as: "owner" } },
-        { $unwind: "$owner" },
-        { $lookup: { from: "users", localField: "users", foreignField: "_id", as: "users" } },
-        { $project: { "owner.password": 0 } },
-        {
-            $lookup: {
-                from: "messages",
-                localField: "messages",
-                foreignField: "_id",
-                as: "messages",
-                pipeline: [
-                    { $sort: { createdAt: -1 } },
-                    // { $limit: 1 },
-                    { $lookup: { from: "users", localField: "userID", foreignField: "_id", as: "user" } },
-                    { $unwind: "$user" },
-                    { $project: { "user.password": 0 } }
-                ]
+    try {
+        const rooms = await roomModel.aggregate([
+            {
+                $match: {
+                    $or: [
+                        {
+                            users: {
+                                $in: [new Types.ObjectId(userID)]
+                            }
+                        },
+                        {
+                            owner: new Types.ObjectId(userID)
+                        }
+                    ]
+                }
             }
-        },
-        { $sort: { "messages.createdAt": -1 } }
-    ])
-    return rooms;
+            ,
+            { $lookup: { from: "users", localField: "userId", foreignField: "_id", as: "owner" } },
+            { $unwind: "$owner" },
+            { $lookup: { from: "users", localField: "users", foreignField: "_id", as: "users" } },
+            { $project: { "owner.password": 0 } },
+            {
+                $lookup: {
+                    from: "messages",
+                    localField: "messages",
+                    foreignField: "_id",
+                    as: "messages",
+                    pipeline: [
+                        { $sort: { createdAt: -1 } },
+                        // { $limit: 1 },
+                        { $lookup: { from: "users", localField: "userID", foreignField: "_id", as: "user" } },
+                        { $unwind: "$user" },
+                        { $project: { "user.password": 0 } }
+                    ]
+                }
+            },
+            { $sort: { "messages.createdAt": -1 } }
+        ])
+        return rooms;
+    } catch (err) {
+        console.log(err)
+    }
+
 }
 
 module.exports = {
@@ -102,5 +126,6 @@ module.exports = {
     addMessageToRoom,
     addUserToRoom,
     findRoomsByUserId,
-    findRoomAdvance
+    findRoomAdvance,
+    getRoomByPostIdAndUserId,
 }

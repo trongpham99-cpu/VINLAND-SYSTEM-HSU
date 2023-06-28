@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -15,21 +15,42 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { Slider } from "react-native-elements";
 import COLORS from "../../constants/colors";
 import houses from "../../constants/houses";
+import * as ImagePicker from 'expo-image-picker';
+// import { launchImageLibrary } from 'react-native-image-picker';
 
 export default function SellProperty({ navigation, route }) {
   const [selectedPrice, setSelectedPrice] = useState(0);
   const [description, setDescription] = useState("");
   const [selectedRoomType, setSelectedRoomType] = useState("studio");
+  const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
+  const [images, setImages] = useState([]);
   const item = route.params;
   // console.log(JSON.stringify(item));
 
-  const interiors = [
-    require("../../image/interior1.jpg"),
-    require("../../image/interior2.jpg"),
-    require("../../image/interior3.jpg"),
-  ];
-  const handleAddImage = () => {
-    // Xử lý logic khi người dùng muốn thêm ảnh
+  useEffect(() => {
+    (async () => {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      setHasGalleryPermission(status === 'granted');
+    })();
+  }, []);
+
+  const getImagePicker = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    const newImageUri = "file:///" + result.uri.split("file:/").join("");
+
+    if (!result.cancelled) {
+      setImages([...images, newImageUri]);
+    }
+  }
+
+  const handleAddImage = async () => {
+    getImagePicker();
   };
 
   const handlePriceChange = (value) => {
@@ -72,12 +93,11 @@ export default function SellProperty({ navigation, route }) {
           </TouchableOpacity>
         </View>
         <FlatList
-          // style={{ alignItems: "center" }}
-          data={interiors}
+          data={images}
           horizontal
-          renderItem={({ item }) => (
-            <Image source={item} style={styles.interiorImage} />
-          )}
+          renderItem={({ item }) => {
+            return (<Image source={item} style={styles.interiorImage} />)
+          }}
           keyExtractor={(item, index) => index.toString()}
         />
 
@@ -179,7 +199,7 @@ export default function SellProperty({ navigation, route }) {
               style={[
                 styles.roomTypeOption,
                 selectedRoomType === "2bathroom" &&
-                  styles.selectedRoomTypeOption,
+                styles.selectedRoomTypeOption,
               ]}
               onPress={() => handleRoomTypeChange("2bathroom")}
             >
@@ -189,7 +209,7 @@ export default function SellProperty({ navigation, route }) {
               style={[
                 styles.roomTypeOption,
                 selectedRoomType === "3bathroom" &&
-                  styles.selectedRoomTypeOption,
+                styles.selectedRoomTypeOption,
               ]}
               onPress={() => handleRoomTypeChange("3bathroom")}
             >
@@ -199,7 +219,7 @@ export default function SellProperty({ navigation, route }) {
               style={[
                 styles.roomTypeOption,
                 selectedRoomType === "4bathroom" &&
-                  styles.selectedRoomTypeOption,
+                styles.selectedRoomTypeOption,
               ]}
               onPress={() => handleRoomTypeChange("4bathroom")}
             >
@@ -209,7 +229,7 @@ export default function SellProperty({ navigation, route }) {
               style={[
                 styles.roomTypeOption,
                 selectedRoomType === "5bathroom" &&
-                  styles.selectedRoomTypeOption,
+                styles.selectedRoomTypeOption,
               ]}
               onPress={() => handleRoomTypeChange("5bathroom")}
             >

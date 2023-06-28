@@ -1,69 +1,77 @@
-import React from "react";
-import { Dimensions, SafeAreaView, StyleSheet, Text, View ,Image, ScrollView} from "react-native";
+import React, { useEffect } from "react";
+import { Dimensions, SafeAreaView, StyleSheet, Text, View, Image, ScrollView } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import COLORS from "../../constants/colors";
 import houses from "../../constants/houses";
-
+import { fetchBlogDetail } from "../../services/blog";
+import { formatISODate } from "../../utils";
+import { useWindowDimensions } from 'react-native';
+import RenderHtml from 'react-native-render-html';
 const NewsDetailScreen = ({ navigation, route }) => {
   const item = route.params;
+  const { id } = item;
+  const { width } = useWindowDimensions();
+  const [blog, setBlog] = React.useState({});
+
+  useEffect(() => {
+    fetchBlogDetail(id).then((res) => {
+      setBlog(res);
+    });
+  }, [id])
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-    <View style={styles.header}>
-        <View style={styles.headerBtn}>
-          <Icon
-            style={{ marginLeft: 10 }}
-            name="arrow-back-ios"
-            size={24}
-            onPress={navigation.goBack}
-          />
-        </View>
-        <Text style={styles.headerText}>Chi tiết bản tin</Text>
+        <View style={styles.header}>
+          <View style={styles.headerBtn}>
+            <Icon
+              style={{ marginLeft: 10 }}
+              name="arrow-back-ios"
+              size={24}
+              onPress={navigation.goBack}
+            />
+          </View>
+          <Text style={styles.headerText}>Chi tiết bản tin</Text>
         </View>
         <View style={styles.content}>
-        <Text style={styles.title}>Cập nhật giá chung cư VinHome Central Park mới nhất</Text>
-        <View style={styles.infoContainer}>
-        <Image
-          source={require("../../image/user.jpg")}
-          style={{
-            height: 50,
-            width: 50,
-            borderRadius: 999,
-            borderColor: COLORS.grey,
-            borderWidth: 1,
-            marginTop:10,
-          }}
-        />
- <View style={{ marginLeft: 10 }}>
-    <Text style={styles.infoText}>Được đăng bởi: <Text style={{ fontWeight: "bold" }}>Nguyễn Minh Trung</Text></Text>
-    <Text style={styles.infoText}>07/04/2023 8:38</Text>
-    <Text style={{ ...styles.infoText, marginBottom: 10 }}>Tin tức</Text>
-  </View>
+          <Text style={styles.title}>
+            {blog.title}
+          </Text>
+          <View style={styles.infoContainer}>
+            <Image
+              source={require("../../image/user.jpg")}
+              style={{
+                height: 50,
+                width: 50,
+                borderRadius: 999,
+                borderColor: COLORS.grey,
+                borderWidth: 1,
+                marginTop: 10,
+              }}
+            />
+            <View style={{ marginLeft: 10 }}>
+              <Text style={styles.infoText}>Được đăng bởi: <Text style={{ fontWeight: "bold" }}>{
+                // blog.userId.username
+              }</Text></Text>
+              <Text style={styles.infoText}>{
+                formatISODate(blog.createdAt, 'dd/MM/yyyy')
+              }</Text>
+              <Text style={{ ...styles.infoText, marginBottom: 10 }}>Tin tức</Text>
+            </View>
+          </View>
+          <View style={{
+            marginLeft: 5,
+          }} >
+            <RenderHtml
+              contentWidth={width}
+              source={{
+                html: blog.content
+              }}
+            />
+          </View>
         </View>
-  <View style={{
-    marginLeft:5,
-  }} >
-        <Text style={{
-        fontSize: 16,
-        marginTop: -10,
-        lineHeight: 26,
-        fontFamily: "Regular",
-        color: COLORS.black,
-        } }>Đi đôi với sự phát triển của xã hội là nhu cầu về chất lượng cuộc sống - bao gồm nhà ở ngày một gia tăng. Theo đó, khi tìm mua nhà chung cư, điều khách hàng hiện đại kỳ vọng không đơn thuần là nơi để sinh sống, mà còn phải đáp ứng các yếu tố về vị trí, tiện nghi và dịch vụ bao hàm</Text>
-  <Image source={require("../../image/vinhome2.jpg")} style={{ width: 300, height: 200 }} />
-  <Text style={{
-     fontSize: 16,
-     marginTop: 10,
-     color: COLORS.black,
-     fontFamily: "Regular",
-     lineHeight: 26,
-
-  }}>Ngày nay, sự phát triển của nền kinh tế xã hội giúp người dân có thu nhập trung bình cao hơn, đồng nghĩa với nhu cầu về nhà ở cũng thay đổi, kéo theo xu hướng chuyển dịch về các khu vực có hạ tầng giao thông được quy hoạch đồng bộ.</Text>
-</View>
-        </View>
-        </ScrollView>
-      </SafeAreaView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 const { width } = Dimensions.get("screen");
@@ -83,7 +91,7 @@ const styles = StyleSheet.create({
   },
   headerBtn: {
     height: 40,
-    width:40,
+    width: 40,
     backgroundColor: "white",
     borderRadius: 10,
     justifyContent: "center",
@@ -95,7 +103,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontWeight: "bold",
     fontSize: 20,
-    flex: 1, 
+    flex: 1,
     textAlign: "center"
   },
   content: {
@@ -106,19 +114,19 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: "bold",
     fontSize: 20,
-    marginTop:-10,
-    marginBottom:10,
- 
+    marginTop: -10,
+    marginBottom: 10,
+
   },
   infoContainer: {
     flexDirection: "row",
     marginBottom: 20,
   },
-  infoText:{
+  infoText: {
     fontSize: 16,
     marginLeft: 5,
   },
-  
+
 
 })
 export default NewsDetailScreen;

@@ -9,8 +9,38 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
 import COLORS from "../../constants/colors";
+import { getProfile } from "../../services/user";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Profile({ navigation }) {
+
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      //call api
+      _getProfile();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  const [profile, setProfile] = React.useState({});
+
+  const _getProfile = async () => {
+    getProfile().then((res) => {
+      if (res) {
+        console.log("Profile: ", res["data"])
+        // setProfile(res["data"]);
+      }
+    });
+  };
+
+  const signOut = async () => {
+    await AsyncStorage.removeItem("token", (err) => {
+      console.log("err: ", err)
+    })
+    navigation.navigate("Home");
+  };
+
   return (
     <SafeAreaView
       style={{
@@ -57,7 +87,9 @@ export default function Profile({ navigation }) {
             marginVertical: 10,
           }}
         >
-          Khôi Đăng
+          {
+            profile.username
+          }
         </Text>
         <View style={{ flexDirection: "row" }}>
           <Image
@@ -97,7 +129,7 @@ export default function Profile({ navigation }) {
             }}
           >
             0911074357
-          
+
           </Text>
         </View>
         <View
@@ -217,6 +249,7 @@ export default function Profile({ navigation }) {
               borderRadius: 10,
               marginHorizontal: 20,
             }}
+            onPress={() => signOut()}
           >
             <Text
               style={{
@@ -224,7 +257,7 @@ export default function Profile({ navigation }) {
                 color: COLORS.bgColor,
               }}
             >
-              Thêm bạn
+              Đăng xuất
             </Text>
           </TouchableOpacity>
         </View>

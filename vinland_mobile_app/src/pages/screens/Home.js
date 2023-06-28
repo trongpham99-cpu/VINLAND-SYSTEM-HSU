@@ -25,17 +25,17 @@ export default function Home({ props, navigation }) {
   const [homeList, setHomeList] = useState([]);
   const getHomeList = async () => {
     try {
-      const response = await getAllHome();
+      const type = categoryList[selectedCategoryIndex];
+      const response = await getAllHome({ type });
       setHomeList(response);
     } catch (error) {
-      console.log(error);
+      return console.log(error);
     }
   };
 
   useEffect(() => {
-    // do something
     getHomeList();
-  }, []);
+  }, [selectedCategoryIndex]);
 
   const ListCategory = () => {
     return (
@@ -175,7 +175,7 @@ export default function Home({ props, navigation }) {
       </Pressable>
     );
   };
- 
+
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.bgColor, flex: 1 }}>
       <View style={styles.header}>
@@ -222,29 +222,25 @@ export default function Home({ props, navigation }) {
           />
         </View>
         <TouchableOpacity
-    onPress={(item) => navigation.navigate("SellProperty",item)}
-  >
-     <Icon
-          style={{
-           borderColor: COLORS.greylight,
-           borderWidth: 5,
-           borderRadius: 10,
-           paddingHorizontal: 5,
-           paddingVertical: 5,
-           marginLeft:10,
-           backgroundColor: COLORS.blue,
-           color:COLORS.white,
-           justifyContent: "center",
-           alignItems: "center",
-         
-          }}
-       name="add"
-          size={22}
-  
-        />
-  </TouchableOpacity>
+          onPress={(item) => navigation.navigate("SellProperty", item)}
+        >
+          <Icon
+            style={{
+              borderColor: COLORS.greylight,
+              borderWidth: 2,
+              borderRadius: 10,
+              paddingHorizontal: 10,
+              paddingVertical: 10,
+              color: "gray",
+              marginLeft: 5,
+            }}
+            name="add"
+            size={22}
+
+          />
+        </TouchableOpacity>
       </View>
-      
+
       <ListCategory />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View

@@ -6,7 +6,8 @@ const roomSchema = new mongoose.Schema(
         avatar: { type: String, required: true }, // Avatar of the room
         messages: { type: [Types.ObjectId], default: Array, ref: "messages" },
         users: { type: [Types.ObjectId], default: Array, ref: "users" },
-        owner: { type: Types.ObjectId, required: true, ref: "users" },
+        postId: { type: Types.ObjectId, required: true, ref: "homes" },
+        userId: { type: Types.ObjectId, required: true, ref: "users" },
     },
     { timestamps: true }
 );

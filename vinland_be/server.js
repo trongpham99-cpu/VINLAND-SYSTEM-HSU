@@ -9,11 +9,15 @@ const authRoute = require("./src/routes/auth");
 const homeRoute = require("./src/routes/home");
 const userRoute = require("./src/routes/user");
 const roomRoute = require("./src/routes/room");
+const blogRoute = require("./src/routes/blog");
+const upload = require("./src/routes/upload");
+const messageRoute = require("./src/routes/message");
 const http = require("http");
 const app = express();
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server, { cors: { origin: "*" } });
+var cloudinary = require('cloudinary').v2;
 
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -24,8 +28,16 @@ app.use(morgan("common"));
 dotenv.config();
 
 //cache 
-const ROOMS = require('./src/cache/room');
-const { getMessageOnRoom, createRoom } = require("./src/services/room.service");
+const { getMessageOnRoom } = require("./src/services/room.service");
+const { getRoomById } = require("./src/controllers/roomControllers");
+
+//Init Cloudinary
+cloudinary.config({
+  cloud_name: 'dblpwxmnh',
+  api_key: '132635623228588',
+  api_secret: 'zKL9yMEaoZfV2fghdY6X6-pxdvo',
+  secure: true
+});
 
 //Init Database (Connect Database(MongoDB))
 mongoose
@@ -41,14 +53,19 @@ mongoose
 //Init io 
 io.on("connection", (socket) => {
 
-  console.log("a user connected", socket.id);
-
-  socket.on('chat message', msg => {
-    io.emit('chat message', msg);
+  socket.on('join_room', async (roomId) => {
+    socket.join(roomId);
+    const messages = await getMessageOnRoom(roomId);
+    io.to(roomId).emit('get messages', messages);
   });
 
-  socket.on('get_my_rooms', async (data) => {
-    io.emit('get_my_rooms', ROOMS);
+  socket.on('leave_room', (roomId) => {
+    socket.leave(roomId);
+  });
+
+  socket.on('message', async (roomId) => {
+    const room = getRoomById(roomId);
+    io.to(message.roomId).emit('message', room);
   });
 
   socket.on('disconnect', () => {
@@ -56,7 +73,6 @@ io.on("connection", (socket) => {
   });
 });
 
-//ROUTES
 //default route
 app.get("/", (req, res) => {
   res.send({
@@ -67,6 +83,9 @@ app.use("/home", homeRoute);
 app.use("/auth", authRoute);
 app.use("/user", userRoute);
 app.use('/room', roomRoute);
+app.use("/blog", blogRoute);
+app.use("/upload", upload);
+app.use("/message", messageRoute);
 
 //JSON WEB TOKEN
 

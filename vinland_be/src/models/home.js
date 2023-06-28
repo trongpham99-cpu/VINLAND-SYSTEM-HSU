@@ -9,6 +9,10 @@ const homeSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    type: { //1 - bán, 2 - cho thuê
+      type: String,
+      required: true,
+    },
     price: {
       type: String,
       required: true,
@@ -23,10 +27,11 @@ const homeSchema = new mongoose.Schema(
     },
     interior: {
       type: Object,
-      required: true,
+      default: null
     },
     slug: {
       type: String,
+      default: null
     },
     rating: {
       type: Number,
@@ -44,16 +49,18 @@ const homeSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      required: true,
+      default: "pending",
     },
     owner: {
-      //đăng bởi ai
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "users",
       required: true,
     },
-    //for actions
     comments: {
+      type: Array,
+      default: [],
+    },
+    replies: {
       type: Array,
       default: [],
     },
@@ -63,5 +70,5 @@ const homeSchema = new mongoose.Schema(
   }
 );
 
-let Home = mongoose.model("Home", homeSchema);
+let Home = mongoose.model("homes", homeSchema);
 module.exports = { Home };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Text,
   View,
@@ -13,46 +13,50 @@ import {
   Button,
   ImageBackground,
 } from "react-native";
-import { useState } from "react";
 import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/Ionicons";
-import houses from "../../constants/houses";
+import { fetchBlogs } from "../../services/blog";
+import { formatISODate } from '../../utils';
 
 export default function News({ props, navigation }) {
-  const renderCard = ({ item }) => (
-    <Pressable
-      style={styles.card}
-      onPress={() => navigation.navigate("NewsDetail", { item })}
-    >
-      <View style={styles.card}>
-        <ImageBackground source={item.image} style={styles.cardImage}>
-          <View style={styles.overlay}>
-            <Text style={styles.overlayDateTime}>07/04/2023 8:38</Text>
-            <Text style={styles.overlayText}>Tin tức</Text>
-            <Text style={styles.overlayText}>
-              Cập nhật giá chung cư VinHome Central Park mới nhất
-            </Text>
-          </View>
-        </ImageBackground>
-      </View>
-    </Pressable>
-  );
-  const house = [
-    {
-      id: 1,
-      image: require("../../image/vinhome.jpg"),
-      publishedDate: "07/04/2023 8:38",
-      title: "Cập nhật giá chung cư VinHome Central Park mới nhất",
-      publishedDate: "07/04/2023 8:38",
-      author: "Người đăng",
-      description:
-        "Mô tả chi tiết của bản tin về giá chung cư VinHome Central Park.",
-    },
+  const [house, setHouse] = React.useState([]);
 
-    { id: 2, image: require("../../image/vinhome2.jpg") },
-    { id: 3, image: require("../../image/vinhome3.jpg") },
-    { id: 4, image: require("../../image/vinhome4.jpg") },
-  ];
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      //call api
+      fetchBlogs().then((res) => {
+        setHouse(res);
+      });
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+
+  const renderCard = ({ item }) => {
+    return (
+      <Pressable
+        style={styles.card}
+        onPress={() => navigation.navigate("NewsDetail", { id: item._id })}
+      >
+        <View style={styles.card}>
+          <ImageBackground style={styles.cardImage} source={item.thumbnail}>
+            <View style={styles.overlay}>
+              <Text style={styles.overlayDateTime}>
+                {
+                  formatISODate(item.createdAt, 'dd/MM/yyyy')
+                }
+              </Text>
+              <Text style={styles.overlayText}>Tin tức</Text>
+              <Text style={styles.overlayText}>
+                {item.title}
+              </Text>
+            </View>
+          </ImageBackground>
+        </View>
+      </Pressable>
+    )
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
@@ -82,13 +86,15 @@ export default function News({ props, navigation }) {
           <FlatList
             data={house}
             renderItem={renderCard}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => {
+              return item._id;
+            }}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.flatListContainer}
           />
 
-          <View style={styles.bottomImageContainer}>
+          {/* <View style={styles.bottomImageContainer}>
             <Image
               source={require("../../image/interior2.jpg")}
               style={styles.bottomImage}
@@ -167,7 +173,7 @@ export default function News({ props, navigation }) {
                 đình.
               </Text>
             </View>
-          </View>
+          </View> */}
         </ScrollView>
       </View>
     </SafeAreaView>

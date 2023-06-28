@@ -16,6 +16,7 @@ import {
 import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import houses from "../../constants/houses";
+import { createRoom } from "../../services/room";
 
 const DetailScreen = ({ navigation, route }) => {
   const item = route.params;
@@ -24,8 +25,22 @@ const DetailScreen = ({ navigation, route }) => {
     return <Image source={interior} style={styles.interiorImage} />;
   };
 
-  const onContact = () => {
-    navigation.navigate("ChatDetail", "abc");
+  const onContact = async () => {
+    const room = {
+      name: house.title,
+      avatar: house.thumbnail[0],
+      messages: [],
+      users: [],
+      postId: house._id,
+    }
+
+    createRoom(room).then(res => {
+      navigation.navigate("ChatDetail", res);
+    }, err => {
+
+    }
+    )
+    // navigation.navigate("ChatDetail", "abc");
   };
 
   return (

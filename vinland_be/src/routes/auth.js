@@ -9,9 +9,7 @@ router.post("/login", authController.loginUser);
 //REFRESH TOKEN
 router.post("/refresh", authController.requestRefreshToken);
 //LOG OUT
-router.post(
-  "/logout",
-  middlewareController.verifyToken,
-  authController.logoutUser
-);
+router.post("/logout", middlewareController.verifyToken, authController.logoutUser);
+router.get('/profile', middlewareController.verifyToken, authController.getProfile)
+
 module.exports = router;
