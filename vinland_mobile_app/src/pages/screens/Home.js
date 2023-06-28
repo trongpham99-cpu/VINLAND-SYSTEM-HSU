@@ -16,7 +16,6 @@ import {
 } from "react-native";
 import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/Ionicons";
-import houses from "../../constants/houses";
 import { getAllHome } from "../../services/home";
 
 export default function Home({ props, navigation }) {
@@ -25,7 +24,7 @@ export default function Home({ props, navigation }) {
   const [homeList, setHomeList] = useState([]);
   const getHomeList = async () => {
     try {
-      const type = categoryList[selectedCategoryIndex];
+      const type = selectedCategoryIndex;
       const response = await getAllHome({ type });
       setHomeList(response);
     } catch (error) {
@@ -286,6 +285,7 @@ export default function Home({ props, navigation }) {
           }}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => <CardPopular item={item} />}
+          key={(item) => item.Id}
         />
         <View
           style={{
@@ -329,6 +329,7 @@ export default function Home({ props, navigation }) {
           }}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => <CardNearest item={item} />}
+          key={(item) => item.Id}
         />
       </ScrollView>
     </SafeAreaView>

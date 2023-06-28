@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   ImageBackground,
   SafeAreaView,
@@ -13,40 +13,49 @@ import {
   Pressable,
   TouchableOpacity,
 } from "react-native";
+import { Avatar } from 'react-native-elements';
 import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import houses from "../../constants/houses";
 import { createRoom } from "../../services/room";
-import { Slider } from "react-native-elements";
+import { getDetailHome } from "../../services/home";
 
 const DetailScreen = ({ navigation, route }) => {
   const item = route.params;
-  // console.log(JSON.stringify(item));
-  const InteriorCard = () => {
-    return <Image source={interior} style={styles.interiorImage} />;
-  };
+  const { _id } = item;
+  const [home, setHome] = useState(null);
+
+  useEffect(() => {
+    getDetail();
+  }, [_id]);
+
+  const getDetail = () => {
+    getDetailHome(_id).then(res => {
+      setHome(res);
+    }).catch(err => {
+      console.log(err);
+    })
+  }
 
   const onContact = async () => {
     const room = {
-      name: house.title,
-      avatar: house.thumbnail[0],
-      messages: [],
-      users: [],
-      postId: house._id,
+      name: home.title,
+      avatar: home.thumbnail[0],
+      postId: home._id,
     }
 
     createRoom(room).then(res => {
-      navigation.navigate("ChatDetail", res);
-    }, err => {
-
-    }
-    )
-    // navigation.navigate("ChatDetail", "abc");
+      console.log(res)
+      // if (res && res._id) {
+        
+      // }
+    }).catch(err => {
+      console.log(err);
+    })
   };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
-      <View style={styles.header}>
+      <View key={'dev'} style={styles.header}>
         <View style={styles.headerBtn}>
           <Icon
             style={{ marginLeft: 10 }}
@@ -61,12 +70,11 @@ const DetailScreen = ({ navigation, route }) => {
         <View style={styles.headerBtn}>
           <Image
             style={{ width: 30, height: 40, marginHorizontal: 30 }}
-            // source={require("../../image/211780_more_icon.png")}
           />
         </View>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <ImageBackground style={styles.backgroundImage} source={item.thumbnail}>
+        <ImageBackground style={styles.backgroundImage} source={home?.thumbnail}>
           <View
             style={{
               height: 40,
@@ -95,21 +103,19 @@ const DetailScreen = ({ navigation, route }) => {
                 color: COLORS.tittleColor,
               }}
             >
-              {item.title}
+              {home?.title}
             </Text>
           </View>
           <View
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
-              // alignItems: "center",
               marginTop: 10,
             }}
           >
             <View
               style={{
                 width: 340,
-                // height: 40,
                 flexDirection: "row",
               }}
             >
@@ -120,28 +126,19 @@ const DetailScreen = ({ navigation, route }) => {
                   fontSize: 18,
                 }}
               >
-                {item.location.address +
-                  ", " +
-                  item.location.district +
-                  ", " +
-                  item.location.province}
+                {home?.location.address + ", " + home?.location.district + ", " + home?.location.province}
               </Text>
             </View>
-            <View
-              style={{
-                flexDirection: "row",
-              }}
-            >
+            <View style={{ flexDirection: "row" }}>
               <Icon name="star" size={20} color={COLORS.yellow} />
               <Text
                 style={{
                   fontWeight: "bold",
-                  // fontSize: 16,
                   marginLeft: 5,
                   textAlign: "center",
                 }}
               >
-                5.0
+                {home?.rating}
               </Text>
             </View>
           </View>
@@ -155,7 +152,7 @@ const DetailScreen = ({ navigation, route }) => {
                 marginVertical: 10,
               }}
             >
-              {item.price}
+              {home?.price}
             </Text>
           </View>
           <View>
@@ -172,66 +169,38 @@ const DetailScreen = ({ navigation, route }) => {
             <Text
               style={{ lineHeight: 20, fontFamily: "Regular", fontSize: 18 }}
             >
-              {item.description}{" "}
+              {home?.description}
             </Text>
           </View>
           <View>
-            <Text style={{ marginTop: 10, fontWeight: "bold", fontSize: 20 }}>
-              Hình ảnh liên quan
-            </Text>
             <FlatList
               contentContainerStyle={{ marginTop: 15 }}
               horizontal
               showsHorizontalScrollIndicator={false}
               keyExtractor={(_, key) => key.toString()}
-              data={item.interior}
-              renderItem={({ item }) => <InteriorCard interior={item} />}
+              data={home?.attachments}
+              renderItem={({ item: url }) => {
+                return <Image source={{ uri: url }} style={styles.interiorImage} />;
+              }}
             />
           </View>
           <View style={{ flexDirection: "row", marginTop: 20 }}>
             <View style={styles.facility}></View>
           </View>
-          <View>
-            <Text
-              style={{ fontFamily: "Bold", fontSize: 20, marginBottom: 10 }}
-            >
-              Thông tin liên hệ
-            </Text>
-            <View style={styles.btn1}>
-              <Image
-                style={{ width: 50, height: 50, borderRadius: 30 }}
-                source={require("../../image/user.jpg")}
-              />
-              <Text style={styles.text1}>Nguyễn Minh Trung</Text>
-              <TouchableOpacity
-                onPress={() => {
-                  onContact();
-                }}
-              >
+          <Pressable onPress={() => onContact()} >
+            <View>
+              <View style={styles.btn1}>
+                <Text style={styles.text1}>{home?.owner?.username}</Text>
                 <Image
-                  style={{ width: 40, height: 40, marginLeft: 80 }}
+                  style={{ width: 20, height: 20, marginLeft: 130 }}
                   source={require("../../image/chat.png")}
                 />
-              </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          </Pressable>
         </View>
-        {/* <Pressable
-          onPress={() => {
-            onContact();
-          }}
-          style={{ justifyContent: "center", alignItems: "center" }}
-        >
-          <View style={styles.btn1}>
-            <Image
-              style={{ width: 50, height: 50, borderRadius: 20 }}
-              source={require("../../image/user.jpg")}
-            />
-            <Text style={styles.text1}>Liên Hệ</Text>
-          </View>
-        </Pressable> */}
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 };
 
@@ -298,7 +267,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 10,
     shadowColor: "black",
-    shadowOffset: { width: -4, height: 2 },
+    shadowOffset: { width: 0, height: 2 },
     shadowRadius: 2,
     shadowOpacity: 0.25,
   },

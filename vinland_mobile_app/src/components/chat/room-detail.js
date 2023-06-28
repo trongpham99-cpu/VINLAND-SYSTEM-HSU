@@ -6,7 +6,8 @@ import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 
 //components 
 import ListMessage from '../chat/list-message';
-import { fetchMyRoom, fetchRoomDetail } from "../../services/room";
+import { fetchRoomDetail } from "../../services/room";
+import { sendMessage } from "../../services/message";
 import socketService from "../../configs/socket";
 const RoomDetail = (props) => {
 
@@ -35,26 +36,42 @@ const RoomDetail = (props) => {
         _fetchRoom();
     }, []);
 
+    const onNewRoom = async (room) => {
+        setRoom(room);
+        setMessages(room.messages);
+    }
+
     useEffect(() => {
         socketService.initializeSocket();
-        socketService.emit('', { email: 'trong.phamtranduc@gmail.com' });
+        socketService.emit('join_room', room._id);
+        socketService.on('on_new_room', onNewRoom);
         return () => {
-
+            socketService.emit('leave_room', room._id);
+            socketService.off('on_new_room', onNewRoom);
         }
     }, [])
 
-    const sendMessage = () => {
+    const onSendMessage = () => {
         const data = {
-            roomID: room._id,
+            roomId: room._id,
             content: content,
             attachments: null,
+            type: text
         }
-        setContent('');
-        socketService.emit('send_message', data);
+
+        if (data.attachments && data.attachments.length > 0) {
+            data.type = 'image'
+        }
+
+        sendMessage(data).then(res => {
+            setContent('');
+            socketService.emit('on_new_room', data.roomId);
+        }, err => {
+            console.log(err);
+        })
     }
 
     const height = Dimensions.get('window').height;
-
     return (
         <View>
             <ActivityIndicator style={{}} size="small" color="#0000ff" animating={loading} />
@@ -87,7 +104,7 @@ const RoomDetail = (props) => {
                         value={content}
                     />
                     <IconButton
-                        onPress={() => sendMessage()}
+                        onPress={() => onSendMessage()}
                         style={styles.icon} icon={props => <Icon name="send" {...props} />} />
                 </View>
             </View>

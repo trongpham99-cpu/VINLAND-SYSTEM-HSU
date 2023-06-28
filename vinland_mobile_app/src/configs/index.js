@@ -8,7 +8,7 @@ const development = {
 
 const production = {
   api: {
-    url: "https://vinland-api.herokuapp.com",
+    url: "https://vinland-hsu-server-ddae33bb8188.herokuapp.com/",
   },
 };
 

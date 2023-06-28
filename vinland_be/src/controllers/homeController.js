@@ -29,13 +29,12 @@ const homeController = {
   },
   getAllHome: async (req, res) => {
     const { type } = req.query;
-
     const params = {
       type: type,
       status: "approved",
     }
 
-    if (!type) {
+    if (!type || type == 0) {
       delete params.type;
     }
 
@@ -48,7 +47,7 @@ const homeController = {
   },
   getDetailHome: async (req, res) => {
     try {
-      const home = await Home.findById(req.params.id);
+      const home = await Home.findById(req.params.id).populate("owner", "_id username email");
       return res.status(200).json(home);
     } catch (err) {
       return res.status(500).json(err);

@@ -1,9 +1,7 @@
 import axios from "axios";
 import { AsyncStorage } from "react-native";
 import config from "../configs/index";
-const {
-    api: { url },
-} = config;
+const { api: { url } } = config;
 
 export const fetchMyRoom = async () => {
     try {
@@ -30,6 +28,20 @@ export const fetchRoomDetail = async (roomId) => {
         return response.data;
     } catch (err) {
         console.log(err);
+    }
+}
+
+export const sendMessage = async (data) => {
+    try {
+        const response = await axios.post(`${url}/message/create_message`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        return response.data;
+    } catch (error) {
+        return error;
     }
 }
 

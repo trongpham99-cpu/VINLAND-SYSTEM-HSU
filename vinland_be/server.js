@@ -63,9 +63,9 @@ io.on("connection", (socket) => {
     socket.leave(roomId);
   });
 
-  socket.on('message', async (roomId) => {
-    const room = getRoomById(roomId);
-    io.to(message.roomId).emit('message', room);
+  socket.on('on_new_room', async (roomId) => {
+    const room = await getRoomById(roomId);
+    io.to(message.roomId).emit('on_new_room', room);
   });
 
   socket.on('disconnect', () => {
@@ -73,12 +73,14 @@ io.on("connection", (socket) => {
   });
 });
 
-//default route
-app.get("/", (req, res) => {
+const onListen = (req, res) => {
   res.send({
     message: "Server is running!",
   });
-});
+}
+
+//default route
+app.get("/", onListen);
 app.use("/home", homeRoute);
 app.use("/auth", authRoute);
 app.use("/user", userRoute);

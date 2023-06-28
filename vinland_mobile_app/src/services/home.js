@@ -36,7 +36,7 @@ export const addHome = async (
     });
     return response.data;
   } catch (error) {
-    console.log(error);
+    return error;
   }
 };
 
@@ -71,6 +71,15 @@ export const updateHome = async (id) => {
   }
 };
 
+export const approveHome = async (id) => {
+  try {
+    const response = await axios.put(`${url}/home/approve/${id}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const deleteHome = async (id) => {
   try {
     const response = await axios.delete(`${url}/home/${id}`);
@@ -80,4 +89,11 @@ export const deleteHome = async (id) => {
   }
 };
 
-export default { addHome, getAllHome, getDetailHome, updateHome, deleteHome };
+export default {
+  addHome,
+  getAllHome,
+  getDetailHome,
+  updateHome,
+  approveHome,
+  deleteHome
+};

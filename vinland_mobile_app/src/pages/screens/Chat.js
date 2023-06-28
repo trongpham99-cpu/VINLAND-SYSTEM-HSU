@@ -18,17 +18,17 @@ export default function Chat({ navigation }) {
     setLoading(false);
   }
 
-  useEffect(() => {
-    socketService.initializeSocket();
+  const onListRoom = rooms => {
+    setRooms(rooms);
+  }
 
-    // socketService.on('get_my_rooms', (data) => {
-    //   console.log(data);
-    // });
-    socketService.emit('get_my_rooms', { email: 'trong.phamtranduc@gmail.com' });
+  useEffect(() => {
+    socketService.emit('get_list_room', onListRoom);
     return () => {
       socketService.removeAllListeners('connect');
       socketService.removeAllListeners('disconnect');
       socketService.removeAllListeners('connect_error');
+      socketService.removeAllListeners('get_list_room');
     }
   }, []);
 
