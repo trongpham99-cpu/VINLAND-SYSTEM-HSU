@@ -12,6 +12,7 @@ import {
   Image,
   Button,
   ImageBackground,
+  TouchableOpacity,
 } from "react-native";
 import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -58,9 +59,38 @@ export default function News({ props, navigation }) {
     )
   }
 
+  const goToAdminScreen = () => {
+    navigation.navigate("Admin");
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <View style={styles.header}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginBottom: 20,
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: "Bold",
+              fontSize: 26,
+              flex: 1,
+              textAlign: "center",
+            }}
+          >
+            Tin tức bất động sản
+          </Text>
+          <TouchableOpacity
+            onPress={goToAdminScreen}
+            style={styles.adminButton}
+          >
+            <Icon name="ellipsis-horizontal" size={22} />
+          </TouchableOpacity>
+        </View>
+
         <View style={{ alignItems: "center", marginBottom: 20 }}>
           <Text
             style={{
@@ -182,6 +212,17 @@ export default function News({ props, navigation }) {
 const { width } = Dimensions.get("screen");
 
 const styles = StyleSheet.create({
+  adminButton: {
+    borderColor: COLORS.greylight,
+    borderWidth: 2,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    marginRight: 10,
+    marginTop: 5,
+  },
   searchInput: {
     height: 50,
     backgroundColor: COLORS.white,
