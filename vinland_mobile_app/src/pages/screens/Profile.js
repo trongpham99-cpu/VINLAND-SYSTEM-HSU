@@ -27,7 +27,7 @@ export default function Profile({ navigation }) {
   const _getProfile = async () => {
     getProfile().then((res) => {
       if (res) {
-        console.log("Profile: ", res["data"]);
+        // console.log("Profile: ", res["data"])
         // setProfile(res["data"]);
       }
     });

@@ -17,6 +17,8 @@ import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { createRoom } from "../../services/room";
 import { getDetailHome } from "../../services/home";
+import { STATUS_PENDING, defineStatus } from "../../constants/bacis";
+import { onEmit } from '../../../src/configs/socket';
 
 const DetailScreen = ({ navigation, route }) => {
   const item = route.params;
@@ -44,16 +46,11 @@ const DetailScreen = ({ navigation, route }) => {
       postId: home._id,
     };
 
-    createRoom(room)
-      .then((res) => {
-        console.log(res);
-        // if (res && res._id) {
-
-        // }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    createRoom(room).then(res => {
+      onEmit("load_rooms", "load room event");
+    }).catch(err => {
+      console.log(err);
+    })
   };
 
   return (
@@ -215,6 +212,13 @@ const DetailScreen = ({ navigation, route }) => {
               </View>
             </View>
           </Pressable>
+          {
+            home?.status === STATUS_PENDING ? (
+              <View>
+
+              </View>
+            ) : null
+          }
         </View>
       </ScrollView>
     </SafeAreaView>

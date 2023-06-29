@@ -8,7 +8,6 @@ const ListRoom = (props) => {
     useEffect(() => {
 
         return () => {
-            console.log("ListRoom unmount");
         }
 
     }, []);

@@ -20,19 +20,6 @@ export default function App() {
     return null;
   }
 
-  // const fetchAPI = async () => {
-  //   try {
-  //     const res = await axios.get("http://192.168.0.125:7000/");
-  //     console.log(res.data);
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // };
-  // fetchAPI();
-  // useEffect(() => {
-  //   fetchAPI();
-  // }, []);
-
   return (
     <NavigationContainer>
       <StatusBar barStyle={"dark-content"} />

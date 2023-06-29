@@ -70,7 +70,6 @@ export default function Home({ props, navigation }) {
   };
 
   const CardPopular = ({ item }) => {
-    // console.log(item);
     return (
       <Pressable onPress={() => navigation.navigate("DetailScreen", item)}>
         <View style={styles.cardPopular}>

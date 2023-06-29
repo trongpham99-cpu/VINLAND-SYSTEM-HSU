@@ -98,7 +98,10 @@ const homeController = {
   },
   getPendingHome: async (req, res) => {
     try {
-      const allHome = await Home.find({ status: "pending" }).sort({ createdAt: -1 });
+      const allHome = await Home
+        .find({ status: "pending" })
+        .populate("owner", "_id username email")
+        .sort({ createdAt: -1 });
       return res.status(200).json(allHome);
     } catch (err) {
       return res.status(500).json(err);
@@ -109,6 +112,14 @@ const homeController = {
       const updateHome = await Home.findByIdAndUpdate(req.params.id, { status: "approved" });
       return res.status(200).json("Home has been approved!");
     } catch (err) {
+      return res.status(500).json(err);
+    }
+  },
+  approveAllHome: async (req, res) => {
+    try {
+      const updateAllHome = await Home.updateMany({ status: "pending" }, { status: "approved" });
+      return res.status(200).json("All Home has been approved!");
+    } catch (error) {
       return res.status(500).json(err);
     }
   },

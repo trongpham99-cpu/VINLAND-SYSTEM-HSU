@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, Text, View, ActivityIndicator } from "react-native";
 import ListRoom from '../../components/chat/list-room';
 import { fetchMyRoom } from "../../services/room";
+import { onListen } from "../../configs/socket";
 
 export default function Chat({ navigation }) {
 
@@ -23,7 +24,7 @@ export default function Chat({ navigation }) {
   }
 
   useEffect(() => {
-  
+
     return () => {
 
     }
@@ -34,6 +35,9 @@ export default function Chat({ navigation }) {
     const unsubscribe = navigation.addListener("focus", () => {
       //call api
       _fetchMyRooms();
+      onListen("load_rooms", () => {
+        _fetchMyRooms();
+      })
     });
 
     return unsubscribe;

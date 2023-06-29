@@ -9,7 +9,7 @@ export const fetchBlogs = async (rating) => {
         const response = await axios.get(`${url}/blog`,
             {
                 params: {
-                    rating
+                    rating: rating
                 }
             }
         );

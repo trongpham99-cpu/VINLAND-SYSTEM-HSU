@@ -17,21 +17,34 @@ import {
 import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/Ionicons";
 import { fetchBlogs } from "../../services/blog";
-import { formatISODate } from "../../utils";
+import { formatISODate } from '../../utils';
+import RenderHTML from "react-native-render-html";
 
 export default function News({ props, navigation }) {
-  const [house, setHouse] = React.useState([]);
+  const [topBlogs, setTopBlogs] = React.useState([]);
+  const [blogs, setBlogs] = React.useState([]);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      //call api
-      fetchBlogs().then((res) => {
-        setHouse(res);
-      });
+      _fetchTopBlogs();
+      _fetchBlogs();
     });
 
     return unsubscribe;
   }, [navigation]);
+
+  const _fetchTopBlogs = () => {
+    fetchBlogs(5).then((res) => {
+      setTopBlogs(res);
+    });
+  };
+
+  const _fetchBlogs = () => {
+    fetchBlogs().then((res) => {
+      setBlogs(res);
+    });
+  };
+
 
   const renderCard = ({ item }) => {
     return (
@@ -87,7 +100,7 @@ export default function News({ props, navigation }) {
             Việt Nam
           </Text>
           <FlatList
-            data={house}
+            data={topBlogs}
             renderItem={(item) => {
               return renderCard(item);
             }}
@@ -98,6 +111,48 @@ export default function News({ props, navigation }) {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.flatListContainer}
           />
+          {
+            blogs.map((item) => {
+              return (
+                <Pressable
+                  style={styles.bottomImageContainer}
+                  onPress={() => navigation.navigate("NewsDetail", { id: item._id })}
+                >
+                  <View style={styles.bottomImageContainer}>
+                    <Image
+                      source={{ uri: item.thumbnail }}
+                      style={styles.bottomImage}
+                    />
+                    <View style={styles.overlayTextContainer}>
+                      <Text
+                        style={{
+                          color: COLORS.black,
+                          fontWeight: "bold",
+                          fontSize: 16,
+                        }}
+                      >
+                        Tin tức
+                      </Text>
+                    </View>
+                    <View style={styles.bottomImageTextContainer}>
+                      <Text style={{ fontSize: 16, color: COLORS.tittleColor }}>
+                        {item.updatedAt}
+                      </Text>
+                      <Text style={styles.bottomImageText}>
+                        {item.title}
+                      </Text>
+                      <RenderHTML
+                        contentWidth={width}
+                        source={{
+                          html: item.content,
+                        }}
+                      />
+                    </View>
+                  </View>
+                </Pressable>
+              )
+            })
+          }
         </ScrollView>
       </View>
     </SafeAreaView>

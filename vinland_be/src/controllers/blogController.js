@@ -33,13 +33,22 @@ const blogController = {
 
         const { rating } = req.query;
 
+        let params = {
+            rating: {
+                $gte: rating,
+            },
+        }
+
+        if (!rating) {
+            params.rating = {
+                $gte: 0,
+                $lte: 4,
+            }
+        }
+
         try {
             const allBlog = await blogModel
-                .find({
-                    // rating: {
-                    //     $gte: rating,
-                    // },
-                })
+                .find(params)
                 .populate("userId", "username email").sort({ createdAt: -1 });
             return res.status(200).json(allBlog);
         } catch (error) {

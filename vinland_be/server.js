@@ -63,6 +63,10 @@ io.on("connection", (socket) => {
     socket.leave(roomId);
   });
 
+  socket.on('load_rooms', (data) => {
+    socket.broadcast.emit('load_rooms', data);
+  })
+
   socket.on('on_new_room', async (roomId) => {
     const room = await findRoomAdvance({ id: roomId });
     io.to(roomId).emit('on_new_room', room[0]);

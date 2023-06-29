@@ -35,7 +35,6 @@ export default function Register({ navigation }) {
   const handleOnChangeText = (value, fieldName) => {
     setUserInfo({ ...userInfo, [fieldName]: value });
   };
-  // console.log(userInfo);
 
   const isValidForm = () => {
     if (!isValidObjField(userInfo))
@@ -71,7 +70,6 @@ export default function Register({ navigation }) {
 
   const submitForm = async () => {
     const { username, email, password } = userInfo;
-    // console.log(userInfo);
     if (isValidForm()) {
       try {
         const res = await register(username, email, password);
