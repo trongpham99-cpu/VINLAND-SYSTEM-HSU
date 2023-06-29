@@ -32,6 +32,15 @@ export const getAllHome = async ({ type }) => {
   }
 };
 
+export const getAllHomePending = async () => {
+  try {
+    const response = await axios.get(`${url}/home/pending`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getDetailHome = async (id) => {
   try {
     const response = await axios.get(`${url}/home/${id}`);
@@ -59,6 +68,15 @@ export const approveHome = async (id) => {
   }
 };
 
+export const rejectHome = async (id) => {
+  try {
+    const response = await axios.put(`${url}/home/reject/${id}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const deleteHome = async (id) => {
   try {
     const response = await axios.delete(`${url}/home/${id}`);
@@ -74,5 +92,7 @@ export default {
   getDetailHome,
   updateHome,
   approveHome,
-  deleteHome
+  deleteHome,
+  getAllHomePending,
+  rejectHome
 };

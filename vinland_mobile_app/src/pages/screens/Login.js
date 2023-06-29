@@ -60,22 +60,11 @@ export default function Login({ navigation }) {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white", paddingTop: 20 }}>
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <View style={styles.headerBtn}>
-          <Icon
-            style={{ marginLeft: 10 }}
-            name="arrow-back-ios"
-            size={24}
-            onPress={navigation.goBack}
-          />
-        </View>
-        <Text style={styles.txtIcon}>Đăng Nhập</Text>
-      </View>
-      <View style={{ alignItems: "center", marginTop: 20 }}>
-        <Image source={require("../../image/LogoV.png")} />
-        <Text style={styles.tittle}>Chào mừng bạn đến với VinLand</Text>
-      </View>
       <KeyboardAwareScrollView>
+        <View style={{ alignItems: "center", marginTop: 100 }}>
+          <Image source={require("../../image/LogoV.png")} />
+          <Text style={styles.tittle}>Chào mừng bạn đến với VinLand</Text>
+        </View>
         {error ? (
           <Text style={{ color: "red", fontSize: 18, textAlign: "center" }}>
             {error}

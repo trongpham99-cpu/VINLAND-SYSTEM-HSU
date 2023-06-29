@@ -12,18 +12,34 @@ const authController = {
     try {
       const salt = await bcrypt.genSalt(10);
       const hashed = await bcrypt.hash(req.body.password, salt);
-      //Create new user
+
+      const foundUser = await User.findOne({
+        username: req.body.username,
+      })
+
+      if (foundUser) return res.status(400).json(
+        {
+          message: "Username already exists",
+          status: 400
+        }
+      )
+
       const newUser = await new User({
         username: req.body.username,
         email: req.body.email,
         password: hashed,
-        // admin: req.body.admin,
       });
-      //Save to DB
       const user = await newUser.save();
-      res.status(200).json(user);
+      return res.status(200).json({
+        message: "Register successfully",
+        status: 200,
+        user: user,
+      });
     } catch (error) {
-      res.status(500).json(error);
+      return res.status(500).json({
+        message: error.message,
+        status: 500,
+      });
     }
   },
 

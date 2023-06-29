@@ -44,7 +44,12 @@ export default function Home({ props, navigation }) {
   };
 
   useEffect(() => {
-    getHomeList();
+    const unsubscribe = navigation.addListener("focus", () => {
+      getHomeList();
+    });
+
+    return unsubscribe;
+
   }, [selectedCategoryIndex]);
 
   const ListCategory = () => {

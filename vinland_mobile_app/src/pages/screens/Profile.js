@@ -105,115 +105,7 @@ export default function Profile({ navigation }) {
             khoidang@gmail.com
           </Text>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginTop: 5,
-          }}
-        >
-          <Image
-            style={{ width: 25, height: 25 }}
-            source={require("../../image/hand-phone.png")}
-          />
-          <Text
-            style={{
-              fontWeight: "300",
-              fontSize: 20,
-              marginTop: 4,
-              marginLeft: 5,
-              textAlign: "center",
-            }}
-          >
-            0911074357
-          </Text>
-        </View>
-        <View
-          style={{
-            paddingVertical: 20,
-            flexDirection: "row",
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "column",
-              alignItems: "center",
-              marginHorizontal: 10,
-            }}
-          >
-            <Text
-              style={{
-                fontWeight: "400",
-                fontSize: 18,
-                color: COLORS.grey,
-              }}
-            >
-              122
-            </Text>
-            <Text
-              style={{
-                fontFamily: "Bold",
-                fontSize: 18,
-                color: COLORS.grey,
-              }}
-            >
-              Follower
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "column",
-              alignItems: "center",
-              marginHorizontal: 10,
-            }}
-          >
-            <Text
-              style={{
-                fontWeight: "400",
-                fontSize: 18,
-                color: COLORS.grey,
-              }}
-            >
-              100
-            </Text>
-            <Text
-              style={{
-                fontFamily: "Bold",
-                fontSize: 18,
-                color: COLORS.grey,
-              }}
-            >
-              Đang Follow
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "column",
-              alignItems: "center",
-              marginHorizontal: 10,
-            }}
-          >
-            <Text
-              style={{
-                fontWeight: "400",
-                fontSize: 18,
-                color: COLORS.grey,
-              }}
-            >
-              50
-            </Text>
-            <Text
-              style={{
-                fontFamily: "Bold",
-                fontSize: 18,
-                color: COLORS.grey,
-              }}
-            >
-              Thích
-            </Text>
-          </View>
-        </View>
-        <View style={{ flexDirection: "row" }}>
+        <View style={styles.container}>
           <TouchableOpacity
             onPress={() => navigation.navigate("EditProfile")}
             style={{
@@ -223,7 +115,6 @@ export default function Profile({ navigation }) {
               justifyContent: "center",
               backgroundColor: COLORS.grey,
               borderRadius: 10,
-              marginHorizontal: 20,
             }}
           >
             <Text
@@ -236,6 +127,7 @@ export default function Profile({ navigation }) {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => navigation.navigate("MyPost")}
             style={{
               width: 124,
               height: 40,
@@ -243,7 +135,25 @@ export default function Profile({ navigation }) {
               justifyContent: "center",
               backgroundColor: COLORS.grey,
               borderRadius: 10,
-              marginHorizontal: 20,
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "Regular",
+                color: COLORS.bgColor,
+              }}
+            >
+              Tin đã đăng
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              width: 124,
+              height: 40,
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: COLORS.grey,
+              borderRadius: 10,
             }}
             onPress={() => signOut()}
           >
@@ -272,5 +182,16 @@ const styles = StyleSheet.create({
     fontFamily: "Regular",
     color: "#fff",
     paddingBottom: 5,
+  },
+  container: {
+    gap: 10,
+    backgroundColor: COLORS.bgColor,
+    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    marginTop: 20,
   },
 });

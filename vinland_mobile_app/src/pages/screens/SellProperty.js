@@ -18,6 +18,7 @@ import * as ImagePicker from "expo-image-picker";
 import { uploadSingleImage } from "../../services/upload";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { addHome } from "../../services/home";
+import ImageModal from 'react-native-image-modal';
 
 export default function SellProperty({ navigation, route }) {
   const [selectedPrice, setSelectedPrice] = useState(0);
@@ -121,15 +122,6 @@ export default function SellProperty({ navigation, route }) {
         </View>
         <Text style={styles.headerText}>Đăng tin bất động sản</Text>
       </View>
-
-      {/* <FlatList
-          data={images}
-          horizontal
-          renderItem={({ item: uri }) => {
-            return <Image source={{ uri }} style={styles.interiorImage} />;
-          }}
-          keyExtractor={(item, index) => index.toString()}
-        /> */}
       <KeyboardAwareScrollView
         style={{
           flex: 1,
@@ -144,6 +136,14 @@ export default function SellProperty({ navigation, route }) {
             <Icon name="camera" size={30} color={COLORS.white} />
           </TouchableOpacity>
         </View>
+        <FlatList
+          data={images}
+          horizontal
+          renderItem={({ item: uri }) => {
+            return <Image source={{ uri }} style={styles.interiorImage} />;
+          }}
+          keyExtractor={(item, index) => index.toString()}
+        />
         <View
           style={{
             marginTop: 10,

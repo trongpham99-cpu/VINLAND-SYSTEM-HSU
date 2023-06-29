@@ -10,6 +10,7 @@ import QRcode from "./QRcode";
 import Rule from "./Rule";
 import Profile from "./Profile";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import MyPost from "./MyPost";
 
 const Stack = createStackNavigator();
 
@@ -50,6 +51,7 @@ export default function Account({ navigation }) {
             <Stack.Screen name="EditProfile" component={EditProfile} />
             <Stack.Screen name="Qrcode" component={QRcode} />
             <Stack.Screen name="Rule" component={Rule} />
+            <Stack.Screen name="MyPost" component={MyPost} />
           </>
         ) : (
           <>

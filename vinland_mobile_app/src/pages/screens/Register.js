@@ -71,14 +71,18 @@ export default function Register({ navigation }) {
   const submitForm = async () => {
     const { username, email, password } = userInfo;
     if (isValidForm()) {
-      try {
-        const res = await register(username, email, password);
-        if (res["status"] == statusCode.OK) {
-          console.log("Register successfully");
+      register(username, email, password).then((res) => {
+        const response = res.data;
+        if (response.status === statusCode.OK) {
+          alert(response.message);
+          navigation.navigate("Login");
         }
-      } catch (err) {
-        console.log("Error Register");
-      }
+      }).catch((err) => {
+        const response = err.response.data;
+        if (response.status === statusCode.BAD_REQUEST) {
+          alert(response.message);
+        }
+      })
     }
   };
 
@@ -87,33 +91,17 @@ export default function Register({ navigation }) {
       style={{ flex: 1, backgroundColor: COLORS.bgColor, paddingTop: 20 }}
     >
       <StatusBar barStyle="dark-content" />
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
-        <View style={styles.headerBtn}>
-          <Icon
-            style={{ marginLeft: 10 }}
-            name="arrow-back-ios"
-            size={24}
-            onPress={navigation.goBack}
-          />
-        </View>
-        <Text style={styles.txtIcon}>Đăng Ký</Text>
-      </View>
-      <View
-        style={{
-          alignItems: "center",
-          marginTop: 20,
-          justifyContent: "center",
-        }}
-      >
-        <Image source={require("../../image/LogoV.png")} />
-        <Text style={styles.tittle}>Chào mừng bạn đến với VinLand</Text>
-      </View>
       <KeyboardAwareScrollView>
+        <View
+          style={{
+            alignItems: "center",
+            marginTop: 100,
+            justifyContent: "center",
+          }}
+        >
+          <Image source={require("../../image/LogoV.png")} />
+          <Text style={styles.tittle}>Chào mừng bạn đến với VinLand</Text>
+        </View>
         <FormInput
           error={error}
           value={username}

@@ -7,15 +7,64 @@ import {
   FlatList,
   Pressable,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-
-import React from "react";
+import { approveHome, getAllHomePending } from '../../services/home';
+import React, { useEffect } from "react";
 import COLORS from "../../constants/colors";
 import houses from "../../constants/houses";
 
 export default function ListProduct({ navigation }) {
-  const CardItem = ({ houses }) => {
+
+  const [home, setHome] = React.useState([]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      //call api
+      _getAllHomePending();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  const _getAllHomePending = async () => {
+    getAllHomePending().then((res) => {
+      if (res) {
+        setHome(res);
+      }
+    });
+  }
+
+  const onApprove = (id) => {
+    approveHome(id).then((res) => {
+      if (res) {
+        console.log("Approve: ", res);
+        _getAllHomePending();
+      }
+    });
+  }
+
+  const onReject = (id) => {
+    console.log("Reject: ", id);
+    Alert.alert(
+      "Xác nhận",
+      "Bạn có chắc chắn muốn từ chối?",
+      [
+        {
+          text: "Hủy",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        {
+          text: "Đồng ý",
+          onPress: () => console.log("OK Pressed")
+        }
+      ],
+      { cancelable: false }
+    );
+  }
+
+  const CardItem = ({ houses: home }) => {
     return (
       <SafeAreaView
         style={{
@@ -60,7 +109,7 @@ export default function ListProduct({ navigation }) {
                 marginLeft: 10,
               }}
             >
-              {houses.time}
+              {home.createdAt}
             </Text>
           </View>
 
@@ -79,7 +128,7 @@ export default function ListProduct({ navigation }) {
                 marginLeft: 10,
               }}
             >
-              {houses.date}
+              {home.title}
             </Text>
           </View>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -91,13 +140,13 @@ export default function ListProduct({ navigation }) {
                 marginLeft: 10,
               }}
             >
-              {houses.username}
+              {home.owner.username}
             </Text>
           </View>
         </View>
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
-            // onPress={DoneHandeler}
+            onPress={() => onReject(home._id)}
             style={styles.headerBtnClose}
           >
             <Icon
@@ -107,7 +156,10 @@ export default function ListProduct({ navigation }) {
               color={"#F44336"}
             />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.headerBtnDone}>
+          <TouchableOpacity
+            style={styles.headerBtnDone}
+            onPress={() => onApprove(home._id)}
+          >
             <Icon
               name="done"
               size={20}
@@ -142,7 +194,7 @@ export default function ListProduct({ navigation }) {
         }}
       >
         <FlatList
-          data={houses}
+          data={home}
           renderItem={({ item }) => {
             return <CardItem houses={item} />;
           }}
