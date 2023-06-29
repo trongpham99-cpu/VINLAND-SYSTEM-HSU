@@ -17,7 +17,7 @@ import {
 import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/Ionicons";
 import { fetchBlogs } from "../../services/blog";
-import { formatISODate } from '../../utils';
+import { formatISODate } from "../../utils";
 
 export default function News({ props, navigation }) {
   const [house, setHouse] = React.useState([]);
@@ -33,7 +33,6 @@ export default function News({ props, navigation }) {
     return unsubscribe;
   }, [navigation]);
 
-
   const renderCard = ({ item }) => {
     return (
       <Pressable
@@ -41,23 +40,22 @@ export default function News({ props, navigation }) {
         onPress={() => navigation.navigate("NewsDetail", { id: item._id })}
       >
         <View style={styles.card}>
-          <ImageBackground style={styles.cardImage} source={{ uri: item.thumbnail }}>
+          <ImageBackground
+            style={styles.cardImage}
+            source={{ uri: item.thumbnail }}
+          >
             <View style={styles.overlay}>
               <Text style={styles.overlayDateTime}>
-                {
-                  formatISODate(item.createdAt, 'dd/MM/yyyy')
-                }
+                {formatISODate(item.createdAt, "dd/MM/yyyy")}
               </Text>
               <Text style={styles.overlayText}>Tin tức</Text>
-              <Text style={styles.overlayText}>
-                {item.title}
-              </Text>
+              <Text style={styles.overlayText}>{item.title}</Text>
             </View>
           </ImageBackground>
         </View>
       </Pressable>
-    )
-  }
+    );
+  };
 
   const goToAdminScreen = () => {
     navigation.navigate("Admin");
@@ -66,30 +64,6 @@ export default function News({ props, navigation }) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <View style={styles.header}>
-        {/* <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginBottom: 20,
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: "Bold",
-              fontSize: 26,
-              flex: 1,
-              textAlign: "center",
-            }}
-          >
-            Tin tức bất động sản
-          </Text>
-          <TouchableOpacity
-            onPress={goToAdminScreen}
-            style={styles.adminButton}
-          >
-            <Icon name="ellipsis-horizontal" size={22} />
-          </TouchableOpacity>
-        </View> */}
         <View style={{ alignItems: "center", marginBottom: 20 }}>
           <Text
             style={{
@@ -114,7 +88,7 @@ export default function News({ props, navigation }) {
           </Text>
           <FlatList
             data={house}
-            renderItem={(item)=> {
+            renderItem={(item) => {
               return renderCard(item);
             }}
             keyExtractor={(item) => {
@@ -124,87 +98,6 @@ export default function News({ props, navigation }) {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.flatListContainer}
           />
-
-          {/* <View style={styles.bottomImageContainer}>
-            <Image
-              source={require("../../image/interior2.jpg")}
-              style={styles.bottomImage}
-            />
-            <View style={styles.overlayTextContainer}>
-              <Text
-                style={{
-                  color: COLORS.black,
-                  fontWeight: "bold",
-                  fontSize: 16,
-                }}
-              >
-                Tin tức
-              </Text>
-            </View>
-            <View style={styles.bottomImageTextContainer}>
-              <Text style={{ fontSize: 16, color: COLORS.tittleColor }}>
-                06/04/2023 10:30
-              </Text>
-              <Text style={styles.bottomImageText}>
-                Tại sao căn hộ 2 PN lại chiếm ưu thế lớn
-              </Text>
-              <Text
-                style={{
-                  fontSize: 12,
-                  paddingHorizontal: 10,
-                  marginLeft: 22,
-                  marginRight: 22,
-                }}
-              >
-                Khách hàng có điều kiện tài chính thường sẽ hướng đến căn hộ 2
-                phòng ngủ ngay từ đầu bởi đây là lựa chọn tối ưu cho nhiều gia
-                đình.
-              </Text>
-            </View>
-          </View>
-          <View
-            style={{
-              position: "relative",
-              marginVertical: 20,
-              alignItems: "center",
-            }}
-          >
-            <Image
-              source={require("../../image/interior2.jpg")}
-              style={styles.bottomImage}
-            />
-            <View style={styles.overlayTextContainer}>
-              <Text
-                style={{
-                  color: COLORS.black,
-                  fontWeight: "bold",
-                  fontSize: 16,
-                }}
-              >
-                Tin tức
-              </Text>
-            </View>
-            <View style={styles.bottomImageTextContainer}>
-              <Text style={{ fontSize: 16, color: COLORS.tittleColor }}>
-                06/04/2023 10:30
-              </Text>
-              <Text style={styles.bottomImageText}>
-                Tại sao căn hộ 2 PN lại chiếm ưu thế lớn
-              </Text>
-              <Text
-                style={{
-                  fontSize: 12,
-                  paddingHorizontal: 10,
-                  marginLeft: 22,
-                  marginRight: 22,
-                }}
-              >
-                Khách hàng có điều kiện tài chính thường sẽ hướng đến căn hộ 2
-                phòng ngủ ngay từ đầu bởi đây là lựa chọn tối ưu cho nhiều gia
-                đình.
-              </Text>
-            </View>
-          </View> */}
         </ScrollView>
       </View>
     </SafeAreaView>

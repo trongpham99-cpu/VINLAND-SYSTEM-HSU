@@ -14,8 +14,9 @@ import {
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { Input, Slider } from "react-native-elements";
 import COLORS from "../../constants/colors";
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
 import { uploadSingleImage } from "../../services/upload";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { addHome } from "../../services/home";
 
 export default function SellProperty({ navigation, route }) {
@@ -29,8 +30,9 @@ export default function SellProperty({ navigation, route }) {
 
   useEffect(() => {
     (async () => {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      setHasGalleryPermission(status === 'granted');
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      setHasGalleryPermission(status === "granted");
     })();
   }, []);
 
@@ -51,15 +53,17 @@ export default function SellProperty({ navigation, route }) {
       uri: uri,
     });
 
-    uploadSingleImage(formData).then((res) => {
-      if (res.data) {
-        const { url } = res.data;
-        setImages([...images, url]);
-      }
-    }).catch((err) => {
-      console.log(err);
-    });
-  }
+    uploadSingleImage(formData)
+      .then((res) => {
+        if (res.data) {
+          const { url } = res.data;
+          setImages([...images, url]);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleAddImage = async () => {
     getImagePicker();
@@ -92,14 +96,16 @@ export default function SellProperty({ navigation, route }) {
       rating: 0,
       type: selectedRoomType,
       thumbnail: images,
-      title: title
+      title: title,
     };
-    addHome(home).then((res) => {
-      alert("Thêm bất động sản thành công, vui lòng chờ admin duyệt");
-      navigation.navigate("Home");
-    }).catch((err) => {
-      console.log(err);
-    });
+    addHome(home)
+      .then((res) => {
+        alert("Thêm bất động sản thành công, vui lòng chờ admin duyệt");
+        navigation.navigate("Home");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -113,80 +119,83 @@ export default function SellProperty({ navigation, route }) {
             onPress={navigation.goBack}
           />
         </View>
-        <Text style={styles.headerText}>Cập nhật bất động sản</Text>
+        <Text style={styles.headerText}>Đăng tin bất động sản</Text>
       </View>
-      <ScrollView>
-        <View style={styles.imageContainer}>
-          <Image
-            source={require("../../image/house5.jpg")}
-            style={styles.image}
-          />
-          <TouchableOpacity style={styles.addButton} onPress={handleAddImage}>
-            <Icon name="add" size={30} color={COLORS.white} />
-          </TouchableOpacity>
-        </View>
-        <FlatList
+
+      {/* <FlatList
           data={images}
           horizontal
           renderItem={({ item: uri }) => {
             return <Image source={{ uri }} style={styles.interiorImage} />;
           }}
           keyExtractor={(item, index) => index.toString()}
-        />
-
+        /> */}
+      <KeyboardAwareScrollView
+        style={{
+          flex: 1,
+        }}
+      >
+        <View style={styles.imageContainer}>
+          <Image
+            source={require("../../image/house5.jpg")}
+            style={styles.image}
+          />
+          <TouchableOpacity style={styles.addButton} onPress={handleAddImage}>
+            <Icon name="camera" size={30} color={COLORS.white} />
+          </TouchableOpacity>
+        </View>
         <View
           style={{
             marginTop: 10,
             marginHorizontal: 10,
+            flexDirection: "column",
           }}
         >
           <Text
             style={{
               fontSize: 18,
               fontFamily: "Bold",
-              marginBottom: 5,
-              marginTop: 5,
+              marginBottom: 10,
+              marginTop: 10,
             }}
           >
-            Tiêu đề:
+            Nhập tên dự án cần đăng:
           </Text>
-          <View
-            style={
-              {
-                ...styles.textInputContainer,
-                flexDirection: "row",
-                height: 50,
-                border: "none",
-              }
-            }
-          >
-            <Input
-              style={styles.textInput}
-              multiline
-              numberOfLines={4}
-              value={title}
-              onChangeText={(e) => setTitle(e)}
-              placeholder="Nhập tiêu đề của bạn"
-              placeholderTextColor={COLORS.gray}
-            />
-
-          </View>
+          <TextInput
+            style={{
+              backgroundColor: COLORS.greylight,
+              height: 50,
+              alignItems: "center",
+              justifyContent: "center",
+              paddingLeft: 20,
+              borderRadius: 10,
+            }}
+            // multiline
+            numberOfLines={2}
+            value={title}
+            onChangeText={(e) => setTitle(e)}
+            placeholder="Nhập tên dựa án"
+            placeholderTextColor={COLORS.grey}
+          />
         </View>
         <View style={styles.priceSelectorContainer}>
-          <Text style={styles.priceLabel}>Chọn giá bán:</Text>
-          <Slider
-            style={styles.slider}
-            minimumValue={0}
-            maximumValue={7000}
-            thumbStyle={{
-              height: 20,
-              width: 20,
-              backgroundColor: COLORS.btnColor,
+          <Text style={styles.priceLabel}>
+            Giá bán/Cho thuê (Đơn vị: /VND):
+          </Text>
+          <TextInput
+            style={{
+              backgroundColor: COLORS.greylight,
+              height: 50,
+              alignItems: "center",
+              justifyContent: "center",
+              paddingLeft: 20,
+              borderRadius: 10,
             }}
             value={selectedPrice}
-            onValueChange={handlePriceChange}
+            onChangeText={handlePriceChange}
+            placeholder="Nhập giá bán/cho thuê"
+            placeholderTextColor={COLORS.grey}
           />
-          <Text style={styles.selectedPrice}>{selectedPrice.toFixed()} $</Text>
         </View>
         <View
           style={{
@@ -194,18 +203,16 @@ export default function SellProperty({ navigation, route }) {
             paddingHorizontal: 10,
           }}
         >
-          <Text style={styles.label}>Mô tả:</Text>
-          <View style={styles.textInputContainer}>
-            <TextInput
-              style={styles.textInput}
-              multiline
-              numberOfLines={4}
-              value={description}
-              onChangeText={handleDescriptionChange}
-              placeholder="Nhập mô tả của bạn"
-              placeholderTextColor={COLORS.gray}
-            />
-          </View>
+          <Text style={styles.label}>Mô tả về dự án:</Text>
+          <TextInput
+            style={styles.textInputContainer}
+            multiline
+            numberOfLines={4}
+            value={description}
+            onChangeText={handleDescriptionChange}
+            placeholder="Nhập mô tả về dự án "
+            placeholderTextColor={COLORS.grey}
+          />
         </View>
         <View
           style={{
@@ -223,38 +230,33 @@ export default function SellProperty({ navigation, route }) {
           >
             Địa chỉ:
           </Text>
-          <View
-            style={
-              {
-                ...styles.textInputContainer,
-                flexDirection: "row",
-                height: 50,
-                border: "none",
-              }
-            }
-          >
-            <Input
-              style={styles.textInput}
-              multiline
-              numberOfLines={4}
-              value={location}
-              onChangeText={(e) => setLocation(e)}
-              placeholder="181 Cao Thắng, Quận 10, Hồ Chí Minh" //Đường, Quận, Thành phố
-              placeholderTextColor={COLORS.gray}
-            />
-
-          </View>
+          <TextInput
+            style={{
+              backgroundColor: COLORS.greylight,
+              height: 50,
+              alignItems: "center",
+              justifyContent: "center",
+              paddingLeft: 20,
+              borderRadius: 10,
+            }}
+            // multiline
+            numberOfLines={4}
+            value={location}
+            onChangeText={(e) => setLocation(e)}
+            placeholder="Nhập địa chỉ" //Đường, Quận, Thành phố
+            placeholderTextColor={COLORS.grey}
+          />
         </View>
         <View style={styles.roomTypeContainer}>
           <Text
             style={{
-              fontSize: 16,
-              fontWeight: "bold",
-              marginBottom: 5,
+              fontSize: 18,
+              fontFamily: "Bold",
+              marginBottom: 10,
               marginTop: 5,
             }}
           >
-            Loại Phòng
+            Loại Hình:
           </Text>
           <View style={styles.roomTypeOptions}>
             <TouchableOpacity
@@ -266,21 +268,21 @@ export default function SellProperty({ navigation, route }) {
             >
               <Text style={styles.roomTypeOptionText}>Căn hộ</Text>
             </TouchableOpacity>
+
             <TouchableOpacity
               style={[
                 styles.roomTypeOption,
-                selectedRoomType === "2" &&
-                styles.selectedRoomTypeOption,
+                selectedRoomType === "2" && styles.selectedRoomTypeOption,
               ]}
               onPress={() => handleRoomTypeChange("2")}
             >
               <Text style={styles.roomTypeOptionText}>Nhà cho thuê</Text>
             </TouchableOpacity>
+
             <TouchableOpacity
               style={[
                 styles.roomTypeOption,
-                selectedRoomType === "3" &&
-                styles.selectedRoomTypeOption,
+                selectedRoomType === "3" && styles.selectedRoomTypeOption,
               ]}
               onPress={() => handleRoomTypeChange("3")}
             >
@@ -292,9 +294,9 @@ export default function SellProperty({ navigation, route }) {
           style={styles.updateButton}
           onPress={handleUpdateInformation}
         >
-          <Text style={styles.updateButtonText}>Cập nhật thông tin</Text>
+          <Text style={styles.updateButtonText}>Đăng thông tin</Text>
         </TouchableOpacity>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
@@ -363,16 +365,13 @@ const styles = StyleSheet.create({
   priceSelectorContainer: {
     marginTop: 10,
     marginHorizontal: 10,
+    flexDirection: "column",
   },
   priceLabel: {
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: "Bold",
     fontSize: 19,
-    marginBottom: 5,
-  },
-  slider: {
-    width: 250,
-    height: 40,
+    marginBottom: 10,
   },
   selectedPrice: {
     fontSize: 16,
@@ -382,46 +381,47 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 18,
     fontFamily: "Bold",
-    marginBottom: 5,
+    marginBottom: 10,
   },
   descriptionContainer: {
-    marginTop: 20,
-    paddingHorizontal: 10,
+    // marginTop: 20,
+    // paddingHorizontal: 10,
   },
   textInputContainer: {
     backgroundColor: COLORS.greylight,
-    borderRadius: 15,
-    padding: 10,
+    borderRadius: 10,
     width: "100%",
-    height: 100,
+    height: 120,
+    paddingLeft: 20,
   },
   roomTypeContainer: {
     marginTop: 5,
     paddingHorizontal: 10,
   },
   roomTypeLabel: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
+    fontSize: 18,
+    fontFamily: "Bold",
+    marginBottom: 10,
   },
   roomTypeOptions: {
     flexDirection: "row",
   },
   roomTypeOption: {
     marginRight: 10,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: "gray",
-    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: COLORS.greylight,
+    borderRadius: 20,
+    color: "black",
   },
   selectedRoomTypeOption: {
-    backgroundColor: COLORS.btnColor,
+    backgroundColor: "#40C4FF",
     color: "white",
-    padding: 20
+    padding: 20,
   },
   roomTypeOptionText: {
-    fontSize: 14,
+    fontSize: 16,
+    fontFamily: "Regular",
     color: "black",
   },
   updateButton: {
@@ -429,15 +429,14 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     backgroundColor: COLORS.btnColor,
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     borderRadius: 20,
-    width: 250,
+    width: 300,
   },
   updateButtonText: {
     color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 20,
+    fontFamily: "Bold",
     textAlign: "center",
-    textAlignVertical: "center",
   },
 });

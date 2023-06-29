@@ -13,7 +13,6 @@ import { getProfile } from "../../services/user";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Profile({ navigation }) {
-
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       //call api
@@ -28,7 +27,7 @@ export default function Profile({ navigation }) {
   const _getProfile = async () => {
     getProfile().then((res) => {
       if (res) {
-        console.log("Profile: ", res["data"])
+        console.log("Profile: ", res["data"]);
         // setProfile(res["data"]);
       }
     });
@@ -36,8 +35,8 @@ export default function Profile({ navigation }) {
 
   const signOut = async () => {
     await AsyncStorage.removeItem("token", (err) => {
-      console.log("err: ", err)
-    })
+      console.log("err: ", err);
+    });
     navigation.navigate("Home");
   };
 
@@ -87,9 +86,7 @@ export default function Profile({ navigation }) {
             marginVertical: 10,
           }}
         >
-          {
-            profile.username
-          }
+          {profile.username}
         </Text>
         <View style={{ flexDirection: "row" }}>
           <Image
@@ -121,7 +118,7 @@ export default function Profile({ navigation }) {
           />
           <Text
             style={{
-              fontFamily: "Regular",
+              fontWeight: "300",
               fontSize: 20,
               marginTop: 4,
               marginLeft: 5,
@@ -129,7 +126,6 @@ export default function Profile({ navigation }) {
             }}
           >
             0911074357
-
           </Text>
         </View>
         <View
@@ -147,7 +143,7 @@ export default function Profile({ navigation }) {
           >
             <Text
               style={{
-                fontFamily: "Regular",
+                fontWeight: "400",
                 fontSize: 18,
                 color: COLORS.grey,
               }}
@@ -173,7 +169,7 @@ export default function Profile({ navigation }) {
           >
             <Text
               style={{
-                fontFamily: "Regular",
+                fontWeight: "400",
                 fontSize: 18,
                 color: COLORS.grey,
               }}
@@ -199,7 +195,7 @@ export default function Profile({ navigation }) {
           >
             <Text
               style={{
-                fontFamily: "Regular",
+                fontWeight: "400",
                 fontSize: 18,
                 color: COLORS.grey,
               }}

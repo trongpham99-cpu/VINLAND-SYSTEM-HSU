@@ -4,18 +4,16 @@ import {
   View,
   StyleSheet,
   Pressable,
-  TextInput,
   Image,
-  ImageBackground,
-  Modal,
   TouchableOpacity,
 } from "react-native";
-import Formik from "formik";
-import * as Yup from "yup";
+// import Formik from "formik";
+// import * as Yup from "yup";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import COLORS from "../../constants/colors";
 import { isValidObjField, updateError } from "../../services/methods";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import FormInput from "../../services/FormInput";
 import { login } from "../../services/auth";
 import { statusCode } from "../../constants/http/statusCodes";
@@ -77,7 +75,7 @@ export default function Login({ navigation }) {
         <Image source={require("../../image/LogoV.png")} />
         <Text style={styles.tittle}>Chào mừng bạn đến với VinLand</Text>
       </View>
-      <View>
+      <KeyboardAwareScrollView>
         {error ? (
           <Text style={{ color: "red", fontSize: 18, textAlign: "center" }}>
             {error}
@@ -87,7 +85,7 @@ export default function Login({ navigation }) {
           // error={error}
           value={username}
           onChangeText={(value) => handleOnChangeText(value, "username")}
-          source={require("../../image/mail-inbox-app.png")}
+          source={require("../../image/userlg.png")}
           placeholder="Vui lòng nhập tên của bạn"
         />
         <FormInput
@@ -99,7 +97,7 @@ export default function Login({ navigation }) {
           source={require("../../image/padlock.png")}
           placeholder="Vui lòng nhập mật khẩu của bạn"
         />
-        <Text
+        {/* <Text
           style={{
             textAlign: "center",
             marginVertical: 20,
@@ -108,7 +106,7 @@ export default function Login({ navigation }) {
           }}
         >
           Quên mật khẩu?
-        </Text>
+        </Text> */}
         <TouchableOpacity
           onPress={submitForm}
           style={{ justifyContent: "center", alignItems: "center" }}
@@ -148,7 +146,7 @@ export default function Login({ navigation }) {
             </Text>
           </Pressable>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
@@ -191,21 +189,4 @@ const styles = StyleSheet.create({
     fontFamily: "Bold",
     fontSize: 18,
   },
-  // btnLogins: {
-  //   height: 60,
-  //   width: 350,
-  //   flexDirection: "row",
-  //   backgroundColor: "#fff",
-  //   borderWidth: 2,
-  //   borderColor: "#2D77EF",
-  //   alignItems: "center",
-  //   // justifyContent: "center",
-  //   borderRadius: 30,
-  //   marginBottom: 10,
-  // },
-  // txtLogins: {
-  //   textAlign: "center",
-  //   fontFamily: "Bold",
-  //   fontSize: 16,
-  // },
 });

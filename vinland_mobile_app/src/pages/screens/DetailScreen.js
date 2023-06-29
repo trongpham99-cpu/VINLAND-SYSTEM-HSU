@@ -13,7 +13,6 @@ import {
   Pressable,
   TouchableOpacity,
 } from "react-native";
-import { Avatar } from 'react-native-elements';
 import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { createRoom } from "../../services/room";
@@ -29,33 +28,37 @@ const DetailScreen = ({ navigation, route }) => {
   }, [_id]);
 
   const getDetail = () => {
-    getDetailHome(_id).then(res => {
-      setHome(res);
-    }).catch(err => {
-      console.log(err);
-    })
-  }
+    getDetailHome(_id)
+      .then((res) => {
+        setHome(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const onContact = async () => {
     const room = {
       name: home.title,
       avatar: home.thumbnail[0],
       postId: home._id,
-    }
+    };
 
-    createRoom(room).then(res => {
-      console.log(res)
-      // if (res && res._id) {
+    createRoom(room)
+      .then((res) => {
+        console.log(res);
+        // if (res && res._id) {
 
-      // }
-    }).catch(err => {
-      console.log(err);
-    })
+        // }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
-      <View key={'dev'} style={styles.header}>
+      <View key={"dev"} style={styles.header}>
         <View style={styles.headerBtn}>
           <Icon
             style={{ marginLeft: 10 }}
@@ -64,17 +67,25 @@ const DetailScreen = ({ navigation, route }) => {
             onPress={navigation.goBack}
           />
         </View>
-        <Text style={{ fontWeight: "bold", fontSize: 20 }}>
+        <Text
+          style={{
+            fontFamily: "Bold",
+            fontSize: 20,
+            textAlign: "center",
+            marginLeft: 50,
+          }}
+        >
           Thông tin bất động sản
         </Text>
-        <View style={styles.headerBtn}>
-          <Image
-            style={{ width: 30, height: 40, marginHorizontal: 30 }}
-          />
-        </View>
+        {/* <View style={styles.headerBtn}>
+          <Image style={{ width: 30, height: 40, marginHorizontal: 30 }} />
+        </View> */}
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <ImageBackground style={styles.backgroundImage} source={home?.thumbnail}>
+        <ImageBackground
+          style={styles.backgroundImage}
+          source={home?.thumbnail}
+        >
           <View
             style={{
               height: 40,
@@ -126,7 +137,11 @@ const DetailScreen = ({ navigation, route }) => {
                   fontSize: 18,
                 }}
               >
-                {home?.location.address + ", " + home?.location.district + ", " + home?.location.province}
+                {home?.location.address +
+                  ", " +
+                  home?.location.district +
+                  ", " +
+                  home?.location.province}
               </Text>
             </View>
             <View style={{ flexDirection: "row" }}>
@@ -146,7 +161,7 @@ const DetailScreen = ({ navigation, route }) => {
             <Text
               style={{
                 fontSize: 26,
-                fontFamily: "Bold",
+                fontWeight: "bold",
                 color: COLORS.btnColor,
                 alignItems: "center",
                 marginVertical: 10,
@@ -180,19 +195,21 @@ const DetailScreen = ({ navigation, route }) => {
               keyExtractor={(_, key) => key.toString()}
               data={home?.attachments}
               renderItem={({ item: url }) => {
-                return <Image source={{ uri: url }} style={styles.interiorImage} />;
+                return (
+                  <Image source={{ uri: url }} style={styles.interiorImage} />
+                );
               }}
             />
           </View>
           <View style={{ flexDirection: "row", marginTop: 20 }}>
             <View style={styles.facility}></View>
           </View>
-          <Pressable onPress={() => onContact()} >
+          <Pressable onPress={() => onContact()}>
             <View>
               <View style={styles.btn1}>
                 <Text style={styles.text1}>{home?.owner?.username}</Text>
                 <Image
-                  style={{ width: 20, height: 20, marginHorizontal: 10}}
+                  style={{ width: 20, height: 20, marginHorizontal: 10 }}
                   source={require("../../image/chat.png")}
                 />
               </View>
@@ -200,7 +217,7 @@ const DetailScreen = ({ navigation, route }) => {
           </Pressable>
         </View>
       </ScrollView>
-    </SafeAreaView >
+    </SafeAreaView>
   );
 };
 
@@ -222,9 +239,9 @@ const styles = StyleSheet.create({
   header: {
     paddingVertical: 10,
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 10,
+    marginBottom: 10,
   },
   headerBtn: {
     height: 40,

@@ -23,7 +23,7 @@ export default function Home({ props, navigation }) {
   const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(0);
   const categoryList = ["Tất cả", "Căn hộ", "Nhà cho thuê", "Chung cư"];
   const [homeList, setHomeList] = useState([]);
-  
+
   const getHomeList = async () => {
     try {
       const type = selectedCategoryIndex;
@@ -108,7 +108,7 @@ export default function Home({ props, navigation }) {
             <Text
               style={{
                 fontSize: 18,
-                fontFamily: "Bold",
+                fontWeight: "bold",
                 color: COLORS.btnColor,
                 marginTop: 5,
               }}
@@ -159,7 +159,7 @@ export default function Home({ props, navigation }) {
             <Text
               style={{
                 fontSize: 16,
-                fontFamily: "Bold",
+                fontWeight: "bold",
                 color: COLORS.btnColor,
                 marginTop: 5,
               }}
@@ -217,28 +217,25 @@ export default function Home({ props, navigation }) {
             placeholder="Tìm kiếm nhà, căn hộ, dự án cho thuê"
           />
         </View>
-        {
-          getToken() != null ? (
-            <TouchableOpacity
-              onPress={(item) => navigation.navigate("SellProperty", item)}
-            >
-              <Icon
-                style={{
-                  borderColor: COLORS.greylight,
-                  borderWidth: 2,
-                  borderRadius: 10,
-                  paddingHorizontal: 10,
-                  paddingVertical: 10,
-                  color: "gray",
-                  marginLeft: 5,
-                }}
-                name="add"
-                size={22}
-
-              />
-            </TouchableOpacity>
-          ) : null
-        }
+        {getToken() != null ? (
+          <TouchableOpacity
+            onPress={(item) => navigation.navigate("SellProperty", item)}
+          >
+            <Icon
+              style={{
+                borderColor: COLORS.greylight,
+                borderWidth: 2,
+                borderRadius: 10,
+                paddingHorizontal: 10,
+                paddingVertical: 10,
+                color: "gray",
+                marginLeft: 5,
+              }}
+              name="add"
+              size={22}
+            />
+          </TouchableOpacity>
+        ) : null}
       </View>
       <ListCategory />
       <ScrollView showsVerticalScrollIndicator={false}>

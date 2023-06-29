@@ -11,6 +11,9 @@ const houses = [
       require("../image/interior2.jpg"),
       require("../image/interior3.jpg"),
     ],
+    time: "10:30pm - 13:00pm",
+    date: "29/06/2023",
+    username: "devvinland",
   },
   {
     id: "2",
@@ -24,6 +27,9 @@ const houses = [
       require("../image/interior2.jpg"),
       require("../image/interior3.jpg"),
     ],
+    time: "10:30pm - 13:00pm",
+    date: "29/06/2023",
+    username: "devvinland",
   },
   {
     id: "3",
@@ -37,10 +43,13 @@ const houses = [
       require("../image/interior2.jpg"),
       require("../image/interior3.jpg"),
     ],
+    time: "10:30pm - 13:00pm",
+    date: "29/06/2023",
+    username: "devvinland",
   },
   {
     id: "4",
-    title: "Căn hộ Pearl Plaza",
+    title: "Căn hộ Yuna",
     location: "Đường Điện Biên Phủ, phường 22, quận Bình Thạnh",
     price: "20 triệu/tháng",
     image: require("../image/house8.jpg"),
@@ -50,6 +59,9 @@ const houses = [
       require("../image/interior2.jpg"),
       require("../image/interior3.jpg"),
     ],
+    time: "10:30pm - 13:00pm",
+    date: "29/06/2023",
+    username: "devvinland",
   },
 ];
 

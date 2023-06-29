@@ -8,7 +8,6 @@ import {
   Image,
   StatusBar,
   TouchableOpacity,
-  Pressable,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -18,6 +17,7 @@ import {
   isValidObjField,
   updateError,
 } from "../../services/methods";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import client from "../../api/client";
 import FormInput from "../../services/FormInput";
 import { register } from "../../services/auth";
@@ -82,8 +82,6 @@ export default function Register({ navigation }) {
         console.log("Error Register");
       }
     }
-    // formikActions.resetForm();
-    // formikActions.setSubmitting(false);
   };
 
   return (
@@ -117,12 +115,12 @@ export default function Register({ navigation }) {
         <Image source={require("../../image/LogoV.png")} />
         <Text style={styles.tittle}>Chào mừng bạn đến với VinLand</Text>
       </View>
-      <View>
+      <KeyboardAwareScrollView>
         <FormInput
           error={error}
           value={username}
           onChangeText={(value) => handleOnChangeText(value, "username")}
-          source={require("../../image/mail-inbox-app.png")}
+          source={require("../../image/userlg.png")}
           placeholder="Vui lòng nhập tên của bạn"
         />
         <FormInput
@@ -147,10 +145,10 @@ export default function Register({ navigation }) {
           style={{ justifyContent: "center", alignItems: "center" }}
         >
           <View style={styles.btnLogin}>
-            <Text style={styles.textLogin}>Đăng Ky</Text>
+            <Text style={styles.textLogin}>Đăng Ký</Text>
           </View>
         </TouchableOpacity>
-      </View>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
