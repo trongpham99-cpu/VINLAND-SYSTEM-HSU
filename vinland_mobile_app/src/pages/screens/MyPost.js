@@ -1,18 +1,7 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  TextInput,
-  Button,
-} from "react-native";
+import { Text, SafeAreaView, StyleSheet, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 
 export default function MyPost({ navigation }) {
-
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       //call api
@@ -22,14 +11,12 @@ export default function MyPost({ navigation }) {
 
   _getMyPost = async () => {
     //call api
-  }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white", paddingTop: 20 }}>
       <Text style={styles.txtIcon}>Tin đã đăng</Text>
-      <ScrollView>
-
-      </ScrollView>
+      <ScrollView></ScrollView>
     </SafeAreaView>
   );
 }
