@@ -50,39 +50,23 @@ export default function Register({ navigation }) {
     return true;
   };
 
-  const validationSchema = Yup.object({
-    username: Yup.string()
-      .trim()
-      .min(3, "Ten khong hop le!")
-      .required("Vui long nhap ten!"),
-    email: Yup.string()
-      .email("Email khong hop le")
-      .required("Vui long nhap Email"),
-    password: Yup.string()
-      .trim()
-      .min(8, "Password khong hop le")
-      .required("Vui long nhap Password"),
-    confirmPassword: Yup.string().equals(
-      [Yup.ref("password"), null],
-      "Password khong trung khop"
-    ),
-  });
-
   const submitForm = async () => {
     const { username, email, password } = userInfo;
     if (isValidForm()) {
-      register(username, email, password).then((res) => {
-        const response = res.data;
-        if (response.status === statusCode.OK) {
-          alert(response.message);
-          navigation.navigate("Login");
-        }
-      }).catch((err) => {
-        const response = err.response.data;
-        if (response.status === statusCode.BAD_REQUEST) {
-          alert(response.message);
-        }
-      })
+      register(username, email, password)
+        .then((res) => {
+          const response = res.data;
+          if (response.status === statusCode.OK) {
+            alert(response.message);
+            navigation.navigate("Login");
+          }
+        })
+        .catch((err) => {
+          const response = err.response.data;
+          if (response.status === statusCode.BAD_REQUEST) {
+            alert(response.message);
+          }
+        });
     }
   };
 

@@ -11,7 +11,7 @@ const Stack = createStackNavigator();
 export default function NewNavigator() {
   return (
     <Stack.Navigator
-      initialRouteName="ListProduct"
+      initialRouteName="News"
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="News" component={News} />

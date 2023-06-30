@@ -18,7 +18,7 @@ import * as ImagePicker from "expo-image-picker";
 import { uploadSingleImage } from "../../services/upload";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { addHome } from "../../services/home";
-import ImageModal from 'react-native-image-modal';
+// import ImageModal from 'react-native-image-modal';
 
 export default function SellProperty({ navigation, route }) {
   const [selectedPrice, setSelectedPrice] = useState(0);

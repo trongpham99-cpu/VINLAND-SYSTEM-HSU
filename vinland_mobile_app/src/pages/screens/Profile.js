@@ -147,6 +147,7 @@ export default function Profile({ navigation }) {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => navigation.navigate("MyProduct")}
             style={{
               width: 124,
               height: 40,
@@ -155,7 +156,6 @@ export default function Profile({ navigation }) {
               backgroundColor: COLORS.grey,
               borderRadius: 10,
             }}
-            onPress={() => signOut()}
           >
             <Text
               style={{
@@ -163,10 +163,30 @@ export default function Profile({ navigation }) {
                 color: COLORS.bgColor,
               }}
             >
-              Đăng xuất
+              Trang sản phẩm
             </Text>
           </TouchableOpacity>
         </View>
+        <TouchableOpacity
+          style={{
+            width: 124,
+            height: 40,
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: COLORS.grey,
+            borderRadius: 10,
+          }}
+          onPress={() => signOut()}
+        >
+          <Text
+            style={{
+              fontFamily: "Regular",
+              color: COLORS.bgColor,
+            }}
+          >
+            Đăng xuất
+          </Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -186,9 +206,8 @@ const styles = StyleSheet.create({
   container: {
     gap: 10,
     backgroundColor: COLORS.bgColor,
-    width: '100%',
+    width: "100%",
     flexDirection: "row",
-    justifyContent: "space-around",
     alignItems: "center",
     paddingVertical: 10,
     paddingHorizontal: 10,

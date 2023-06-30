@@ -10,13 +10,12 @@ import {
   Alert,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { approveHome, getAllHomePending } from '../../services/home';
+import { approveHome, getAllHomePending } from "../../services/home";
 import React, { useEffect } from "react";
 import COLORS from "../../constants/colors";
 import houses from "../../constants/houses";
 
 export default function ListProduct({ navigation }) {
-
   const [home, setHome] = React.useState([]);
 
   useEffect(() => {
@@ -33,7 +32,7 @@ export default function ListProduct({ navigation }) {
         setHome(res);
       }
     });
-  }
+  };
 
   const onApprove = (id) => {
     approveHome(id).then((res) => {
@@ -42,7 +41,7 @@ export default function ListProduct({ navigation }) {
         _getAllHomePending();
       }
     });
-  }
+  };
 
   const onReject = (id) => {
     console.log("Reject: ", id);
@@ -53,20 +52,21 @@ export default function ListProduct({ navigation }) {
         {
           text: "Hủy",
           onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
+          style: "cancel",
         },
         {
           text: "Đồng ý",
-          onPress: () => console.log("OK Pressed")
-        }
+          onPress: () => console.log("OK Pressed"),
+        },
       ],
       { cancelable: false }
     );
-  }
+  };
 
   const CardItem = ({ houses: home }) => {
     return (
-      <SafeAreaView
+      <Pressable
+        onPress={() => navigation.navigate("DetailScreen")}
         style={{
           flex: 1,
           backgroundColor: COLORS.bgColor,
@@ -168,7 +168,7 @@ export default function ListProduct({ navigation }) {
             />
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      </Pressable>
     );
   };
   return (
