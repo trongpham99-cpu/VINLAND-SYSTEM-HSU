@@ -4,18 +4,23 @@ const middlewareController = {
   //verifyToken
   verifyToken: (req, res, next) => {
     const token = req.headers.authorization;
-    console.log(token)
     if (token) {
       const accessToken = token.split(" ")[1];
       jwt.verify(accessToken, process.env.ACCESS_TOKEN_KEY, (err, user) => {
         if (err) {
-          return res.status(403).json("Token is not valid");
+          return res.status(403).json({
+            status: 403,
+            message: "Invalid token",
+          });
         }
         req.user = user;
         next();
       });
     } else {
-      return res.status(401).json("You're not authentication");
+      return res.status(401).json({
+        status: 401,
+        message: "You are not authenticated!",
+      });
     }
   },
   verifyTokenAndAdminAuth: (req, res, next) => {
@@ -23,7 +28,10 @@ const middlewareController = {
       if (req.user.id == req.params.id || req.user.admin) {
         next();
       } else {
-        res.status(403).json("You're not allowed to delete other");
+        res.status(403).json({
+          status: 403,
+          message: "You are not allowed to do that!",
+        });
       }
     });
   },
