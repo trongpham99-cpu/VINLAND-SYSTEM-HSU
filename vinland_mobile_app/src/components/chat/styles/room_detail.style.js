@@ -1,16 +1,16 @@
+import COLORS from "../../../constants/colors";
 export const styles = {
   block_room: {
+    // backgroundColor: COLORS.bgColor,
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
-    // borderBottomWidth: 1,
-    // borderBottomColor: '#ccc',
-    display: "flex",
-    borderColor: "black",
+    borderColor: COLORS.greylight,
     borderBottomWidth: 1,
   },
 
   block_message: {
+    // flex: 2,
     padding: 10,
   },
   tinyLogo: {
@@ -20,14 +20,25 @@ export const styles = {
     marginRight: 10,
   },
   name_room: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
     color: "#000",
+    marginTop: 10,
   },
   icon: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#000",
+  },
+
+  iconCamera: {
+    fontWeight: "bold",
+    backgroundColor: COLORS.grey,
+    justifyContent: "center",
+    alignItems: "center",
+    width: 40,
+    height: 40,
+    borderRadius: 20,
   },
   user_name: {},
   block_input: {
@@ -44,9 +55,10 @@ export const styles = {
   input: {
     flex: 1,
     height: 40,
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.greylight,
     borderRadius: 50,
     paddingHorizontal: 10,
-    marginRight: 10,
+    marginVertical: 10,
+    marginLeft: 10,
   },
 };
