@@ -15,15 +15,11 @@ export const pingServer = async () => {
 };
 
 export const login = async (username, password) => {
-  try {
-    const response = await axios.post(`${url}/auth/login`, {
-      username,
-      password,
-    });
-    return response.data;
-  } catch (err) {
-    console.log(err);
-  }
+  const response = await axios.post(`${url}/auth/login`, {
+    username,
+    password,
+  });
+  return response;
 };
 
 export const register = async (username, email, password) => {

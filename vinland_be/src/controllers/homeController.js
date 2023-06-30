@@ -91,7 +91,16 @@ const homeController = {
     if (!userId) return res.status(403).json("You're not authentication");
     try {
       const allHome = await Home.find({ owner: userId }).sort({ createdAt: -1 });
-      return res.status(200).json(allHome);
+      const response = {
+        documentsCount: {
+          total: allHome.length,
+          approved: allHome.filter((item) => item.status === "approved").length,
+          pending: allHome.filter((item) => item.status === "pending").length,
+          rejected: allHome.filter((item) => item.status === "rejected").length,
+        },
+        documents: allHome
+      }
+      return res.status(200).json(response);
     } catch (err) {
       return res.status(500).json(err);
     }
