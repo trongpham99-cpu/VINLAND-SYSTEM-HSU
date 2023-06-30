@@ -1,5 +1,7 @@
 vinland_mobile_app/node_modules/
 vinland_be/node_modules/
+vinland_be/.env
+vinland_be/src/public/
 .expo/
 dist/
 npm-debug.*
