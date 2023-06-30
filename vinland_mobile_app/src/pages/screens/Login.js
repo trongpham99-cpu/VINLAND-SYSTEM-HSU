@@ -43,18 +43,21 @@ export default function Login({ navigation }) {
   const submitForm = async () => {
     const { username, password } = userInfo;
     if (isValidForm()) {
-      try {
-        const res = await login(username, password);
-        if (res && res["status"] == statusCode.OK) {
-          //continue coding here....
-          await AsyncStorage.setItem("token", res["data"]["accessToken"]);
-          await AsyncStorage.setItem("user_id", res["data"]["_id"]);
-          //navigate to home screen
+      login(username, password).then((res) => {
+        console.log(res)
+
+        const response = res.data;
+        if (response.status == statusCode.OK) {
+          AsyncStorage.setItem("token", response.data.accessToken);
+          AsyncStorage.setItem("user_id", response.data._id);
           navigation.navigate("Home");
         }
-      } catch (err) {
-        console.log("Error: ", err);
-      }
+      }).catch((err) => {
+        const response = err.response.data;
+        if (response.status == statusCode.BAD_REQUEST) {
+          alert(response.message);
+        }
+      });
     }
   };
 
