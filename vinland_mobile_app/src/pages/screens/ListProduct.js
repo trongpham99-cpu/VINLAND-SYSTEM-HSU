@@ -232,9 +232,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   txtIcon: {
-    marginLeft: 26,
+    marginLeft: 10,
     fontFamily: "Bold",
     fontSize: 24,
+    textAlign: "center",
   },
 
   tittle: {

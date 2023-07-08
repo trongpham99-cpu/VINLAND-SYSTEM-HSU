@@ -186,6 +186,7 @@ const styles = StyleSheet.create({
     fontFamily: "SemiBold",
     textAlign: "center",
     marginBottom: 10,
+    padding: 10
   },
   flatListContainer: {
     paddingHorizontal: 10,
@@ -221,7 +222,7 @@ const styles = StyleSheet.create({
   },
   bottomImageContainer: {
     position: "relative",
-    marginVertical: 20,
+    marginVertical: 5,
     alignItems: "center",
   },
   bottomImage: {
@@ -239,7 +240,6 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 10,
     width: "100%",
-    height: "50%",
     alignItems: "center",
   },
   bottomImageText: {

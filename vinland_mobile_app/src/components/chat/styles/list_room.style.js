@@ -8,7 +8,6 @@ export const styles = {
         marginLeft: 10,
         marginRight: 10,
         textAlign: 'center',
-        textTransform: 'uppercase',
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
         paddingBottom: 10

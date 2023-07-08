@@ -18,7 +18,6 @@ export default function Chat({ navigation }) {
     setLoading(true);
     let response = await fetchMyRoom();
     if (response) {
-      console.log(response);
       setRooms(response);
     }
     setLoading(false);

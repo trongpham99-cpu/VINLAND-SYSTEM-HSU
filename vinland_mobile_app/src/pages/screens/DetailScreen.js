@@ -19,6 +19,7 @@ import { createRoom } from "../../services/room";
 import { getDetailHome } from "../../services/home";
 import { STATUS_PENDING, defineStatus } from "../../constants/bacis";
 import { onEmit } from '../../../src/configs/socket';
+import { HttpStatusCode } from "axios";
 
 const DetailScreen = ({ navigation, route }) => {
   const item = route.params;
@@ -48,6 +49,12 @@ const DetailScreen = ({ navigation, route }) => {
 
     createRoom(room).then(res => {
       onEmit("load_rooms", "load room event");
+      const parse = JSON.parse(res.data);
+      const jsonStringify = JSON.stringify(parse);
+      const { status } = jsonStringify;
+      if (status === HttpStatusCode.Forbidden) {
+        console.log("Please login to create room");
+      }
     }).catch(err => {
       console.log(err);
     })
@@ -74,9 +81,6 @@ const DetailScreen = ({ navigation, route }) => {
         >
           Thông tin bất động sản
         </Text>
-        {/* <View style={styles.headerBtn}>
-          <Image style={{ width: 30, height: 40, marginHorizontal: 30 }} />
-        </View> */}
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <ImageBackground

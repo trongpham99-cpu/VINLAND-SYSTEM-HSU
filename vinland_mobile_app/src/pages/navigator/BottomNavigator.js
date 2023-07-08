@@ -11,11 +11,25 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Tab = createBottomTabNavigator();
 
-export default function BottomNavigator() {
+export default function BottomNavigator(props) {
+  console.log("props: ", props);
+  const [isLogin, setIsLogin] = React.useState(false);
+
   const getToken = async () => {
     const token = await AsyncStorage.getItem("token");
     return token;
   };
+
+  React.useEffect(async () => {
+    let token = await getToken();
+    if (token) {
+      setIsLogin(true);
+    } else {
+      setIsLogin(false);
+    }
+  }, []);
+
+
   return (
     <Tab.Navigator
       initialRouteName="Trang chủ"
@@ -52,7 +66,7 @@ export default function BottomNavigator() {
         }}
       />
       {
-        getToken() != null ? (
+        isLogin ? (
           <Tab.Screen
             name="Chatting"
             component={ChatNavigator}
@@ -65,8 +79,7 @@ export default function BottomNavigator() {
                 />
               ),
             }}
-          />
-        ) : null
+          />) : null
       }
       <Tab.Screen
         name="Tài khoản"

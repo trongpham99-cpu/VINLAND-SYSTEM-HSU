@@ -15,7 +15,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function Profile({ navigation }) {
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      //call api
       _getProfile();
     });
 
@@ -27,8 +26,7 @@ export default function Profile({ navigation }) {
   const _getProfile = async () => {
     getProfile().then((res) => {
       if (res) {
-        // console.log("Profile: ", res["data"])
-        // setProfile(res["data"]);
+        setProfile(res);
       }
     });
   };
@@ -68,13 +66,13 @@ export default function Profile({ navigation }) {
       </View>
       <View style={{ flex: 1, alignItems: "center" }}>
         <Image
-          source={require("../../image/user.jpg")}
+          source={require("../../image/avatar.jpeg")}
           resizeMode="center"
           style={{
             height: 155,
             width: 155,
             borderRadius: 999,
-            borderColor: COLORS.grey,
+            borderColor: "#fff", // if you need
             borderWidth: 1,
             marginTop: -80,
           }}
@@ -102,74 +100,105 @@ export default function Profile({ navigation }) {
               textAlign: "center",
             }}
           >
-            khoidang@gmail.com
+            {profile.email}
           </Text>
         </View>
-        <View style={styles.container}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("EditProfile")}
-            style={{
-              width: 124,
-              height: 40,
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: COLORS.grey,
-              borderRadius: 10,
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Regular",
-                color: COLORS.bgColor,
-              }}
-            >
-              Sửa thông tin
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("MyPost")}
-            style={{
-              width: 124,
-              height: 40,
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: COLORS.grey,
-              borderRadius: 10,
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Regular",
-                color: COLORS.bgColor,
-              }}
-            >
-              Tin đã đăng
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("MyProduct")}
-            style={{
-              width: 124,
-              height: 40,
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: COLORS.grey,
-              borderRadius: 10,
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Regular",
-                color: COLORS.bgColor,
-              }}
-            >
-              Trang sản phẩm
-            </Text>
-          </TouchableOpacity>
-        </View>
+        {
+          profile.admin == true ? (
+            <View style={{ width: '90%' }} >
+              <TouchableOpacity
+                onPress={() => navigation.navigate("ListProduct")}
+                style={{
+                  width: '100%',
+                  height: 40,
+                  marginTop: 10,
+                  marginBottom: 10,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: COLORS.grey,
+                  borderRadius: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: "Regular",
+                    color: COLORS.bgColor,
+                  }}
+                >
+                  Quản lý tin đăng
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("MyPost")}
+                style={{
+                  width: '100%',
+                  height: 40,
+                  marginBottom: 10,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: COLORS.grey,
+                  borderRadius: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: "Regular",
+                    color: COLORS.bgColor,
+                  }}
+                >
+                  Quán lý người dùng
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View style={styles.container}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("MyPost")}
+                style={{
+                  width: '50%',
+                  height: 40,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: COLORS.grey,
+                  borderRadius: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: "Regular",
+                    color: COLORS.bgColor,
+                  }}
+                >
+                  Tin đã đăng
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("MyProduct")}
+                style={{
+                  width: '50%',
+                  height: 40,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: COLORS.grey,
+                  borderRadius: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: "Regular",
+                    color: COLORS.bgColor,
+                  }}
+                >
+                  Trang sản phẩm
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )
+        }
+
         <TouchableOpacity
           style={{
-            width: 124,
+            width: '90%',
             height: 40,
             alignItems: "center",
             justifyContent: "center",
@@ -188,7 +217,7 @@ export default function Profile({ navigation }) {
           </Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 }
 const styles = StyleSheet.create({
@@ -206,7 +235,7 @@ const styles = StyleSheet.create({
   container: {
     gap: 10,
     backgroundColor: COLORS.bgColor,
-    width: "100%",
+    // width: "100%",
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 10,

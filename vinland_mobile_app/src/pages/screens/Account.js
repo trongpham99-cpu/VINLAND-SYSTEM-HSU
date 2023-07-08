@@ -8,6 +8,7 @@ import Register from "../screens/Register";
 import EditProfile from "./EditProfile";
 import QRcode from "./QRcode";
 import MyProduct from "./MyProduct";
+import ListProduct from "./ListProduct";
 import Profile from "./Profile";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import MyPost from "./MyPost";
@@ -17,7 +18,7 @@ const Stack = createStackNavigator();
 export default function Account({ navigation }) {
   const [isLogin, setIsLogin] = React.useState(false);
 
-  React.useEffect(() => {}, []);
+  React.useEffect(() => { }, []);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -48,6 +49,8 @@ export default function Account({ navigation }) {
           <Stack.Screen name="Qrcode" component={QRcode} />
           <Stack.Screen name="MyProduct" component={MyProduct} />
           <Stack.Screen name="MyPost" component={MyPost} />
+          <Stack.Screen name="ListProduct" component={ListProduct} />
+
         </>
       ) : (
         <>

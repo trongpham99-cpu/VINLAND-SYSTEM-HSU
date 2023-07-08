@@ -14,6 +14,8 @@ import {
   Button,
   TouchableOpacity,
 } from "react-native";
+import { format } from '../../utils/index';
+import { to_vietnamese } from '../../utils/number_to_text';
 import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/Ionicons";
 import { getAllHome } from "../../services/home";
@@ -27,7 +29,7 @@ export default function Home({ props, navigation }) {
   const getHomeList = async () => {
     try {
       const type = selectedCategoryIndex;
-      const response = await getAllHome({ type });
+      const response = await getAllHome({ type: type });
       setHomeList(response);
     } catch (error) {
       return console.log(error);
@@ -116,7 +118,10 @@ export default function Home({ props, navigation }) {
                 marginTop: 5,
               }}
             >
-              {item.price}
+              {format(item.price)}
+            </Text>
+            <Text>
+              {to_vietnamese(item.price)}
             </Text>
           </View>
         </View>
@@ -167,7 +172,10 @@ export default function Home({ props, navigation }) {
                 marginTop: 5,
               }}
             >
-              {item.price}
+              {format(item.price)}
+            </Text>
+            <Text >
+              {to_vietnamese(item.price)}
             </Text>
           </View>
         </View>

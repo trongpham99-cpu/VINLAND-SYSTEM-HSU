@@ -10,6 +10,7 @@ import {
   FlatList,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { Input, Slider } from "react-native-elements";
@@ -18,6 +19,7 @@ import * as ImagePicker from "expo-image-picker";
 import { uploadSingleImage } from "../../services/upload";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { addHome } from "../../services/home";
+import { to_vietnamese } from '../../utils/number_to_text';
 // import ImageModal from 'react-native-image-modal';
 
 export default function SellProperty({ navigation, route }) {
@@ -101,7 +103,10 @@ export default function SellProperty({ navigation, route }) {
     };
     addHome(home)
       .then((res) => {
-        alert("Thêm bất động sản thành công, vui lòng chờ admin duyệt");
+        Alert.alert(
+          "Thông báo",
+          "Thêm bất động sản thành công, vui lòng chờ admin duyệt",
+        )
         navigation.navigate("Home");
       })
       .catch((err) => {
@@ -182,6 +187,9 @@ export default function SellProperty({ navigation, route }) {
           <Text style={styles.priceLabel}>
             Giá bán/Cho thuê (Đơn vị: /VND):
           </Text>
+          <Text>
+            {to_vietnamese(selectedPrice)} đồng
+          </Text>
           <TextInput
             style={{
               backgroundColor: COLORS.greylight,
@@ -191,6 +199,7 @@ export default function SellProperty({ navigation, route }) {
               paddingLeft: 20,
               borderRadius: 10,
             }}
+            keyboardType='numeric'
             value={selectedPrice}
             onChangeText={handlePriceChange}
             placeholder="Nhập giá bán/cho thuê"
@@ -198,10 +207,7 @@ export default function SellProperty({ navigation, route }) {
           />
         </View>
         <View
-          style={{
-            marginTop: 20,
-            paddingHorizontal: 10,
-          }}
+          style={{ marginTop: 20, paddingHorizontal: 10, }}
         >
           <Text style={styles.label}>Mô tả về dự án:</Text>
           <TextInput
