@@ -29,6 +29,7 @@ export default function SellProperty({ navigation, route }) {
   const [location, setLocation] = useState("");
   const [selectedRoomType, setSelectedRoomType] = useState("1");
   const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
+  const [loadingUpload, setLoadingUpload] = useState(false);
   const [images, setImages] = useState([]);
 
   useEffect(() => {
@@ -40,6 +41,8 @@ export default function SellProperty({ navigation, route }) {
   }, []);
 
   const getImagePicker = async () => {
+
+
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -49,6 +52,11 @@ export default function SellProperty({ navigation, route }) {
 
     const { uri } = result;
 
+    if (result.cancelled) {
+      return;
+    }
+
+    setLoadingUpload(true);
     const formData = new FormData();
     formData.append("file", {
       name: result.uri.split("/").pop(),
@@ -61,6 +69,7 @@ export default function SellProperty({ navigation, route }) {
         if (res.data) {
           const { url } = res.data;
           setImages([...images, url]);
+          setLoadingUpload(false);
         }
       })
       .catch((err) => {
@@ -141,11 +150,18 @@ export default function SellProperty({ navigation, route }) {
             <Icon name="camera" size={30} color={COLORS.white} />
           </TouchableOpacity>
         </View>
+        {
+          loadingUpload && (
+            <View style={{ padding: 10 }} >
+              <Text>Đang tải lên...</Text>
+            </View>
+          )
+        }
         <FlatList
           data={images}
           horizontal
           renderItem={({ item: uri }) => {
-            return <Image source={{ uri }} style={styles.interiorImage} />;
+            return <Image source={{ uri }} style={{ ...styles.interiorImage, marginTop: loadingUpload ? 0 : 10 }} />;
           }}
           keyExtractor={(item, index) => index.toString()}
         />
@@ -365,7 +381,6 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 10,
     resizeMode: "cover",
-    marginTop: 10,
     marginLeft: 10,
   },
   priceSelectorContainer: {

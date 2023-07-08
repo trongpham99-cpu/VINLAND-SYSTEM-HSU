@@ -115,9 +115,6 @@ export default function MyProduct({ navigation }) {
           contentContainerStyle={{ paddingHorizontal: 4, paddingVertical: 15 }}
           numColumns={2}
           data={houses}
-          // keyExtractor={(item_home) => {
-          //   return item_home.Id;
-          // }}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => <CardProduct item={item} />}
         />
