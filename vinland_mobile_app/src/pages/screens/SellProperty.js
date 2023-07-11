@@ -19,7 +19,7 @@ import * as ImagePicker from "expo-image-picker";
 import { uploadSingleImage } from "../../services/upload";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { addHome } from "../../services/home";
-import { to_vietnamese } from '../../utils/number_to_text';
+import { to_vietnamese } from "../../utils/number_to_text";
 // import ImageModal from 'react-native-image-modal';
 
 export default function SellProperty({ navigation, route }) {
@@ -41,8 +41,6 @@ export default function SellProperty({ navigation, route }) {
   }, []);
 
   const getImagePicker = async () => {
-
-
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -114,8 +112,8 @@ export default function SellProperty({ navigation, route }) {
       .then((res) => {
         Alert.alert(
           "Thông báo",
-          "Thêm bất động sản thành công, vui lòng chờ admin duyệt",
-        )
+          "Thêm bất động sản thành công, vui lòng chờ admin duyệt"
+        );
         navigation.navigate("Home");
       })
       .catch((err) => {
@@ -150,18 +148,24 @@ export default function SellProperty({ navigation, route }) {
             <Icon name="camera" size={30} color={COLORS.white} />
           </TouchableOpacity>
         </View>
-        {
-          loadingUpload && (
-            <View style={{ padding: 10 }} >
-              <Text>Đang tải lên...</Text>
-            </View>
-          )
-        }
+        {loadingUpload && (
+          <View style={{ padding: 10 }}>
+            <Text>Đang tải lên...</Text>
+          </View>
+        )}
         <FlatList
           data={images}
           horizontal
           renderItem={({ item: uri }) => {
-            return <Image source={{ uri }} style={{ ...styles.interiorImage, marginTop: loadingUpload ? 0 : 10 }} />;
+            return (
+              <Image
+                source={{ uri }}
+                style={{
+                  ...styles.interiorImage,
+                  marginTop: loadingUpload ? 0 : 10,
+                }}
+              />
+            );
           }}
           keyExtractor={(item, index) => index.toString()}
         />
@@ -203,9 +207,7 @@ export default function SellProperty({ navigation, route }) {
           <Text style={styles.priceLabel}>
             Giá bán/Cho thuê (Đơn vị: /VND):
           </Text>
-          <Text>
-            {to_vietnamese(selectedPrice)} đồng
-          </Text>
+          <Text>{to_vietnamese(selectedPrice)}</Text>
           <TextInput
             style={{
               backgroundColor: COLORS.greylight,
@@ -215,16 +217,14 @@ export default function SellProperty({ navigation, route }) {
               paddingLeft: 20,
               borderRadius: 10,
             }}
-            keyboardType='numeric'
+            keyboardType="numeric"
             value={selectedPrice}
             onChangeText={handlePriceChange}
             placeholder="Nhập giá bán/cho thuê"
             placeholderTextColor={COLORS.grey}
           />
         </View>
-        <View
-          style={{ marginTop: 20, paddingHorizontal: 10, }}
-        >
+        <View style={{ marginTop: 20, paddingHorizontal: 10 }}>
           <Text style={styles.label}>Mô tả về dự án:</Text>
           <TextInput
             style={styles.textInputContainer}

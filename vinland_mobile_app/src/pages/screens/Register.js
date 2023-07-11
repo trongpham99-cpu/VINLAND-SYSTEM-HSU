@@ -18,7 +18,7 @@ import {
   updateError,
 } from "../../services/methods";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import client from "../../api/client";
+// import client from "../../api/client";
 import FormInput from "../../services/FormInput";
 import { register } from "../../services/auth";
 import { statusCode } from "../../constants/http/statusCodes";

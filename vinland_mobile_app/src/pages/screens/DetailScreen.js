@@ -15,10 +15,12 @@ import {
 } from "react-native";
 import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { to_vietnamese } from "../../utils/number_to_text";
+import { format } from "../../utils/index";
 import { createRoom } from "../../services/room";
 import { getDetailHome } from "../../services/home";
 import { STATUS_PENDING, defineStatus } from "../../constants/bacis";
-import { onEmit } from '../../../src/configs/socket';
+import { onEmit } from "../../../src/configs/socket";
 import { HttpStatusCode } from "axios";
 
 const DetailScreen = ({ navigation, route }) => {
@@ -47,17 +49,19 @@ const DetailScreen = ({ navigation, route }) => {
       postId: home._id,
     };
 
-    createRoom(room).then(res => {
-      onEmit("load_rooms", "load room event");
-      const parse = JSON.parse(res.data);
-      const jsonStringify = JSON.stringify(parse);
-      const { status } = jsonStringify;
-      if (status === HttpStatusCode.Forbidden) {
-        console.log("Please login to create room");
-      }
-    }).catch(err => {
-      console.log(err);
-    })
+    createRoom(room)
+      .then((res) => {
+        onEmit("load_rooms", "load room event");
+        const parse = JSON.parse(res.data);
+        const jsonStringify = JSON.stringify(parse);
+        const { status } = jsonStringify;
+        if (status === HttpStatusCode.Forbidden) {
+          console.log("Please login to create room");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -127,7 +131,7 @@ const DetailScreen = ({ navigation, route }) => {
           >
             <View
               style={{
-                width: 340,
+                width: 360,
                 flexDirection: "row",
               }}
             >
@@ -145,7 +149,7 @@ const DetailScreen = ({ navigation, route }) => {
                   home?.location.province}
               </Text>
             </View>
-            <View style={{ flexDirection: "row" }}>
+            {/* <View style={{ flexDirection: "row" }}>
               <Icon name="star" size={20} color={COLORS.yellow} />
               <Text
                 style={{
@@ -156,7 +160,7 @@ const DetailScreen = ({ navigation, route }) => {
               >
                 {home?.rating}
               </Text>
-            </View>
+            </View> */}
           </View>
           <View>
             <Text
@@ -168,7 +172,7 @@ const DetailScreen = ({ navigation, route }) => {
                 marginVertical: 10,
               }}
             >
-              {home?.price}
+              {format(home?.price)}
             </Text>
           </View>
           <View>
@@ -216,13 +220,7 @@ const DetailScreen = ({ navigation, route }) => {
               </View>
             </View>
           </Pressable>
-          {
-            home?.status === STATUS_PENDING ? (
-              <View>
-
-              </View>
-            ) : null
-          }
+          {home?.status === STATUS_PENDING ? <View></View> : null}
         </View>
       </ScrollView>
     </SafeAreaView>

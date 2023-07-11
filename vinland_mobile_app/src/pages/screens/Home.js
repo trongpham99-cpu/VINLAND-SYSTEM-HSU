@@ -14,8 +14,8 @@ import {
   Button,
   TouchableOpacity,
 } from "react-native";
-import { format } from '../../utils/index';
-import { to_vietnamese } from '../../utils/number_to_text';
+import { format } from "../../utils/index";
+import { to_vietnamese } from "../../utils/number_to_text";
 import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/Ionicons";
 import { getAllHome } from "../../services/home";
@@ -84,7 +84,7 @@ export default function Home({ props, navigation }) {
             style={{
               flexDirection: "column",
               marginTop: 10,
-              paddingHorizontal: 15,
+              paddingHorizontal: 10,
             }}
           >
             <Text style={{ fontSize: 20, fontFamily: "Bold" }}>
@@ -110,19 +110,30 @@ export default function Home({ props, navigation }) {
                   item.location.province}
               </Text>
             </View>
-            <Text
+            <View
               style={{
-                fontSize: 18,
-                fontWeight: "bold",
-                color: COLORS.btnColor,
-                marginTop: 5,
+                flexDirection: "column",
+                marginTop: 10,
               }}
             >
-              {format(item.price)}
-            </Text>
-            <Text>
-              {to_vietnamese(item.price)}
-            </Text>
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontWeight: "bold",
+                  color: COLORS.btnColor,
+                }}
+              >
+                {format(item.price)}
+              </Text>
+              <Text
+                style={{
+                  fontFamily: "Bold",
+                  color: COLORS.blue,
+                }}
+              >
+                ({to_vietnamese(item.price)})
+              </Text>
+            </View>
           </View>
         </View>
       </Pressable>
@@ -152,7 +163,7 @@ export default function Home({ props, navigation }) {
               <Icon name="location" size={14} color={COLORS.blue} />
               <Text
                 style={{
-                  width: width - 170,
+                  width: width - 180,
                   color: COLORS.tittleColor,
                   fontSize: 14,
                 }}
@@ -164,19 +175,30 @@ export default function Home({ props, navigation }) {
                   item.location.province}
               </Text>
             </View>
-            <Text
+            <View
               style={{
-                fontSize: 16,
-                fontWeight: "bold",
-                color: COLORS.btnColor,
-                marginTop: 5,
+                flexDirection: "column",
+                marginTop: 10,
               }}
             >
-              {format(item.price)}
-            </Text>
-            <Text >
-              {to_vietnamese(item.price)}
-            </Text>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "bold",
+                  color: COLORS.btnColor,
+                }}
+              >
+                {format(item.price)}
+              </Text>
+              <Text
+                style={{
+                  fontFamily: "Bold",
+                  color: COLORS.blue,
+                }}
+              >
+                ({to_vietnamese(item.price)})
+              </Text>
+            </View>
           </View>
         </View>
       </Pressable>
@@ -329,7 +351,7 @@ export default function Home({ props, navigation }) {
         </View>
         <FlatList
           napToInterval={width - 40}
-          contentContainerStyle={{ paddingLeft: 10, paddingVertical: 10 }}
+          contentContainerStyle={{ paddingLeft: 10, paddingVertical: 20 }}
           horizontal
           data={homeList}
           keyExtractor={(item_home) => {
@@ -388,8 +410,8 @@ const styles = StyleSheet.create({
     fontFamily: "Bold",
   },
   cardPopular: {
-    height: 300,
-    width: width - 120,
+    height: 320,
+    width: width - 100,
     backgroundColor: "#fafafa",
     elevation: 10,
     marginHorizontal: 5,
@@ -406,8 +428,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
   },
   cardNearest: {
-    height: 120,
-    width: width - 40,
+    height: 140,
+    width: width - 15,
     backgroundColor: "#fafafa",
     flexDirection: "row",
     alignItems: "center",
@@ -420,8 +442,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
   },
   cardNearestImage: {
-    width: 100,
-    height: 100,
+    width: 120,
+    height: 120,
     borderRadius: 10,
   },
 });
