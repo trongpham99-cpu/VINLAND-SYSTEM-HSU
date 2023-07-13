@@ -19,13 +19,24 @@ export const addHome = async (params) => {
   }
 };
 
-export const getAllHome = async ({ type }) => {
+export const getAllHome = async ({ type, keyword }) => {
   try {
     const response = await axios.get(`${url}/home/`, {
       params: {
         type,
+        keyword
       },
     });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const adminGetAllHome = async () => {
+  try {
+    console.log(`${url}/home/admin`)
+    const response = await axios.get(`${url}/home/admin`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -94,5 +105,6 @@ export default {
   approveHome,
   deleteHome,
   getAllHomePending,
-  rejectHome
+  rejectHome,
+  adminGetAllHome
 };

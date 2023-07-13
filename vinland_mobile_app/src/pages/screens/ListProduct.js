@@ -66,7 +66,7 @@ export default function ListProduct({ navigation }) {
   const CardItem = ({ houses: home }) => {
     return (
       <Pressable
-        onPress={() => navigation.navigate("DetailScreen")}
+        onPress={() => navigation.navigate("DetailScreen", home)}
         style={{
           flex: 1,
           backgroundColor: COLORS.bgColor,

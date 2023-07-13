@@ -12,6 +12,7 @@ import {
   Image,
   Pressable,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -52,15 +53,12 @@ const DetailScreen = ({ navigation, route }) => {
     createRoom(room)
       .then((res) => {
         onEmit("load_rooms", "load room event");
-        const parse = JSON.parse(res.data);
-        const jsonStringify = JSON.stringify(parse);
-        const { status } = jsonStringify;
-        if (status === HttpStatusCode.Forbidden) {
-          console.log("Please login to create room");
-        }
+        navigation.navigate("ChatDetail", {
+          room: res,
+        });
       })
       .catch((err) => {
-        console.log(err);
+        Alert.alert("Thông báo", "Bạn cần đăng nhập để sử dụng chức năng này");
       });
   };
 

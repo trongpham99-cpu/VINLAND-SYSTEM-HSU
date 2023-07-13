@@ -129,7 +129,7 @@ export default function Profile({ navigation }) {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => navigation.navigate("MyPost")}
+                onPress={() => navigation.navigate("MyProduct")}
                 style={{
                   width: '100%',
                   height: 40,
@@ -146,7 +146,7 @@ export default function Profile({ navigation }) {
                     color: COLORS.bgColor,
                   }}
                 >
-                  Quán lý người dùng
+                  Trang sản phẩm
                 </Text>
               </TouchableOpacity>
             </View>
@@ -155,7 +155,7 @@ export default function Profile({ navigation }) {
               <TouchableOpacity
                 onPress={() => navigation.navigate("MyPost")}
                 style={{
-                  width: '50%',
+                  width: '100%',
                   height: 40,
                   alignItems: "center",
                   justifyContent: "center",
@@ -170,26 +170,6 @@ export default function Profile({ navigation }) {
                   }}
                 >
                   Tin đã đăng
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => navigation.navigate("MyProduct")}
-                style={{
-                  width: '50%',
-                  height: 40,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: COLORS.grey,
-                  borderRadius: 10,
-                }}
-              >
-                <Text
-                  style={{
-                    fontFamily: "Regular",
-                    color: COLORS.bgColor,
-                  }}
-                >
-                  Trang sản phẩm
                 </Text>
               </TouchableOpacity>
             </View>

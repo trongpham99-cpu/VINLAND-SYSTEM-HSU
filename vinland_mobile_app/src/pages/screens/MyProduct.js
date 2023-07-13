@@ -10,66 +10,95 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import React from "react";
+import React, { useEffect } from "react";
 import COLORS from "../../constants/colors";
 import houses from "../../constants/houses";
+import { adminGetAllHome } from "../../services/home";
 
 export default function MyProduct({ navigation }) {
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      _getList();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  const [response, setResponse] = React.useState({
+    rows: [],
+    options: {
+      total: 0,
+      approved: 0,
+      pending: 0,
+      rejected: 0,
+    },
+  });
+
+  const _getList = async () => {
+    adminGetAllHome().then((res) => {
+      setResponse(res);
+    }).catch((err) => {
+      console.log(err);
+    });
+  };
+
   const CardProduct = ({ item }) => {
     return (
-      <Pressable onPress={() => navigation.navigate("DetailScreen", item)}>
-        <View style={styles.cardPopular}>
-          <Image source={item.image} style={styles.cardPoppularImage} />
-          <View
-            style={{
-              flexDirection: "column",
-              marginTop: 10,
-              paddingHorizontal: 8,
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 16,
-                fontFamily: "Bold",
-                color: COLORS.tittleColor,
-              }}
-            >
-              {item.title}
-            </Text>
-            <View
-              style={{
-                flexDirection: "row",
-                marginTop: 5,
-              }}
-            >
-              <Icon name="place" size={12} color={COLORS.blue} />
-              <Text
-                style={{
-                  color: COLORS.tittleColor,
-                  fontSize: 12,
-                }}
-              >
-                {/* {item.location.address +
-                  ", " +
-                  item.location.district +
-                  ", " +
-                  item.location.province} */}
-                {item.location}
-              </Text>
-            </View>
-            <Text
-              style={{
-                fontSize: 18,
-                fontFamily: "Bold",
-                color: COLORS.btnColor,
-                marginTop: 5,
-              }}
-            >
-              {item.price}
-            </Text>
-          </View>
-        </View>
-      </Pressable>
+      <Text>{item.title}</Text>
+      // <Pressable onPress={() => navigation.navigate("DetailScreen", item)}>
+      //   <View style={styles.cardPopular}>
+      //     <Image source={item.image} style={styles.cardPoppularImage} />
+      //     <View
+      //       style={{
+      //         flexDirection: "column",
+      //         marginTop: 10,
+      //         paddingHorizontal: 8,
+      //       }}
+      //     >
+      //       <Text
+      //         style={{
+      //           fontSize: 16,
+      //           fontFamily: "Bold",
+      //           color: COLORS.tittleColor,
+      //         }}
+      //       >
+      //         {item.title}
+      //       </Text>
+      //       <View
+      //         style={{
+      //           flexDirection: "row",
+      //           marginTop: 5,
+      //         }}
+      //       >
+      //         <Icon name="place" size={12} color={COLORS.blue} />
+      //         <Text
+      //           style={{
+      //             color: COLORS.tittleColor,
+      //             fontSize: 12,
+      //           }}
+      //         >
+      //           {/* {item.location.address +
+      //             ", " +
+      //             item.location.district +
+      //             ", " +
+      //             item.location.province} */}
+      //           {item.location}
+      //         </Text>
+      //       </View>
+      //       <Text
+      //         style={{
+      //           fontSize: 18,
+      //           fontFamily: "Bold",
+      //           color: COLORS.btnColor,
+      //           marginTop: 5,
+      //         }}
+      //       >
+      //         {item.price}
+      //       </Text>
+      //     </View>
+      //   </View>
+      // </Pressable>
     );
   };
 
@@ -86,26 +115,31 @@ export default function MyProduct({ navigation }) {
             onPress={navigation.goBack}
           />
         </View>
-        <Text style={styles.txtIcon}>Trang sản phẩm của tôi</Text>
+        <Text style={styles.txtIcon}>Quản lý sản phẩm</Text>
       </View>
       <View style={styles.chartBox}>
         <View style={styles.chart}>
           <TouchableOpacity style={styles.newsPost}>
             <Icon name="add-circle" size={25} color={COLORS.bgColor} />
-            <Text style={styles.txtDetail}>Tổng tin đã đăng</Text>
-            <Text style={styles.txtNumber}>5</Text>
+            <Text style={styles.txtDetail}>Tổng tất cả tin</Text>
+            <Text style={styles.txtNumber}>{response.options.total || 0}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.newsCancel}>
             <Icon name="cancel" size={25} color={COLORS.bgColor} />
             <Text style={styles.txtDetail}>Tổng tin bị từ chối</Text>
-            <Text style={styles.txtNumber}>1</Text>
+            <Text style={styles.txtNumber}>{response.options.rejected || 0}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.chart}>
           <TouchableOpacity style={styles.newsShow}>
             <Icon name="visibility" size={25} color={COLORS.bgColor} />
             <Text style={styles.txtDetail}>Tổng tin đang hiển thị</Text>
-            <Text style={styles.txtNumber}>4</Text>
+            <Text style={styles.txtNumber}>{response.options.approved || 0}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.newsShow}>
+            <Icon name="visibility" size={25} color={COLORS.bgColor} />
+            <Text style={styles.txtDetail}>Tổng tin đang chờ duyệt</Text>
+            <Text style={styles.txtNumber}>{response.options.pending || 0}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -114,7 +148,7 @@ export default function MyProduct({ navigation }) {
           napToInterval={width - 20}
           contentContainerStyle={{ paddingHorizontal: 4, paddingVertical: 15 }}
           numColumns={2}
-          data={houses}
+          data={response.rows}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => <CardProduct item={item} />}
         />

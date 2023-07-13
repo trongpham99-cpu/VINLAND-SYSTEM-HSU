@@ -11,26 +11,31 @@ import {
   FlatList,
   Dimensions,
   Image,
-  Button,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { format } from "../../utils/index";
 import { to_vietnamese } from "../../utils/number_to_text";
 import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/Ionicons";
 import { getAllHome } from "../../services/home";
+import _, { set } from "lodash";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Home({ props, navigation }) {
   const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(0);
   const categoryList = ["Tất cả", "Căn hộ", "Nhà cho thuê", "Chung cư"];
+  const [loading, setLoading] = useState(false);
   const [homeList, setHomeList] = useState([]);
 
-  const getHomeList = async () => {
+  const getHomeList = async (params = {}) => {
+    setLoading(true);
     try {
       const type = selectedCategoryIndex;
-      const response = await getAllHome({ type: type });
+      const newParams = { ...params, type: type }
+      const response = await getAllHome(newParams);
       setHomeList(response);
+      setLoading(false);
     } catch (error) {
       return console.log(error);
     }
@@ -47,10 +52,18 @@ export default function Home({ props, navigation }) {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
+      setSelectedCategoryIndex(0);
       getHomeList();
     });
-
     return unsubscribe;
+  }, []);
+
+  const onSearch = async (text) => {
+    getHomeList({ keyword: text });
+  };
+
+  useEffect(() => {
+    getHomeList();
   }, [selectedCategoryIndex]);
 
   const ListCategory = () => {
@@ -206,6 +219,7 @@ export default function Home({ props, navigation }) {
   };
 
   return (
+
     <SafeAreaView style={{ backgroundColor: COLORS.bgColor, flex: 1 }}>
       <View style={styles.header}>
         <View>
@@ -247,6 +261,7 @@ export default function Home({ props, navigation }) {
           <Icon name="search" size={25} color={COLORS.grey} />
           <TextInput
             style={{ paddingHorizontal: 5 }}
+            onChange={(e) => onSearch(e.nativeEvent.text)}
             placeholder="Tìm kiếm nhà, căn hộ, dự án cho thuê"
           />
         </View>
@@ -271,97 +286,102 @@ export default function Home({ props, navigation }) {
         ) : null}
       </View>
       <ListCategory />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            paddingHorizontal: 10,
-            marginVertical: 10,
-            alignItems: "center",
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: "Bold",
-              color: COLORS.tittleColor,
-              fontSize: 20,
-            }}
-          >
-            Dự án nổi bật
-          </Text>
-          <TouchableOpacity
-            onPress={({ item }) => navigation.navigate("HomePopular", item)}
-          >
-            <Text
+      <ActivityIndicator size="small" color="#0000ff" animating={loading} />
+      {
+        !loading && (
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View
               style={{
-                fontFamily: "Regular",
-                color: COLORS.tittleColor,
-                fontSize: 16,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                paddingHorizontal: 10,
+                marginVertical: 10,
+                alignItems: "center",
               }}
             >
-              xem tất cả
-            </Text>
-          </TouchableOpacity>
-        </View>
+              <Text
+                style={{
+                  fontFamily: "Bold",
+                  color: COLORS.tittleColor,
+                  fontSize: 20,
+                }}
+              >
+                Dự án nổi bật
+              </Text>
+              <TouchableOpacity
+                onPress={({ item }) => navigation.navigate("HomePopular", item)}
+              >
+                <Text
+                  style={{
+                    fontFamily: "Regular",
+                    color: COLORS.tittleColor,
+                    fontSize: 16,
+                  }}
+                >
+                  xem tất cả
+                </Text>
+              </TouchableOpacity>
+            </View>
 
-        <FlatList
-          napToInterval={width - 40}
-          contentContainerStyle={{ paddingLeft: 5, paddingVertical: 20 }}
-          horizontal
-          data={homeList}
-          keyExtractor={(item_home) => {
-            return item_home.Id;
-          }}
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => <CardPopular item={item} />}
-          key={(item) => item.Id}
-        />
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            paddingHorizontal: 10,
-            marginVertical: 5,
-            alignItems: "center",
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: "Bold",
-              color: COLORS.tittleColor,
-              fontSize: 20,
-            }}
-          >
-            Dự án gần bạn
-          </Text>
-          <TouchableOpacity
-            onPress={({ item }) => navigation.navigate("HomeNearest", item)}
-          >
-            <Text
+            <FlatList
+              napToInterval={width - 40}
+              contentContainerStyle={{ paddingLeft: 5, paddingVertical: 20 }}
+              horizontal
+              data={homeList}
+              keyExtractor={(item_home) => {
+                return item_home._id;
+              }}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => <CardPopular item={item} />}
+              key={(item) => item._id}
+            />
+            <View
               style={{
-                fontFamily: "Regular",
-                color: COLORS.tittleColor,
-                fontSize: 16,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                paddingHorizontal: 10,
+                marginVertical: 5,
+                alignItems: "center",
               }}
             >
-              xem tất cả
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <FlatList
-          napToInterval={width - 40}
-          contentContainerStyle={{ paddingLeft: 10, paddingVertical: 20 }}
-          horizontal
-          data={homeList}
-          keyExtractor={(item_home) => {
-            return item_home.Id;
-          }}
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => <CardNearest item={item} />}
-          key={(item) => item.Id}
-        />
-      </ScrollView>
+              <Text
+                style={{
+                  fontFamily: "Bold",
+                  color: COLORS.tittleColor,
+                  fontSize: 20,
+                }}
+              >
+                Dự án gần bạn
+              </Text>
+              <TouchableOpacity
+                onPress={({ item }) => navigation.navigate("HomeNearest", item)}
+              >
+                <Text
+                  style={{
+                    fontFamily: "Regular",
+                    color: COLORS.tittleColor,
+                    fontSize: 16,
+                  }}
+                >
+                  xem tất cả
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <FlatList
+              napToInterval={width - 40}
+              contentContainerStyle={{ paddingLeft: 10, paddingVertical: 20 }}
+              horizontal
+              data={homeList}
+              keyExtractor={(item_home) => {
+                return item_home._id;
+              }}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => <CardNearest item={item} />}
+              key={(item) => item._id}
+            />
+          </ScrollView>
+        )
+      }
     </SafeAreaView>
   );
 }

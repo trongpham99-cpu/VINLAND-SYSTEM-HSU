@@ -28,10 +28,15 @@ const homeController = {
     }
   },
   getAllHome: async (req, res) => {
-    const { type } = req.query;
+    const { type, keyword } = req.query;
+    console.log(type, keyword)
     const params = {
       type: type,
       status: "approved",
+      $or: [
+        { title: { $regex: keyword ? keyword : "", $options: "i" } },
+        { description: { $regex: keyword ? keyword : "", $options: "i" } },
+      ],
     }
 
     if (!type || type == 0) {
@@ -139,7 +144,23 @@ const homeController = {
     } catch (err) {
       return res.status(500).json(err);
     }
-  }
+  },
+  adminGetAllHome: async (req, res) => {
+    const homes = await Home.find().sort({ createdAt: -1 });
+    let countStats = {
+      total: homes.length,
+      approved: homes.filter((item) => item.status === "approved").length ? homes.filter((item) => item.status === "approved").length : 0,
+      pending: homes.filter((item) => item.status === "pending").length ? homes.filter((item) => item.status === "pending").length : 0,
+      rejected: homes.filter((item) => item.status === "rejected").length ? homes.filter((item) => item.status === "rejected").length : 0,
+    }
+
+    params = {
+      rows: homes,
+      options: countStats
+    }
+
+    return res.status(200).json(params);
+  },
 };
 
 module.exports = homeController;

@@ -38,27 +38,6 @@ const NewsDetailScreen = ({ navigation, route }) => {
           <Text style={styles.title}>
             {blog.title}
           </Text>
-          <View style={styles.infoContainer}>
-            <Image
-              source={require("../../image/user.jpg")}
-              style={{
-                height: 50,
-                width: 50,
-                borderRadius: 999,
-                borderColor: COLORS.grey,
-                borderWidth: 1,
-                marginTop: 10,
-              }}
-            />
-            <View style={{ marginLeft: 10 }}>
-              <Text style={styles.infoText}>Được đăng bởi: <Text style={{ fontWeight: "bold" }}>{
-              }</Text></Text>
-              <Text style={styles.infoText}>{
-                formatISODate(blog.createdAt, 'dd/MM/yyyy')
-              }</Text>
-              <Text style={{ ...styles.infoText, marginBottom: 10 }}>Tin tức</Text>
-            </View>
-          </View>
           <View style={{
             marginLeft: 5,
           }} >

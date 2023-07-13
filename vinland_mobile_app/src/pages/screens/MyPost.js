@@ -4,13 +4,13 @@ import React, { useEffect, useState } from "react";
 export default function MyPost({ navigation }) {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      //call api
+      _getMyPost();
     });
     return unsubscribe;
   }, [navigation]);
 
-  _getMyPost = async () => {
-    //call api
+  const _getMyPost = async () => {
+    
   };
 
   return (

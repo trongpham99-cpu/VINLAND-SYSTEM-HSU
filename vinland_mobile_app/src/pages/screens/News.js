@@ -109,6 +109,7 @@ export default function News({ props, navigation }) {
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.flatListContainer}
+            key={(item) => item._id}
           />
           {blogs.map((item) => {
             return (
