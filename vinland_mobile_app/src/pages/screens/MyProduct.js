@@ -12,11 +12,10 @@ import {
 import Icon from "react-native-vector-icons/MaterialIcons";
 import React, { useEffect } from "react";
 import COLORS from "../../constants/colors";
-import houses from "../../constants/houses";
 import { adminGetAllHome } from "../../services/home";
+import { format } from "../../utils/index";
 
 export default function MyProduct({ navigation }) {
-
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       _getList();
@@ -36,69 +35,71 @@ export default function MyProduct({ navigation }) {
   });
 
   const _getList = async () => {
-    adminGetAllHome().then((res) => {
-      setResponse(res);
-    }).catch((err) => {
-      console.log(err);
-    });
+    adminGetAllHome()
+      .then((res) => {
+        setResponse(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const CardProduct = ({ item }) => {
     return (
-      <Text>{item.title}</Text>
-      // <Pressable onPress={() => navigation.navigate("DetailScreen", item)}>
-      //   <View style={styles.cardPopular}>
-      //     <Image source={item.image} style={styles.cardPoppularImage} />
-      //     <View
-      //       style={{
-      //         flexDirection: "column",
-      //         marginTop: 10,
-      //         paddingHorizontal: 8,
-      //       }}
-      //     >
-      //       <Text
-      //         style={{
-      //           fontSize: 16,
-      //           fontFamily: "Bold",
-      //           color: COLORS.tittleColor,
-      //         }}
-      //       >
-      //         {item.title}
-      //       </Text>
-      //       <View
-      //         style={{
-      //           flexDirection: "row",
-      //           marginTop: 5,
-      //         }}
-      //       >
-      //         <Icon name="place" size={12} color={COLORS.blue} />
-      //         <Text
-      //           style={{
-      //             color: COLORS.tittleColor,
-      //             fontSize: 12,
-      //           }}
-      //         >
-      //           {/* {item.location.address +
-      //             ", " +
-      //             item.location.district +
-      //             ", " +
-      //             item.location.province} */}
-      //           {item.location}
-      //         </Text>
-      //       </View>
-      //       <Text
-      //         style={{
-      //           fontSize: 18,
-      //           fontFamily: "Bold",
-      //           color: COLORS.btnColor,
-      //           marginTop: 5,
-      //         }}
-      //       >
-      //         {item.price}
-      //       </Text>
-      //     </View>
-      //   </View>
-      // </Pressable>
+      // <Text>{item.title}</Text>
+      <Pressable onPress={() => navigation.navigate("DetailScreen", item)}>
+        <View style={styles.cardPopular}>
+          <Image source={item.thumbnail} style={styles.cardPoppularImage} />
+          <View
+            style={{
+              flexDirection: "column",
+              marginTop: 10,
+              paddingHorizontal: 10,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontFamily: "Bold",
+                color: COLORS.tittleColor,
+              }}
+            >
+              {item.title}
+            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                marginTop: 5,
+              }}
+            >
+              <Icon name="place" size={12} color={COLORS.blue} />
+              <Text
+                style={{
+                  color: COLORS.tittleColor,
+                  fontSize: 12,
+                }}
+              >
+                {item.location.address +
+                  ", " +
+                  item.location.district +
+                  ", " +
+                  item.location.province}
+                {/* {item.location} */}
+              </Text>
+            </View>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "bold",
+                color: COLORS.btnColor,
+                marginTop: 5,
+              }}
+            >
+              {format(item.price)}
+            </Text>
+          </View>
+        </View>
+      </Pressable>
     );
   };
 
@@ -127,19 +128,25 @@ export default function MyProduct({ navigation }) {
           <TouchableOpacity style={styles.newsCancel}>
             <Icon name="cancel" size={25} color={COLORS.bgColor} />
             <Text style={styles.txtDetail}>Tổng tin bị từ chối</Text>
-            <Text style={styles.txtNumber}>{response.options.rejected || 0}</Text>
+            <Text style={styles.txtNumber}>
+              {response.options.rejected || 0}
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.chart}>
           <TouchableOpacity style={styles.newsShow}>
             <Icon name="visibility" size={25} color={COLORS.bgColor} />
             <Text style={styles.txtDetail}>Tổng tin đang hiển thị</Text>
-            <Text style={styles.txtNumber}>{response.options.approved || 0}</Text>
+            <Text style={styles.txtNumber}>
+              {response.options.approved || 0}
+            </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.newsShow}>
+          <TouchableOpacity style={styles.newsPending}>
             <Icon name="visibility" size={25} color={COLORS.bgColor} />
             <Text style={styles.txtDetail}>Tổng tin đang chờ duyệt</Text>
-            <Text style={styles.txtNumber}>{response.options.pending || 0}</Text>
+            <Text style={styles.txtNumber}>
+              {response.options.pending || 0}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -210,7 +217,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 100,
     marginRight: 6,
-    backgroundColor: "#64B5F6",
+    backgroundColor: "#1565C0",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
@@ -219,7 +226,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 100,
     marginRight: 6,
-    backgroundColor: "#00E5FF",
+    backgroundColor: "#C62828",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
@@ -228,7 +235,16 @@ const styles = StyleSheet.create({
     width: 200,
     height: 100,
     marginRight: 6,
-    backgroundColor: "#1DE9B6",
+    backgroundColor: "#00E676",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+  },
+  newsPending: {
+    width: 200,
+    height: 100,
+    marginRight: 6,
+    backgroundColor: "#2962FF",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,

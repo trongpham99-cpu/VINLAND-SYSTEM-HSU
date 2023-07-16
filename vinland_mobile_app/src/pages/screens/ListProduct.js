@@ -10,7 +10,11 @@ import {
   Alert,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { approveHome, getAllHomePending } from "../../services/home";
+import {
+  approveHome,
+  getAllHomePending,
+  rejectHome,
+} from "../../services/home";
 import React, { useEffect } from "react";
 import COLORS from "../../constants/colors";
 import houses from "../../constants/houses";
@@ -56,7 +60,15 @@ export default function ListProduct({ navigation }) {
         },
         {
           text: "Đồng ý",
-          onPress: () => console.log("OK Pressed"),
+          // onPress: () => console.log("OK Pressed"),
+          onPress: () => {
+            rejectHome(id).then((res) => {
+              if (res) {
+                console.log("Reject:", res);
+                _getAllHomePending();
+              }
+            });
+          },
         },
       ],
       { cancelable: false }

@@ -11,7 +11,7 @@ export const addHome = async (params) => {
     const response = await axios.post(`${url}/home`, params, {
       headers: {
         Authorization: `Bearer ${token}`,
-      }
+      },
     });
     return response.data;
   } catch (error) {
@@ -24,7 +24,7 @@ export const getAllHome = async ({ type, keyword }) => {
     const response = await axios.get(`${url}/home/`, {
       params: {
         type,
-        keyword
+        keyword,
       },
     });
     return response.data;
@@ -35,7 +35,7 @@ export const getAllHome = async ({ type, keyword }) => {
 
 export const adminGetAllHome = async () => {
   try {
-    console.log(`${url}/home/admin`)
+    console.log(`${url}/home/admin`);
     const response = await axios.get(`${url}/home/admin`);
     return response.data;
   } catch (error) {
@@ -79,6 +79,15 @@ export const approveHome = async (id) => {
   }
 };
 
+export const getMyHomes = async (id) => {
+  try {
+    const response = await axios.get(`${url}/home/my_homes`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const rejectHome = async (id) => {
   try {
     const response = await axios.put(`${url}/home/reject/${id}`);
@@ -106,5 +115,6 @@ export default {
   deleteHome,
   getAllHomePending,
   rejectHome,
-  adminGetAllHome
+  adminGetAllHome,
+  getMyHomes,
 };

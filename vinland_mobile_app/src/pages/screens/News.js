@@ -10,19 +10,19 @@ import {
   FlatList,
   Dimensions,
   Image,
-  Button,
   ImageBackground,
-  TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import COLORS from "../../constants/colors";
 import Icon from "react-native-vector-icons/Ionicons";
 import { fetchBlogs } from "../../services/blog";
 import { formatISODate } from "../../utils";
-import RenderHTML from "react-native-render-html";
+// import RenderHTML from "react-native-render-html";
 
-export default function News({ props, navigation }) {
+export default function News({ navigation }) {
   const [topBlogs, setTopBlogs] = React.useState([]);
   const [blogs, setBlogs] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -39,31 +39,74 @@ export default function News({ props, navigation }) {
     });
   };
 
-  const _fetchBlogs = () => {
-    fetchBlogs().then((res) => {
+  const onSearchBlog = async (text) => {
+    _fetchBlogs({ keyword: text });
+  };
+
+  // const _fetchBlogs = () => {
+  //   fetchBlogs().then((res) => {
+  //     setBlogs(res);
+  //   });
+  // };
+
+  const _fetchBlogs = async (params = {}) => {
+    setLoading(true);
+    try {
+      const newParams = { ...params };
+      const res = await fetchBlogs(newParams);
       setBlogs(res);
-    });
+      setLoading(false);
+    } catch (error) {
+      return console.log(error);
+    }
   };
 
   const renderCard = ({ item }) => {
+    // return (
+    //   <Pressable
+    //     style={styles.card}
+    //     onPress={() => navigation.navigate("NewsDetail", { id: item._id })}
+    //   >
+    //     <View style={styles.card}>
+    //       <ImageBackground
+    //         style={styles.cardImage}
+    //         source={{ uri: item.thumbnail }}
+    //       >
+    //         <View style={styles.overlay}>
+    //           <Text style={styles.overlayDateTime}>
+    //             {formatISODate(item.createdAt, "dd/MM/yyyy")}
+    //           </Text>
+    //           <Text style={styles.overlayText}>Tin tức</Text>
+    //           <Text style={styles.overlayText}>{item.title}</Text>
+    //         </View>
+    //       </ImageBackground>
+    //     </View>
+    //   </Pressable>
+    // );
     return (
       <Pressable
-        style={styles.card}
+        style={styles.bottomImageContainer}
         onPress={() => navigation.navigate("NewsDetail", { id: item._id })}
       >
-        <View style={styles.card}>
-          <ImageBackground
-            style={styles.cardImage}
-            source={{ uri: item.thumbnail }}
-          >
-            <View style={styles.overlay}>
-              <Text style={styles.overlayDateTime}>
-                {formatISODate(item.createdAt, "dd/MM/yyyy")}
-              </Text>
-              <Text style={styles.overlayText}>Tin tức</Text>
-              <Text style={styles.overlayText}>{item.title}</Text>
-            </View>
-          </ImageBackground>
+        <View style={styles.bottomImageContainer}>
+          <Image source={{ uri: item.thumbnail }} style={styles.bottomImage} />
+          <View style={styles.overlayTextContainer}>
+            <Text
+              style={{
+                color: COLORS.black,
+                fontWeight: "bold",
+                fontSize: 16,
+              }}
+            >
+              Tin tức
+            </Text>
+          </View>
+          <View style={styles.bottomImageTextContainer}>
+            <Text style={{ fontSize: 16, color: COLORS.tittleColor }}>
+              {item.updatedAt}
+            </Text>
+            <Text style={styles.bottomImageText}>{item.title}</Text>
+          </View>
         </View>
       </Pressable>
     );
@@ -86,72 +129,70 @@ export default function News({ props, navigation }) {
             Tin tức bất động sản
           </Text>
         </View>
-        <ScrollView>
-          <View style={styles.searchInput}>
-            <Icon name="search" size={25} color={COLORS.grey} />
-            <TextInput
-              style={{ paddingHorizontal: 5 }}
-              placeholder="Tìm kiếm "
-            />
-          </View>
-          <Text style={styles.descriptionText}>
-            Những thông tin mới nhất,hấp dẫn nhất về thị trường bất động sản
-            Việt Nam
-          </Text>
-          <FlatList
-            data={topBlogs}
-            renderItem={(item) => {
-              return renderCard(item);
-            }}
-            keyExtractor={(item) => {
-              return item._id;
-            }}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.flatListContainer}
-            key={(item) => item._id}
+        <View style={styles.searchInput}>
+          <Icon name="search" size={25} color={COLORS.grey} />
+          <TextInput
+            onChange={(e) => onSearchBlog(e.nativeEvent.text)}
+            style={{ paddingHorizontal: 5 }}
+            placeholder="Tìm kiếm "
           />
-          {blogs.map((item) => {
-            return (
-              <Pressable
-                style={styles.bottomImageContainer}
-                onPress={() =>
-                  navigation.navigate("NewsDetail", { id: item._id })
-                }
-              >
-                <View style={styles.bottomImageContainer}>
-                  <Image
-                    source={{ uri: item.thumbnail }}
-                    style={styles.bottomImage}
-                  />
-                  <View style={styles.overlayTextContainer}>
-                    <Text
-                      style={{
-                        color: COLORS.black,
-                        fontWeight: "bold",
-                        fontSize: 16,
-                      }}
-                    >
-                      Tin tức
-                    </Text>
-                  </View>
-                  <View style={styles.bottomImageTextContainer}>
-                    <Text style={{ fontSize: 16, color: COLORS.tittleColor }}>
-                      {item.updatedAt}
-                    </Text>
-                    <Text style={styles.bottomImageText}>{item.title}</Text>
-                    {/* <RenderHTML
-                      contentWidth={width - 100}
-                      source={{
-                        html: item.content,
-                      }}
-                    /> */}
-                  </View>
+        </View>
+        <Text style={styles.descriptionText}>
+          Những thông tin mới nhất,hấp dẫn nhất về thị trường bất động sản Việt
+          Nam
+        </Text>
+        <ActivityIndicator size="small" color="#0000ff" animating={loading} />
+        {!loading && (
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <FlatList
+              data={blogs}
+              renderItem={(item) => {
+                return renderCard(item);
+              }}
+              keyExtractor={(item) => {
+                return item._id;
+              }}
+              // horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.flatListContainer}
+              key={(item) => item._id}
+            />
+          </ScrollView>
+        )}
+        {/* {blogs.map((item) => {
+          return (
+            <Pressable
+              style={styles.bottomImageContainer}
+              onPress={() =>
+                navigation.navigate("NewsDetail", { id: item._id })
+              }
+            >
+              <View style={styles.bottomImageContainer}>
+                <Image
+                  source={{ uri: item.thumbnail }}
+                  style={styles.bottomImage}
+                />
+                <View style={styles.overlayTextContainer}>
+                  <Text
+                    style={{
+                      color: COLORS.black,
+                      fontWeight: "bold",
+                      fontSize: 16,
+                    }}
+                  >
+                    Tin tức
+                  </Text>
                 </View>
-              </Pressable>
-            );
-          })}
-        </ScrollView>
+                <View style={styles.bottomImageTextContainer}>
+                  <Text style={{ fontSize: 16, color: COLORS.tittleColor }}>
+                    {item.updatedAt}
+                  </Text>
+                  <Text style={styles.bottomImageText}>{item.title}</Text>
+                </View>
+              </View>
+            </Pressable>
+          );
+        })} */}
       </View>
     </SafeAreaView>
   );
@@ -187,7 +228,7 @@ const styles = StyleSheet.create({
     fontFamily: "SemiBold",
     textAlign: "center",
     marginBottom: 10,
-    padding: 10
+    padding: 10,
   },
   flatListContainer: {
     paddingHorizontal: 10,

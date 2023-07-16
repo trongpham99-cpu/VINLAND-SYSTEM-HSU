@@ -6,14 +6,13 @@ import {
   Pressable,
   Image,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from "react-native";
-// import Formik from "formik";
-// import * as Yup from "yup";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import COLORS from "../../constants/colors";
 import { isValidObjField, updateError } from "../../services/methods";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+//import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import FormInput from "../../services/FormInput";
 import { login } from "../../services/auth";
 import { statusCode } from "../../constants/http/statusCodes";
@@ -43,27 +42,29 @@ export default function Login({ navigation }) {
   const submitForm = async () => {
     const { username, password } = userInfo;
     if (isValidForm()) {
-      login(username, password).then((res) => {
-        console.log(res)
+      login(username, password)
+        .then((res) => {
+          console.log(res);
 
-        const response = res.data;
-        if (response.status == statusCode.OK) {
-          AsyncStorage.setItem("token", response.data.accessToken);
-          AsyncStorage.setItem("user_id", response.data._id);
-          navigation.navigate("Home");
-        }
-      }).catch((err) => {
-        const response = err.response.data;
-        if (response.status == statusCode.BAD_REQUEST) {
-          alert(response.message);
-        }
-      });
+          const response = res.data;
+          if (response.status == statusCode.OK) {
+            AsyncStorage.setItem("token", response.data.accessToken);
+            AsyncStorage.setItem("user_id", response.data._id);
+            navigation.navigate("Home");
+          }
+        })
+        .catch((err) => {
+          const response = err.response.data;
+          if (response.status == statusCode.BAD_REQUEST) {
+            alert(response.message);
+          }
+        });
     }
   };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white", paddingTop: 20 }}>
-      <KeyboardAwareScrollView>
+      <KeyboardAvoidingView style={styles.container} behavior="height">
         <View style={{ alignItems: "center", marginTop: 100 }}>
           <Image source={require("../../image/LogoV.png")} />
           <Text style={styles.tittle}>Chào mừng bạn đến với VinLand</Text>
@@ -138,7 +139,8 @@ export default function Login({ navigation }) {
             </Text>
           </Pressable>
         </View>
-      </KeyboardAwareScrollView>
+        <View style={{ height: 100 }} />
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }

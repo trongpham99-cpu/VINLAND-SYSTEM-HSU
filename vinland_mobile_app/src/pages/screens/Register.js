@@ -8,6 +8,7 @@ import {
   Image,
   StatusBar,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -75,17 +76,17 @@ export default function Register({ navigation }) {
       style={{ flex: 1, backgroundColor: COLORS.bgColor, paddingTop: 20 }}
     >
       <StatusBar barStyle="dark-content" />
+      <View
+        style={{
+          alignItems: "center",
+          marginTop: 100,
+          justifyContent: "center",
+        }}
+      >
+        <Image source={require("../../image/LogoV.png")} />
+        <Text style={styles.tittle}>Chào mừng bạn đến với VinLand</Text>
+      </View>
       <KeyboardAwareScrollView>
-        <View
-          style={{
-            alignItems: "center",
-            marginTop: 100,
-            justifyContent: "center",
-          }}
-        >
-          <Image source={require("../../image/LogoV.png")} />
-          <Text style={styles.tittle}>Chào mừng bạn đến với VinLand</Text>
-        </View>
         <FormInput
           error={error}
           value={username}
@@ -109,7 +110,6 @@ export default function Register({ navigation }) {
           source={require("../../image/padlock.png")}
           placeholder="Vui lòng nhập mật khẩu của bạn"
         />
-
         <TouchableOpacity
           onPress={submitForm}
           style={{ justifyContent: "center", alignItems: "center" }}
